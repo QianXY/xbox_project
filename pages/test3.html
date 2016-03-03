@@ -1,0 +1,39 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>   
+    <script type="text/javascript">
+        $(document).ready(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "http://xboxweb.azurewebsites.net/api/question/random",
+                        success: function (data) {
+                            var string_json = JSON.stringify(data);
+                            var obj = JSON.parse(string_json);
+                            for(var i in obj){   
+                                var question=obj[i].content+"<br><br><br>";
+                                $('#'+i).append(question);
+                            }
+                        }
+                });
+        });
+    </script>
+</head>
+<body>
+    <div id="1">
+        a
+    </div>
+    <div id="2">
+        b
+    </div>
+    <div id="3">
+        c
+    </div>
+    <div id="4">
+        d
+    </div>
+    <div id="5">
+        e
+    </div>
+</body>
+</html>
