@@ -36,14 +36,46 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <style type="text/css">
+        .panel-heading{
+            font-size:24px;
+        }
+        #tree{
+            padding:20px 0 0 0;
+        }
+        #page-wrapper{
+            visibility: hidden;
+            height: 0;
+            width: 0;
+        }
+        .firstlevel{
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .sidebar-nav {
+            padding-left: 30;
+            padding-right: 0;
+        }
+        .navbar-collapse{
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .nav-second-level{
+            padding-left: 10px;
+        }
+        .nav>li>a{
+            padding: 5px 15px;
+        }
+    </style>
+
 </head>
 
 <body>
 
 <div class="container-fluid">
+    <!-- 导航栏 -->
     <div class="row" id="top">
-        <!-- 导航栏 -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-top: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -51,9 +83,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">做题不无聊 V0.9</a>
+                <a class="navbar-brand" href="index.html" id="title">做题不无聊 V0.9</a>
             </div>
             <!-- /.navbar-header -->
+            
 
             <ul class="nav navbar-top-links navbar-right">
                 
@@ -218,10 +251,188 @@
         </nav>
     </div>
 
-    <div calss="row" id="bottom">
+
+
+
+
+    <div clsss="row col-md-12" id="bottom">
+        
         <!-- 左侧树 -->
-        <div class="col-md-2">
-        </div>
+        <div class="col-md-2 firstlevel" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+
+                        <li>
+                            <a>21一元二次方程<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a>21.1一元二次方程</a>
+                                </li>
+                                <li>
+                                    <a>21.2解一元二次方程<span class="fa arrow"></span></a>
+                                    <ul>
+                                        <li>
+                                            <a>21.2.1配方法</a>
+                                        </li>
+                                        <li>
+                                            <a>21.2.2公式法</a>
+                                        </li>
+                                        <li>
+                                            <a>21.2.3因式分解法</a>
+                                        </li>
+                                        <li>
+                                            <a>21.2.4一元二次方程的根与系数的关系</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a>21.3实际问题与一元二次方程</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <br>
+
+                        <li>
+                            <a>22二次函数<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a>22.1二次函数的图像和性质<span class="fa arrow"></span></a>
+                                    <ul>
+                                        <li>
+                                            <a>22.1.1二次函数</a>
+                                        </li>
+                                        <li>
+                                            <a>22.1.2二次函数y=ax2的图像和性质</a>
+                                        </li>
+                                        <li>
+                                            <a>22.1.3二次函数y=a(x-h)2+k的图像和性质</a>
+                                        </li>
+                                        <li>
+                                            <a>22.1.4二次函数y=ax2+bx+c的图像和性质</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a>21.2二次函数与一元二次方程</a>
+                                </li>
+                                <li>
+                                    <a>21.3实际问题与二次函数</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <br>
+
+                        <li>
+                            <a>23旋转<span class="fa arrow"></span></a>
+                                <li>
+                                    <a>23.1图形的旋转</a>
+                                </li>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a>23.2中心对称<span class="fa arrow"></span></a>
+                                    <ul>
+                                        <li>
+                                            <a>23.2.1中心对称</a>
+                                        </li>
+                                        <li>
+                                            <a>23.2.2中心对称图形</a>
+                                        </li>
+                                        <li>
+                                            <a>23.2.3关于原点对称的点的坐标</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a>23.3课题学习  图案设计</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <br>
+
+                        <li>
+                            <a>24圆<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a>24.1圆的有关性质<span class="fa arrow"></span></a>
+                                    <ul>
+                                        <li>
+                                            <a>24.1.1圆</a>
+                                        </li>
+                                        <li>
+                                            <a>24.1.2垂直于弦的直径</a>
+                                        </li>
+                                        <li>
+                                            <a>24.1.3弧、弦、圆心角</a>
+                                        </li>
+                                        <li>
+                                            <a>24.1.4圆周角</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a>24.2点和圆、直线和圆的位置关系<span class="fa arrow"></span></a>
+                                    <ul>
+                                        <li>
+                                            <a>24.2.1点和圆的位置关系</a>
+                                        </li>
+                                        <li>
+                                            <a>24.2.2直线和圆的位置关系</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a>24.3正多边形和圆</a>
+                                </li>
+                                <li>
+                                    <a>24.4弧长和扇形面积</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <br>
+
+                        <li>
+                            <a>24概率初步<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a>24.1随机事件与概率<span class="fa arrow"></span></a>
+                                    <ul>
+                                        <li>
+                                            <a>24.1.1随机事件</a>
+                                        </li>
+                                        <li>
+                                            <a>24.1.2概率</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a>24.2用列举法求概率</a>
+                                </li>
+                                <li>
+                                    <a>24.3用频率估计概率</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <br>
+
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+
+
+
         <!-- 右侧做题 -->    
         <div class="col-md-10">
             <div class="panel panel-default">
@@ -232,8 +443,9 @@
                 <div class="panel-body">
                     <ul class="timeline">
                         <!-- 第一题 -->
-                        <li class="timeline-inverted">
-                            <div class="timeline-badge info"><i class="fa fa-check"></i>
+                        <li >
+                            <!-- 问第一题 -->
+                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -242,10 +454,22 @@
                                 <div class="timeline-body" id="Q0">
                                 </div>
                             </div>
+                            <!-- 回答第一题 -->
+                            <div class="timeline-panelright">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">Answer1</h4>
+                                </div>
+                                <div class="timeline-body" id="A0">
+                                    <div class="input-group input-group-lg">
+                                        <input type="text" class="form-control" placeholder="answer" size="50" >
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         <!-- 第二题 -->
                         <li>
-                            <div class="timeline-badge info"><i class="fa fa-check"></i>
+                            <!-- 问第二题 -->
+                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -254,10 +478,22 @@
                                 <div class="timeline-body" id="Q1">
                                 </div>
                             </div>
+                            <div class="timeline-panelright">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">Answer2</h4>
+                                </div>
+                                <!-- 回答第二题 -->
+                                <div class="timeline-body" id="A1">
+                                    <div class="input-group input-group-lg">
+                                        <input type="text" class="form-control" placeholder="answer" size="50">
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         <!-- 第3题 -->
                         <li>
-                            <div class="timeline-badge info"><i class="fa fa-check"></i>
+                            <!-- 问第三题 -->
+                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -266,10 +502,22 @@
                                 <div class="timeline-body" id="Q2">
                                 </div>
                             </div>
+                            <!-- 回答第一题 -->
+                            <div class="timeline-panelright">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">Answer3</h4>
+                                </div>
+                                <div class="timeline-body" id="A2">
+                                    <div class="input-group input-group-lg">
+                                        <input type="text" class="form-control" placeholder="answer" size="50" >
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         <!-- 第4题 -->
                         <li>
-                            <div class="timeline-badge info"><i class="fa fa-check"></i>
+                            <!-- 问第四题 -->
+                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -278,16 +526,39 @@
                                 <div class="timeline-body" id="Q3">
                                 </div>
                             </div>
+                            <!-- 回答第一题 -->
+                            <div class="timeline-panelright">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">Answer3</h4>
+                                </div>
+                                <div class="timeline-body" id="A3">
+                                    <div class="input-group input-group-lg">
+                                        <input type="text" class="form-control" placeholder="answer" size="50" >
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         <!-- 第5题 -->
                         <li>
-                            <div class="timeline-badge info"><i class="fa fa-check"></i>
+                            <!-- 问第五题 -->
+                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
                                     <h4 class="timeline-title">Question5</h4>
                                 </div>
                                 <div class="timeline-body" id="Q4">
+                                </div>
+                            </div>
+                            <!-- 回答第一题 -->
+                            <div class="timeline-panelright">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">Answer5</h4>
+                                </div>
+                                <div class="timeline-body" id="A4">
+                                    <div class="input-group input-group-lg">
+                                        <input type="text" class="form-control" placeholder="answer" size="50" >
+                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -298,6 +569,18 @@
 </div>
 
 
+
+
+        <div id="page-wrapper">
+            
+                        
+                    <div id="morris-area-chart"></div>
+                                
+                    <div id="morris-bar-chart"></div>
+                    
+                    <div id="morris-donut-chart"></div>
+                   
+        </div>
 
 
 
@@ -321,7 +604,6 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>  
     <script type="text/javascript">
         $(document).ready(function () {
                 $.ajax({
