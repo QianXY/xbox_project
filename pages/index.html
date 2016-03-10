@@ -18,6 +18,7 @@
     <script src="..dist/css/uc.css"></script>
 
 
+
     <!-- Custom Theme JavaScript -->
     
     <script type="text/javascript">
@@ -61,20 +62,12 @@
     <link href="../dist/css/jquery-accordion-menu.css" rel="stylesheet" type="text/css" />
     <link href="../dist/css/font-awesome.css" rel="stylesheet" type="text/css" />
 
+    <link href="../dist/css/button.css" rel="stylesheet" type="text/css" />
+
     <style type="text/css">
     *{box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;}
     body{background:#f0f0f0;}
     .content{width:200px;margin:0px 0px 0px 0px;}
-    .filterinput{
-        background-color:rgba(249, 244, 244, 0);
-        border-radius:15px;
-        width:90%;
-        height:30px;
-        border:thin solid #FFF;
-        text-indent:0.5em;
-        font-weight:bold;
-        color:#FFF;
-    }
     #demo-list a{
         overflow:hidden;
         text-overflow:ellipsis;
@@ -240,7 +233,7 @@
         }
         .buttongroup{
             float: right;
-            padding-right: 85px;
+            padding-right: 30px;
         }
         .dropdown{
             padding-top: 10px;
@@ -249,6 +242,10 @@
             padding-left: 0px;
             padding-right: 0px;
             min-width: 0px;
+            position: fixed;
+        }
+        #exam{
+            float: right;
         }
     </style>
 
@@ -397,7 +394,7 @@
         
 
         <!-- 右侧做题 -->    
-        <div class="col-md-10">
+        <div id="exam" class="col-md-10">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-clock-o fa-fw"></i> Questions
@@ -527,12 +524,12 @@
                         </li>
 
                         <div class="buttongroup">
-                            <button type="button" class="btn btn-danger" >
+                            <button type="button" class="button button-3d button-caution button-pill" >
                                 Cancel
                             </button>
 
 
-                            <button id="submit" type="button" class="btn btn-primary">
+                            <button id="submit" type="button" class="button button-3d button-caution button-pill">
                                 Submit
                             </button>
                         </div>
