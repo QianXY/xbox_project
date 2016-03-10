@@ -9,15 +9,17 @@
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
-    <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
 
     <!-- Morris Charts JavaScript -->
     <script src="../bower_components/raphael/raphael-min.js"></script>
     <script src="../bower_components/morrisjs/morris.min.js"></script>
     <script src="../js/morris-data.js"></script>
+    <script src="..dist/css/uc.css"></script>
+
 
     <!-- Custom Theme JavaScript -->
-    <script src="../dist/js/sb-admin-2.js"></script>
+    
     <script type="text/javascript">
         var questionid;
         var question;
@@ -33,7 +35,8 @@
                 $('input').remove();
             });
 
-                    $('.collapse in').removeClass('collapse');
+            
+                
                 $.ajax({
                     type: "GET",
                     url: "http://xboxweb.azurewebsites.net/api/question/random",
@@ -53,6 +56,124 @@
                 });
         });
     </script>
+
+    <!-- 左侧知识树 -->
+    <link href="../dist/css/jquery-accordion-menu.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+    *{box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;}
+    body{background:#f0f0f0;}
+    .content{width:200px;margin:0px 0px 0px 0px;}
+    .filterinput{
+        background-color:rgba(249, 244, 244, 0);
+        border-radius:15px;
+        width:90%;
+        height:30px;
+        border:thin solid #FFF;
+        text-indent:0.5em;
+        font-weight:bold;
+        color:#FFF;
+    }
+    #demo-list a{
+        overflow:hidden;
+        text-overflow:ellipsis;
+        -o-text-overflow:ellipsis;
+        white-space:nowrap;
+        width:100%;
+    }
+    </style>
+
+    <script src="../dist/js/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../dist/js/jquery-accordion-menu.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+
+    var html="";
+    jQuery(document).ready(function () {
+
+
+        function AP(children)
+        {
+
+            html+=("<li><a href='#'>"+children.name+"</a>");
+            for(var i in children.children)
+            {
+                if(i=="0")
+                {
+                    html+="<ul class='submenu'>"+"<li><a href='#'>"+children.children[i].name+"</a>";
+                }
+                else
+                {
+                    html+="<li><a href='#'>"+children.children[i].name+"</a>";
+                }
+                if (children.children[i].children.length>0)
+                {
+                    for (var t in children.children[i].children) {
+                        if(t==0)
+                        {
+                            html+="<ul class='submenu'>";
+                            AP(children.children[i].children[t]);
+                        }
+                        else
+                        {
+                            AP(children.children[i].children[t]);
+                            if(t==children.children[i].children.length-1)
+                            {
+                                html+="</ul></li>";
+                            }
+                        //html+="</ul>";
+                    }
+                };
+
+
+                    //html+="</li>";
+                }
+                else{html+="</li>"}
+            }
+                                //html+="</ul>";
+                                html+="</li>";
+                            }
+
+
+                            $.ajax({
+                                type: "get",
+                                url: "http://xboxweb.azurewebsites.net/api/user/getseed",
+                                success: function (data) {
+                //var html="<ul class=\"submenu\">";
+                
+                var string_json = JSON.stringify(data);
+                var obj = JSON.parse(string_json);
+                for (var i in obj.children) {
+                    html=html.substring(0,html.length-5);
+                    if(i!=0)
+                        html+="</ul></li>";
+                    AP(obj.children[i]);
+                };
+                html+="</li></ul>";
+
+                $('#demo-list').append(html);
+                $("#demo-list").trigger("create"); 
+                jQuery("#jquery-accordion-menu").jqueryAccordionMenu();
+            }
+
+        });
+
+                            $(function () {
+        //顶部导航切换
+        $("#demo-list li").click(function () {
+            $("#demo-list li.active").removeClass("active")
+            $(this).addClass("active");
+        })
+    });
+                        });
+</script>
+
+
+
+
+
+
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -123,6 +244,11 @@
         }
         .dropdown{
             padding-top: 10px;
+        }
+        #jquery-accordion-menu{
+            padding-left: 0px;
+            padding-right: 0px;
+            min-width: 0px;
         }
     </style>
 
@@ -258,184 +384,17 @@
     <div clsss="row col-md-12" id="bottom">
         
         <!-- 左侧树 -->
-        <div class="col-md-2 firstlevel" role="navigation">
 
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                            </div>
-                            <!-- /input-group -->
-                        </li>
+            <div id="jquery-accordion-menu" class="jquery-accordion-menu red col-md-2">
+
+                <ul id="demo-list">
 
 
-                        <li>
-                            <a>21一元二次方程<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a>21.1一元二次方程</a>
-                                </li>
-                                <li>
-                                    <a>21.2解一元二次方程<span class="fa arrow"></span></a>
-                                    <ul>
-                                        <li>
-                                            <a>21.2.1配方法</a>
-                                        </li>
-                                        <li>
-                                            <a>21.2.2公式法</a>
-                                        </li>
-                                        <li>
-                                            <a>21.2.3因式分解法</a>
-                                        </li>
-                                        <li>
-                                            <a>21.2.4一元二次方程的根与系数的关系</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a>21.3实际问题与一元二次方程</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <br>
+                </ul>
 
-                        <li>
-                            <a>22二次函数<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a>22.1二次函数的图像和性质<span class="fa arrow"></span></a>
-                                    <ul>
-                                        <li>
-                                            <a>22.1.1二次函数</a>
-                                        </li>
-                                        <li>
-                                            <a>22.1.2二次函数y=ax2的图像和性质</a>
-                                        </li>
-                                        <li>
-                                            <a>22.1.3二次函数y=a(x-h)2+k的图像和性质</a>
-                                        </li>
-                                        <li>
-                                            <a>22.1.4二次函数y=ax2+bx+c的图像和性质</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a>21.2二次函数与一元二次方程</a>
-                                </li>
-                                <li>
-                                    <a>21.3实际问题与二次函数</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <br>
-
-                        <li>
-                            <a>23旋转<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a>23.1图形的旋转</a>
-                                </li>
-                                <li>
-                                    <a>23.2中心对称<span class="fa arrow"></span></a>
-                                    <ul>
-                                        <li>
-                                            <a>23.2.1中心对称</a>
-                                        </li>
-                                        <li>
-                                            <a>23.2.2中心对称图形</a>
-                                        </li>
-                                        <li>
-                                            <a>23.2.3关于原点对称的点的坐标</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a>23.3课题学习 图案设计</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <br>
-
-                        
-
-                        <li>
-                            <a>24圆<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a>24.1圆的有关性质<span class="fa arrow"></span></a>
-                                    <ul>
-                                        <li>
-                                            <a>24.1.1圆</a>
-                                        </li>
-                                        <li>
-                                            <a>24.1.2垂直于弦的直径</a>
-                                        </li>
-                                        <li>
-                                            <a>24.1.3弧、弦、圆心角</a>
-                                        </li>
-                                        <li>
-                                            <a>24.1.4圆周角</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a>24.2点和圆、直线和圆的位置关系<span class="fa arrow"></span></a>
-                                    <ul>
-                                        <li>
-                                            <a>24.2.1点和圆的位置关系</a>
-                                        </li>
-                                        <li>
-                                            <a>24.2.2直线和圆的位置关系</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a>24.3正多边形和圆</a>
-                                </li>
-                                <li>
-                                    <a>24.4弧长和扇形面积</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <br>
-
-                        <li>
-                            <a>24概率初步<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a>24.1随机事件与概率<span class="fa arrow"></span></a>
-                                    <ul>
-                                        <li>
-                                            <a>24.1.1随机事件</a>
-                                        </li>
-                                        <li>
-                                            <a>24.1.2概率</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a>24.2用列举法求概率</a>
-                                </li>
-                                <li>
-                                    <a>24.3用频率估计概率</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <br>
-
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
             </div>
-            <!-- /.navbar-static-side -->
 
-
+        
 
         <!-- 右侧做题 -->    
         <div class="col-md-10">

@@ -1,0 +1,596 @@
+
+.uc_q,
+.uc_q_object {
+    font-family: Math, STIXGeneral, DejaVu Serif, DejaVu Sans, Times, Lucida Sans Unicode, OpenSymbol, Standard Symbols L, serif
+}
+.ucqo_g_wrong {
+    color: red
+}
+.ucqo_g_wrong .ucqo_g_border {
+    border-color: red
+}
+.ucqo_g_blank {
+    font-size: 0;
+    color: #fff
+}
+.ucqo_g_symbol {
+    font-family: Symbola-mq, Times New Roman, serif
+}
+.ucqo_g_big {
+    font-size: 1.4em
+}
+.ucqo_g_blank {
+    padding: 0 10px;
+    border-bottom: 1px solid #333
+}
+.ucqo_g_input {
+    color: #000
+}
+.uc_q_fraction,
+.ucqo_frac {
+    display: inline-block;
+    vertical-align: middle
+}
+.ucqo_frac {
+    margin: 0 .1em;
+    line-height: 1.2em
+}
+.ucqo_frac_integer {
+    margin-right: .1em
+}
+.ucqo_frac_frac {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: -.1em
+}
+.ucqo_frac_frac .ucqo_frac_denominator,
+.ucqo_frac_frac .ucqo_frac_numerator {
+    padding: 0 .2em;
+    text-align: center
+}
+.ucqo_frac_frac .ucqo_frac_denominator {
+    padding-top: 1px;
+    border-top-width: 1px;
+    border-top-style: solid
+}
+.ucqo_frac_editor.ucqo_g_blank {
+    padding: 0;
+    border: none
+}
+.ucqo_frac_editor input {
+    border: none;
+    font-size: inherit;
+    text-align: center;
+    outline: none;
+    font: inherit;
+    width: 25px;
+    border: 1px dotted #ddd
+}
+.ucqo_script>sub,
+.ucqo_script>sup {
+    font-size: smaller;
+    -webkit-transform: scale(.8);
+    transform: scale(.8);
+    -ms-transform: scale(.8);
+    -webkit-transform-origin: center left;
+    transform-origin: center left;
+    -ms-transform-origin: center left
+}
+.ucqo_script_full {
+    line-height: 1em
+}
+.ucqo_script_full .ucqo_script_body {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1em;
+    margin-top: -.1em
+}
+.ucqo_script_full .ucqo_script_sub,
+.ucqo_script_full .ucqo_script_sup {
+    font-size: 80%;
+    line-height: .8em
+}
+.ucqo_script_full .ucqo_script_sub>sub,
+.ucqo_script_full .ucqo_script_sup>sup {
+    font-size: smaller;
+    -webkit-transform: scale(.8);
+    transform: scale(.8);
+    -ms-transform: scale(.8);
+    -webkit-transform-origin: center left;
+    transform-origin: center left;
+    -ms-transform-origin: center left;
+    line-height: .8em
+}
+.ucqo_pc .ucqo_script_front {
+    font-size: 1.4em;
+    line-height: 1em;
+    vertical-align: text-bottom
+}
+.ucqo_equation {
+    margin: 0 3px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1.4em
+}
+.ucqo_equation_bracket {
+    position: relative;
+    width: .8em
+}
+.ucqo_equation_bracket>span {
+    position: absolute;
+    display: inline-block;
+    font-family: Symbola-mq, Times New Roman, serif;
+    top: 48%;
+    width: .8em;
+    text-align: center;
+    margin-top: -.59em;
+    -webkit-transform-origin: center center
+}
+.ucqo_select {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 .1em 0 .3em
+}
+.ucqo_select_editor>li {
+    cursor: pointer
+}
+.ucqo_select_editor>li.ucqo_select_selected .ucqo_select_radio {
+    color: #4cd1d4
+}
+.ucqo_text {
+    border-bottom: 1px solid #333;
+    padding: 0 20px
+}
+.ucqo_text_editor {
+    display: inline-block;
+    border-bottom: 1px solid #333;
+    min-width: 60px
+}
+.ucqo_text_editor input {
+    border: none;
+    color: #333;
+    font-size: inherit;
+    text-align: center;
+    outline: none;
+    font: inherit;
+    width: 100%;
+    width: 60px;
+    padding: 0 10px
+}
+.ucqo_root {
+    display: inline-block;
+    vertical-align: 0;
+    position: relative;
+    margin-left: .1em
+}
+.ucqo_root .ucqo_root_index {
+    vertical-align: .2em;
+    -webkit-transform: scale(.7);
+    transform: scale(.7);
+    -ms-transform: scale(.7);
+    -webkit-transform-origin: top;
+    transform-origin: top;
+    -ms-transform-origin: top;
+    left: -.1em;
+    display: inline-block;
+    position: absolute;
+    top: -.4em
+}
+.ucqo_root .ucqo_root_root {
+    font-family: Symbola-mq, Times New Roman, serif;
+    margin-right: -1px;
+    line-height: 1em;
+    position: relative;
+    top: -.2em
+}
+.ucqo_root_number {
+    padding: 1px .2em 0;
+    border-top: 1px solid #333;
+    display: inline-block;
+    line-height: 1.2em
+}
+.ucqo_repeat_repeat {
+    position: relative;
+    margin-top: .5em;
+    display: inline-block
+}
+.ucqo_repeat_dot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    margin-top: -1.15em;
+    line-height: 1em;
+    font-weight: 700;
+    min-width: 1em;
+    font-family: Symbola-mq, Times New Roman, serif
+}
+.ucqo_repeat_one .ucqo_repeat_dot {
+    min-width: 0
+}
+.ucqo_repeat_right {
+    float: left;
+    padding-left: .1em
+}
+.ucqo_repeat_left {
+    float: right;
+    padding-right: .1em
+}
+.ucqo_overline {
+    border-top-width: 1px;
+    border-top-style: solid;
+    margin-top: .1em;
+    vertical-align: .05em
+}
+.ucqo_overline,
+.ucqo_vector {
+    line-height: 1em;
+    display: inline-block
+}
+.ucqo_vector {
+    position: relative;
+    margin-top: .5em
+}
+.ucqo_vector_over {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    text-align: right;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    margin-top: -1.2em;
+    line-height: 1em;
+    height: .46em;
+    overflow: visible;
+    font-family: SimSun
+}
+.ucqo_vector_over>span {
+    margin-right: -.15em
+}
+.ucqo_tof>li {
+    display: inline-block
+}
+.ucqo_operator {
+    margin: 0 .1em
+}
+.ucqo_operator .ucqo_operator_main {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center
+}
+.ucqo_operator .ucqo_operator_o {
+    line-height: 1em;
+    display: block
+}
+.ucqo_operator .ucqo_operator_lower,
+.ucqo_operator .ucqo_operator_upper {
+    line-height: 1em;
+    font-size: .6em;
+    display: block
+}
+.ucqo_limit .ucqo_operator_main {
+    margin-bottom: -.1em
+}
+.ucqo_limit .ucqo_operator_lower {
+    margin-bottom: -7px
+}
+.ucqo_sum .ucqo_operator_o {
+    line-height: .8em;
+    padding-top: .1em;
+    font-size: 1.6em
+}
+.ucqo_sum .ucqo_operator_main {
+    margin-top: -.2em
+}
+.ucqo_table>table {
+    margin-top: 1px;
+    border-collapse: collapse;
+    text-align: center;
+    line-height: 1.3em;
+    width: 100%
+}
+.ucqo_table>table>tbody>tr>td,
+.ucqo_table>table>tbody>tr>th,
+.ucqo_table>table>tr>td,
+.ucqo_table>table>tr>th {
+    padding: 8px;
+    border: 1px solid #333
+}
+table.edittable {
+    border-collapse: collapse;
+    text-align: center;
+    line-height: 1.3em
+}
+table.edittable>tbody>tr>td,
+table.edittable>tbody>tr>th,
+table.edittable>tr>td,
+table.edittable>tr>th {
+    padding: 8px;
+    border: 1px solid #333
+}
+.ucqo_matrix {
+    display: inline-block;
+    vertical-align: middle;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+    padding: 0 .4em;
+    margin: 0 .4em
+}
+.ucqo_matrix .ucqo_matrix_fl {
+    float: left
+}
+.ucqo_matrix .ucqo_matrix_fr {
+    float: left;
+    margin-left: 1em
+}
+.ucqo_grid {
+    display: inline-block;
+    vertical-align: middle
+}
+.ucqo_grid .ucqo_grid_fl {
+    float: left
+}
+.ucqo_grid .ucqo_grid_fr {
+    float: left;
+    margin-left: 1em
+}
+.ucqo_arc {
+    line-height: 1em;
+    display: inline-block;
+    text-align: center;
+    vertical-align: baseline
+}
+.ucqo_arc .ucqo_arc_main {
+    display: block;
+    line-height: .8em;
+    height: .8em
+}
+.ucqo_arc .ucqo_arc_header {
+    display: block
+}
+.ucqo_strike {
+    text-decoration: line-through
+}
+.math,
+.math table {
+    display: inline-block
+}
+.math table {
+    vertical-align: middle
+}
+.uc_q_wrong_type {
+    color: red
+}
+.uc_q_equalmark {
+    display: inline-block;
+    vertical-align: middle
+}
+.ucqo_equalmark {
+    margin: 0 .1em;
+    vertical-align: middle;
+    line-height: 1.2em
+}
+.ucqo_equalmark_table {
+    border-collapse: separate;
+    border-spacing: 1px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: -.1em
+}
+.ucqo_equalmark_table .ucqo_equalmark_bottom,
+.ucqo_equalmark_table .ucqo_equalmark_top {
+    padding: 0 .2em;
+    text-align: center
+}
+.ucqo_equalmark_table .ucqo_equalmark_top {
+    border-bottom-width: 1px;
+    border-bottom-style: solid
+}
+.ucqo_equalmark_table .ucqo_equalmark_bottom {
+    border-top-width: 1px;
+    border-top-style: solid
+}
+.uc_q_arrow {
+    display: inline-block;
+    vertical-align: middle
+}
+.ucqo_arrow {
+    margin: 0 .1em;
+    vertical-align: middle;
+    line-height: 1.2em
+}
+.ucqo_arrow_table {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: -.1em
+}
+.ucqo_arrow_table .ucqo_arrow_top {
+    position: relative;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    padding: 2px 3px
+}
+.ucqo_arrow_right_arrow {
+    right: 0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    border-right-width: 1px;
+    border-right-style: solid
+}
+.ucqo_arrow_left_arrow,
+.ucqo_arrow_right_arrow {
+    position: absolute;
+    bottom: -3px;
+    width: 4px;
+    height: 4px;
+    border-top-width: 1px;
+    border-top-style: solid
+}
+.ucqo_arrow_left_arrow {
+    left: 0;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    border-left-width: 1px;
+    border-left-style: solid
+}
+.uc_q_parallelequal {
+    display: inline-block;
+    vertical-align: middle
+}
+.ucqo_parallelequal {
+    margin: 0 .1em;
+    vertical-align: middle;
+    line-height: 1.2em
+}
+.ucqo_parallelequal_table {
+    border-collapse: separate;
+    border-spacing: 1px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: -.1em
+}
+.ucqo_parallelequal_table .ucqo_parallelequal_bottom,
+.ucqo_parallelequal_table .ucqo_parallelequal_top {
+    text-align: center
+}
+.ucqo_parallelequal_table .ucqo_parallelequal_top {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    font-family: ????
+}
+.ucqo_parallelequal_table .ucqo_parallelequal_bottom {
+    border-top-width: 1px;
+    border-top-style: solid
+}
+.uc_q_underbrace {
+    display: inline-block;
+    vertical-align: middle
+}
+.ucqo_underbrace {
+    margin: 0 .1em;
+    vertical-align: middle;
+    line-height: 1.2em
+}
+.ucqo_underbrace_table {
+    border-collapse: separate;
+    border-spacing: 1px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: -.1em
+}
+.ucqo_underbrace_table .ucqo_underbrace_bottom,
+.ucqo_underbrace_table .ucqo_underbrace_top {
+    text-align: center
+}
+.ucqo_underbrace_brace {
+    font-family: Symbola-mq, Times New Roman, serif;
+    -webkit-transform: scaleX(3.4) rotate(-90deg);
+    transform: scaleX(3.4) rotate(-90deg);
+    display: inline-block
+}
+.uc_q_valence {
+    display: inline-block;
+    vertical-align: middle
+}
+.ucqo_valence {
+    margin: 0 .1em;
+    vertical-align: middle;
+    line-height: 1.2em
+}
+.ucqo_valence_table {
+    border-collapse: separate;
+    border-spacing: 1px;
+    text-align: center;
+    margin-top: -.1em
+}
+.uc_q_chemequation,
+.ucqo_valence_table {
+    display: inline-block;
+    vertical-align: middle
+}
+.ucqo_chemequation {
+    margin: 0 .1em;
+    vertical-align: middle;
+    line-height: 1.2em
+}
+.ucqo_chemequation_table {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: -.1em;
+    border-collapse: separate;
+    border-spacing: 1px
+}
+.ucqo_chemequation_table .ucqo_chemequation_top {
+    position: relative;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    padding: 2px 3px
+}
+.ucqo_chemequation_right_arrow {
+    position: absolute;
+    right: 0;
+    bottom: -3px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    width: 4px;
+    height: 4px;
+    border-top-width: 1px;
+    border-top-style: solid
+}
+.ucqo_chemequation_table .ucqo_chemequation_bottom {
+    position: relative;
+    border-top-width: 1px;
+    border-top-style: solid;
+    padding: 2px 3px
+}
+.ucqo_chemequation_left_arrow {
+    position: absolute;
+    left: 0;
+    top: -3px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    width: 4px;
+    height: 4px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid
+}
+.uc_q_object img {
+    max-width: 100%
+}
+img {
+    vertical-align: middle
+}
+#questionListContainer {
+    min-height: 400px
+}
+#booksFilter {
+    padding: 15px 20px 10px;
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #e6e6e6
+}
+.question-module .main .question-item-panel .panel-body img {
+    display: inline-block
+}
+.question-module .main .help-tips {
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.6
+}
+.panel-body img {
+    max-width: 100%;
+    height: auto
+}
+#errorList li {
+    list-style: none
+}
+.uc_q_answer ul {
+    list-style: none;
+    padding: 0
+}
