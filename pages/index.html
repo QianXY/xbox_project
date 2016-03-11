@@ -15,7 +15,7 @@
     <script src="../bower_components/raphael/raphael-min.js"></script>
     <script src="../bower_components/morrisjs/morris.min.js"></script>
     <script src="../js/morris-data.js"></script>
-    <script src="..dist/css/uc.css"></script>
+    <link href="../dist/css/ucc.css" rel="stylesheet">
 
 
 
@@ -26,15 +26,12 @@
         var question;
         var html;
         var explain= new Array();
-        var answer;
+        var answer=new Array();
+        var getanswer=new Array();
+        var questiontype=new Array();
         $(document).ready(function () {
 
-            $( "#submit" ).click(function() {
-                for(var t in explain){
-                    $("#explain"+t).append(explain[t]);
-                }
-                $('input').remove();
-            });
+
 
             
                 
@@ -44,17 +41,88 @@
                         success: function (data) {
                             var string_json = JSON.stringify(data);
                             var obj = JSON.parse(string_json);
-
                             for(var i in obj){   
+                                questiontype[i]=obj[i].questionType;
                                 questionid=obj[i].questionID;
                                 question=obj[i].content;
                                 explain[i]=obj[i].answerExplain;
-                                answer=obj[i].rightAnswer;
+                                answer[i]=obj[i].rightAnswer;
                                 html=questionid+question;
                                 $('#Q'+i).append("<div id='"+questionid+"'>"+question+"</div>");
+                                console.log(answer[i]);
+
+                                if(questiontype[i]=="2"){
+                                    $('#A'+i).append('<div class="input-group input-group-lg"><input id="input'+i+'" type="text" class="form-control inputa" placeholder="answer" size="50" ></div>');
+                                }
+                                else{
+                                    $('#A'+i).append('<div class="selected"><input class="select" name="answer'+i+'" type="radio" value="A"> A &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="B"> B &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="C"> C &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="D"> D &nbsp;&nbsp;</div>');
+                                }
+
                             }
                         }
                 });
+
+
+                $( "#submit" ).click(function() {
+                // for(var t in explain){
+                //     $("#explain"+t).append(explain[t]);
+                // }
+                // $('input').remove();
+                
+                // for(var i=0;i<5;i++){
+                // getanswer[i]=document.getElementsByName('answer'+i).value;
+                // if(getanswer[i]==answer[i])
+                //     console.log("right");
+                // else
+                //     console.log("wrong");
+                // }
+
+
+
+                // var form=new Array();
+                // for(var i=0;i<5;i++){
+                //     var form=document.getElementById("form"+i);
+                //     for(j=0;j<4;i++){
+                //         if(document.form[i].answer.checked)
+                //             getanswer[i]=document.form[i].answer.value;
+                //     }
+                //     console.log(getanswer[i]);
+                // }
+                // var char=document.getElementById("form1");
+                // for(i=1;i<5;i++){
+                //     if(char.answer1[i].checked)
+                //         console.log('a');
+                // }
+
+                
+
+                //选择
+                for(var i=0;i<5;i++){
+                    if(questiontype[i]=="0"){
+                        getanswer[i]=$('input:radio[name="answer'+i+'"]:checked').val();
+                        if(getanswer[i]==answer[i])
+                        console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  right");
+                    else
+                        console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  wrong");
+                    }
+                    else{
+                        getanswer[i]=$('input:text[id="input'+i+'"]').val();
+                        console.log("第"+(i+1)+"题填空 "+getanswer[i]);    
+                    }
+                }
+
+
+
+                 $(".theme-popover-mask").fadeIn(100);
+                 $(".theme-popover").slideDown(200);
+
+                
+
+                })
+            
+
+
+
         });
     </script>
 
@@ -80,15 +148,10 @@
     <script src="../dist/js/jquery-1.11.2.min.js" type="text/javascript"></script>
     <script src="../dist/js/jquery-accordion-menu.js" type="text/javascript"></script>
     <script type="text/javascript">
-
-
     var html="";
     jQuery(document).ready(function () {
-
-
         function AP(children)
         {
-
             html+=("<li><a href='#'>"+children.name+"</a>");
             for(var i in children.children)
             {
@@ -118,8 +181,6 @@
                         //html+="</ul>";
                     }
                 };
-
-
                     //html+="</li>";
                 }
                 else{html+="</li>"}
@@ -127,8 +188,6 @@
                                 //html+="</ul>";
                                 html+="</li>";
                             }
-
-
                             $.ajax({
                                 type: "get",
                                 url: "http://xboxweb.azurewebsites.net/api/user/getseed",
@@ -144,14 +203,11 @@
                     AP(obj.children[i]);
                 };
                 html+="</li></ul>";
-
                 $('#demo-list').append(html);
                 $("#demo-list").trigger("create"); 
                 jQuery("#jquery-accordion-menu").jqueryAccordionMenu();
             }
-
         });
-
                             $(function () {
         //顶部导航切换
         $("#demo-list li").click(function () {
@@ -247,6 +303,32 @@
         #exam{
             float: right;
         }
+        .theme-popover-mask {
+            z-index: 9998;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:#000;
+            opacity:0.4;
+            filter:alpha(opacity=40);
+            display:none
+        }
+        .theme-popover {
+            z-index:9999;
+            position:fixed;
+            top:50%;
+            left:50%;
+            width:500px;
+            height:260px;
+            margin:-180px 0 0 -330px;
+            border-radius:5px;
+            border:solid 2px #666;
+            background-color:#fff;
+            display:none;
+            box-shadow: 0 0 10px #666;
+        }
     </style>
 
 </head>
@@ -254,7 +336,51 @@
 <body>
 
 <div class="container-fluid">
+
+    <div class="theme-popover">
+     <div class="theme-poptit">
+          <a id="close" href="javascript:;" class="close">×</a>
+         <script>
+             $('#close').click(function () {
+                  $('.theme-popover-mask').fadeOut(100);
+                  $('.theme-popover').slideUp(200);
+              })
+         </script>
+          <h3>Please ask the question</h3>
+     </div>
+     <div class="theme-popbod dform">
+      <form class="theme-signin form-horizontal">
+        <div class="row">
+            <div class="form-group">
+                        <label  class="col-md-2 control-label">Question</label>
+                        <div class="col-md-7">
+                          <input disabled="disabled" id="question_List" class="form-control"></input>
+                          
+                        </div>
+                      </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                        <label class="col-md-2 control-label">Answer</label>
+                        <div class="col-md-7">
+                          <input id="answer_list" type="password" class="form-control" placeholder="Please answer the question">
+                        </div>
+                    </div>
+        </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <button id="check_answer" class="btn btn-info">Confirm</button>
+                           
+                        </div>
+                      </div>
+                </div>    
+            </form>
+     </div>
+</div>
+<div class="theme-popover-mask"></div>
     <!-- 导航栏 -->
+
     <div class="row" id="top">
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-top: 0">
             <div class="navbar-header">
@@ -420,9 +546,7 @@
                                     <h4 class="timeline-title">Answer1</h4>
                                 </div>
                                 <div class="timeline-body" id="A0">
-                                    <div class="input-group input-group-lg">
-                                        <input type="text" class="form-control inputa" placeholder="answer" size="50" >
-                                    </div>
+
                                 </div>
                             </div>
                         </li>
@@ -444,9 +568,7 @@
                                 </div>
                                 <!-- 回答第二题 -->
                                 <div class="timeline-body" id="A1">
-                                    <div class="input-group input-group-lg">
-                                        <input type="text" class="form-control inputa" placeholder="answer" size="50">
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </li>
@@ -468,9 +590,7 @@
                                     <h4 class="timeline-title">Answer3</h4>
                                 </div>
                                 <div class="timeline-body" id="A2">
-                                    <div class="input-group input-group-lg">
-                                        <input type="text" class="form-control inputa" placeholder="answer" size="50" >
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </li>
@@ -489,12 +609,10 @@
                             <!-- 回答第4题 -->
                             <div class="timeline-panelright">
                                 <div class="timeline-heading" id="explain3">
-                                    <h4 class="timeline-title">Answer3</h4>
+                                    <h4 class="timeline-title">Answer4</h4>
                                 </div>
                                 <div class="timeline-body" id="A3">
-                                    <div class="input-group input-group-lg">
-                                        <input type="text" class="form-control inputa" placeholder="answer" size="50" >
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </li>
@@ -516,15 +634,13 @@
                                     <h4 class="timeline-title">Answer5</h4>
                                 </div>
                                 <div class="timeline-body" id="A4">
-                                    <div class="input-group input-group-lg">
-                                        <input type="text" class="form-control inputa" placeholder="answer" size="50" >
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </li>
 
                         <div class="buttongroup">
-                            <button type="button" class="button button-3d button-caution button-pill" >
+                            <button id="cancel" type="button" class="button button-3d button-caution button-pill" >
                                 Cancel
                             </button>
 
