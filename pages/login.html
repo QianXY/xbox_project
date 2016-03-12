@@ -1,4 +1,4 @@
-<!doctype html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,8 +6,40 @@
     <link rel="icon" type="image/png" href="../assets/img/favicon.ico">
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../assets/css/gsdk-base.css" rel="stylesheet" />
-    
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+   
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css" rel="stylesheet">
+
+    <script type="text/javascript">
+    $(document).ready(function (){
+
+
+            function setCookie(cname, cvalue, exdays) {
+                  var d = new Date();
+                  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                  var expires = null; //"expires=" + d.toUTCString();
+                  this.document.cookie = cname + "=" + cvalue + "; " + expires;
+            };
+
+
+            
+
+    function login(){
+         var name=$('#login-name').val();
+            var password=$('#login-pass').val();
+            $.post("http://xboxweb.azurewebsites.net/api/user/loginUser",{Name:name,Password:password}, function(data,status){
+                console.log(data.Id);
+                setCookie("user_id",data.Id,1);
+                console.log(data);
+
+            });
+    }
+        $('#login').click(function(){
+           login();
+
+        })
+    });
+    </script>
 
     <!-- Loading Flat UI -->
     <link href="../dist/css/flat-ui.css" rel="stylesheet">
@@ -42,7 +74,7 @@
               <input type="password" class="form-control login-field" value="" placeholder="Password" id="login-pass" />
             </div>
             <br>
-            <a class="btn btn-primary btn-lg btn-block" href="#">登录</a>
+            <a id="login" class="btn btn-primary btn-lg btn-block">登录</a>
             <br>
             <a class="btn btn-danger btn-lg btn-block" href="register.html">注册</a>
             <a class="login-link" href="#">忘记密码</a>

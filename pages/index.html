@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+
 <html lang="en">
 
 <head>
+ 
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 
@@ -12,9 +13,7 @@
 
 
     <!-- Morris Charts JavaScript -->
-    <script src="../bower_components/raphael/raphael-min.js"></script>
-    <script src="../bower_components/morrisjs/morris.min.js"></script>
-    <script src="../js/morris-data.js"></script>
+    
     <link href="../dist/css/ucc.css" rel="stylesheet">
 
 
@@ -22,7 +21,17 @@
     <!-- Custom Theme JavaScript -->
     
     <script type="text/javascript">
-        var questionid;
+        function getCookie(name) {
+               var arr,reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+               if (arr = document.cookie.match(reg))
+                   return unescape(arr[2]);
+               else
+                   return 'shabi';
+        }
+
+       var idttt =  getCookie("user_id");
+        console.log(idttt);
+        var questionid=new Array();
         var question;
         var html;
         var explain= new Array();
@@ -30,12 +39,8 @@
         var getanswer=new Array();
         var questiontype=new Array();
         $(document).ready(function () {
-
-
-
-            
-                
-                $.ajax({
+                function random(){
+                    $.ajax({
                     type: "GET",
                     url: "http://xboxweb.azurewebsites.net/api/question/random",
                         success: function (data) {
@@ -43,31 +48,75 @@
                             var obj = JSON.parse(string_json);
                             for(var i in obj){   
                                 questiontype[i]=obj[i].questionType;
-                                questionid=obj[i].questionID;
+                                questionid[i]=obj[i].questionID;
                                 question=obj[i].content;
                                 explain[i]=obj[i].answerExplain;
                                 answer[i]=obj[i].rightAnswer;
                                 html=questionid+question;
-                                $('#Q'+i).append("<div id='"+questionid+"'>"+question+"</div>");
+                                $('#Q'+i).append("<div class='questionlist' id='"+questionid[i]+"'>"+question+"</div>");
                                 console.log(answer[i]);
 
                                 if(questiontype[i]=="2"){
-                                    $('#A'+i).append('<div class="input-group input-group-lg"><input id="input'+i+'" type="text" class="form-control inputa" placeholder="answer" size="50" ></div>');
+                                    $('#A'+i).append('<div id="'+questionid[i]+'" class="useranswer input-group input-group-lg"><input id="input'+i+'" type="text" class="form-control inputa" placeholder="answer" size="50" ></div>');
                                 }
                                 else{
-                                    $('#A'+i).append('<div class="selected"><input class="select" name="answer'+i+'" type="radio" value="A"> A &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="B"> B &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="C"> C &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="D"> D &nbsp;&nbsp;</div>');
+                                    $('#A'+i).append('<div id="'+questionid[i]+'" class="useranswer"><input class="select" name="answer'+i+'" type="radio" value="A"> A &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="B"> B &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="C"> C &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="D"> D &nbsp;&nbsp;</div>');
                                 }
 
                             }
                         }
-                });
+                    });
+                }
+                random();
+
+                $('#nextpage').click(function(){
+                    // 去掉问题&答案
+                    $('.questionlist').remove();
+                    $('.answerlist').remove();
+                    random();
+                    //变换按钮
+                    $("#submit").fadeIn(100);
+                    $("#nextpage").fadeOut(100);
+                    $("#showrecom").fadeOut(100);
+                })
 
 
-                $( "#submit" ).click(function() {
-                // for(var t in explain){
-                //     $("#explain"+t).append(explain[t]);
-                // }
-                // $('input').remove();
+                function wronganswer(){
+                var totalid="";
+                //选择
+                for(var i=0;i<5;i++){
+                    var id=questionid[i];
+                    if(questiontype[i]=="0"){
+                        getanswer[i]=$('input:radio[name="answer'+i+'"]:checked').val();
+                        if(getanswer[i]==answer[i]){
+
+                        }
+                        // console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  right");
+                        else{
+                            console.log(id+"  wrong");
+                            totalid+=id+";";
+                        }
+                    }
+                    else{
+                        // console.log(questionid[i]+"  wrong");
+                        totalid+=id+";";
+                    }
+                }
+                returnid(totalid);
+                }
+
+                function returnid(totalid){
+                    $.post("http://hkbuebank.azurewebsites.net/api/user/getlost",{id:1,u_password:123,u_courseid:totalid}, function(data,status){
+                    });
+                }
+
+                $("#submit" ).click(function() {
+                    wronganswer();
+                        for(var t in explain){
+                            $("#explain"+t).append('<div class="answerlist">'+explain[t]+'</div>');
+                        }
+                        $('input').remove();
+                        $('div[class="selected"]').remove();
                 
                 // for(var i=0;i<5;i++){
                 // getanswer[i]=document.getElementsByName('answer'+i).value;
@@ -96,33 +145,11 @@
 
                 
 
-                //选择
-                for(var i=0;i<5;i++){
-                    if(questiontype[i]=="0"){
-                        getanswer[i]=$('input:radio[name="answer'+i+'"]:checked').val();
-                        if(getanswer[i]==answer[i])
-                        console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  right");
-                    else
-                        console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  wrong");
-                    }
-                    else{
-                        getanswer[i]=$('input:text[id="input'+i+'"]').val();
-                        console.log("第"+(i+1)+"题填空 "+getanswer[i]);    
-                    }
-                }
-
-
+                
 
                  $(".theme-popover-mask").fadeIn(100);
                  $(".theme-popover").slideDown(200);
-
-                
-
                 })
-            
-
-
-
         });
     </script>
 
@@ -287,10 +314,7 @@
         .nav>li>a{
             padding: 5px 15px;
         }
-        .buttongroup{
-            float: right;
-            padding-right: 30px;
-        }
+        
         .dropdown{
             padding-top: 10px;
         }
@@ -329,59 +353,45 @@
             display:none;
             box-shadow: 0 0 10px #666;
         }
+        #showrecom,#nextpage{
+
+            display: none;
+        }
     </style>
 
 </head>
 
 <body>
-
 <div class="container-fluid">
 
-    <div class="theme-popover">
-     <div class="theme-poptit">
-          <a id="close" href="javascript:;" class="close">×</a>
-         <script>
-             $('#close').click(function () {
+
+<!-- 弹窗 -->
+<div class="theme-popover">
+    <div class="theme-poptit">
+        <h3>Please ask the question</h3>
+        <button id="showanswer" type="button" class="button button-caution button-pill button-pill">
+                看答案
+        </button>
+        <script>
+             $('#showanswer').click(function () {
                   $('.theme-popover-mask').fadeOut(100);
                   $('.theme-popover').slideUp(200);
+                  $('#submit').fadeOut(100);
+                  $('#showrecom').fadeIn(100);
+                  $('#nextpage').fadeIn(100);
               })
-         </script>
-          <h3>Please ask the question</h3>
-     </div>
-     <div class="theme-popbod dform">
-      <form class="theme-signin form-horizontal">
-        <div class="row">
-            <div class="form-group">
-                        <label  class="col-md-2 control-label">Question</label>
-                        <div class="col-md-7">
-                          <input disabled="disabled" id="question_List" class="form-control"></input>
-                          
-                        </div>
-                      </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                        <label class="col-md-2 control-label">Answer</label>
-                        <div class="col-md-7">
-                          <input id="answer_list" type="password" class="form-control" placeholder="Please answer the question">
-                        </div>
-                    </div>
-        </div>
-                <div class="row">
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                          <button id="check_answer" class="btn btn-info">Confirm</button>
-                           
-                        </div>
-                      </div>
-                </div>    
-            </form>
-     </div>
+        </script>
+    </div>
 </div>
 <div class="theme-popover-mask"></div>
-    <!-- 导航栏 -->
+<!-- 弹窗 -->
 
-    <div class="row" id="top">
+
+
+
+
+    <!-- 导航栏 -->
+  <div class="row" id="top">
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-top: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -639,14 +649,19 @@
                             </div>
                         </li>
 
-                        <div class="buttongroup">
-                            <button id="cancel" type="button" class="button button-3d button-caution button-pill" >
-                                Cancel
+
+                        <div class="buttongroup2 col-md-4 col-md-offset-4">
+                            <button id="showrecom" type="button" class="button button-caution button-pill button-pill">
+                                课外辅导
                             </button>
+                            <button id="nextpage" type="button" class="button button-caution button-pill button-pill">
+                                再做一组
+                            </button>
+                        </div>
 
-
-                            <button id="submit" type="button" class="button button-3d button-caution button-pill">
-                                Submit
+                        <div class="buttongroup col-md-3 col-md-offset-1">
+                            <button id="submit" type="button" class="button button-caution button-pill button-pill">
+                                提交作业
                             </button>
                         </div>
                     </ul>
@@ -654,21 +669,6 @@
             </div>
     </div>
 </div>
-
-
-
-
-        <div id="page-wrapper">
-            
-                        
-                    <div id="morris-area-chart"></div>
-                                
-                    <div id="morris-bar-chart"></div>
-                    
-                    <div id="morris-donut-chart"></div>
-                   
-        </div>
-
 
 
 
