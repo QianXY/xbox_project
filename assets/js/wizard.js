@@ -89,12 +89,16 @@ function validateFirstStep(){
     
     $(".wizard-card form").validate({
 		rules: {
-			firstname: "required",
-			lastname: "required",
-			email: {
-				required: true,
-				email: true
-			}
+			// realname: "required",
+			username: "required",
+            password: {
+                required: true,
+                minlength:3,
+            },
+            password2: {
+                required: true,
+                equalTo:"#password",
+            }
 			
 /*  other possible input validations
 			,username: {
@@ -120,9 +124,16 @@ function validateFirstStep(){
 
 		},
 		messages: {
-			firstname: "请输入姓",
-			lastname: "请输入名",
-			email: "请输入邮箱地址",
+			// realname: "请输入姓名",
+			username: "请输入用户名",
+			password:{
+                required:"请输入密码",
+                minlength:"密码太短，请重新输入",
+            } ,
+            password2:{
+                required:"请确认密码",
+                equalTo:"密码不同，请重新输入"
+            }
 
 /*   other posible validation messages
 			username: {
@@ -176,7 +187,21 @@ function validateSecondStep(){
 
 function validateThirdStep(){
     //code here for third step
+    $(".wizard-card form").validate({
+        rules: {
+            username:"required",
+        },
+        messages: {
+            username:"aaa"
+        }
+    }); 
     
+    if(!$(".wizard-card form").valid()){
+        console.log('invalid');
+        return false;
+    }
+    return true;    
+
     
 }
 

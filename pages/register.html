@@ -41,14 +41,31 @@
       //   var firstname=
       // }
       $(document).ready(function (){
-        $(".btn-finish").click(function(){
 
+
+        function register(){
+
+          var username=$("input[name='username']").val();
+          var password=$("input[name='password']").val();
           var firstname=$("input[name='firstname']").val();
           var lastname=$("input[name='lastname']").val();
           var name=firstname+lastname;
           var email=$("input[name='email']").val();
           var grade=$("input[name='grade']:checked").val();
-          console.log(name+email+grade);
+
+            $.post("http://xboxweb.azurewebsites.net/api/user/register",{Name:username,Password:password}, function(data,status){
+                if(data.Status=="Success"){
+                    console.log(data);
+                }
+                if(data.Status=="Password Error"){
+                  console.log(data);
+                }
+            });
+        }
+
+        $(".btn-finish").click(function(){
+
+          register();
 
         })
     });
@@ -56,7 +73,7 @@
 </head>
 
 <body>
-<div class="image-container set-full-height" style="background-image: url('../assets/img/wizard.jpg')">
+<div class="image-container set-full-height" style="background-image: url('../assets/img/53.jpg')">
     <!--   Creative Tim Branding   -->
     <a href="http://creative-tim.com">
          <div class="logo-container">
@@ -108,31 +125,30 @@
                                   </div>
                                   <div class="col-sm-6">
                                       <div class="form-group">
-                                        <label>姓 <small>(必填)</small></label>
-                                        <input name="firstname" type="text" class="form-control" placeholder="Andrew...">
+                                        <label>用户名 <small>(必填)</small></label>
+                                        <input name="username" type="text" class="form-control" placeholder="Smith...">
                                       </div>
+
                                       <div class="form-group">
-                                        <label>名 <small>(必填)</small></label>
-                                        <input name="lastname" type="text" class="form-control" placeholder="Smith...">
+                                          <label>密码 </label>
+                                          <input name="password" id="password" class="form-control" placeholder="">
                                       </div>
-                                  </div>
-                                  <div class="col-sm-10 col-sm-offset-1">
-                                      <div class="form-group">
-                                          <label>邮箱 <small>(必填)</small></label>
-                                          <input name="email" type="email" class="form-control" placeholder="andrew@creative-tim.com">
+                                      <div class="form-group1">
+                                          <label>确认密码 </label>
+                                          <input name="password2" class="form-control" placeholder="">
                                       </div>
                                   </div>
                               </div>
                             </div>
+
                             <div class="tab-pane" id="account">
                                 <h4 class="info-text"> 您现在几年级？ </h4>
                                 <div class="row">
-                                   
-                                    
                                     <div class="col-sm-10 col-sm-offset-1">
-                                        <div class="col-sm-4">
-                                            <div class="choice" data-toggle="wizard-checkbox">
-                                                <input type="checkbox" name="grade" value="初一">
+                                        <form action="" method="">
+                                          <div class="col-sm-4">
+                                            <div class="choice" data-toggle="wizard-radio">
+                                                <input class="grade" type="radio" name="grade" value="初一">
                                                 <div class="icon">
                                                     <i class="fa fa-pencil"></i>
                                                 </div>
@@ -140,8 +156,8 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
-                                            <div class="choice" data-toggle="wizard-checkbox">
-                                                <input type="checkbox" name="grade" value="初二">
+                                            <div class="choice" data-toggle="wizard-radio">
+                                                <input class="grade" type="radio" name="grade" value="初二">
                                                 <div class="icon">
                                                     <i class="fa fa-terminal"></i>
                                                 </div>
@@ -150,8 +166,8 @@
                                             
                                         </div>
                                         <div class="col-sm-4">
-                                            <div class="choice" data-toggle="wizard-checkbox">
-                                                <input type="checkbox" name="grade" value="初三">
+                                            <div class="choice" data-toggle="wizard-radio">
+                                                <input class="grade" type="radio" name="grade" value="初三">
                                                 <div class="icon">
                                                     <i class="fa fa-laptop"></i>
                                                 </div>
@@ -159,6 +175,7 @@
                                             </div>
                                             
                                         </div>
+                                        </form>
                                     </div>
                                     
                                 </div>
@@ -166,28 +183,62 @@
 
 
                             <div class="tab-pane" id="address">
-                                <div class="row">
-                                    <div class="col-sm-12">
+                                <div class="row col-md-12">
+                                    <div class="col-md-12">
                                         <h4 class="info-text"> 我们还想知道您更多的秘密~ </h4>
                                     </div>
-                                    <div class="col-sm-5 col-sm-offset-4">
-                                         <div class="form-group">
-                                            <labe>学校名称</label><br>
-                                            <input type="text" class="form-control" placeholder="">
-                                          </div>
-                                    </div>
 
-                                    <div class="col-sm-5 col-sm-offset-4">
+                                      <div class="col-md-6 col-md-offset-1 ">
+                                            <labe>姓</label><br>
+                                            <input name="firstname" type="text" class="form-control" placeholder="">
+                                      </div>
+
+                                      <div class="col-md-4">
+                                            <label>年龄</label>
+                                             <select name="age" class="form-control">
+                                                <option value=""> 12 </option>
+                                                <option value=""> 13 </option>
+                                                <option value=""> 14 </option>
+                                                <option value=""> 15 </option>
+                                            </select>
+                                      </div>
+                                      <div class="col-md-6 col-md-offset-1">
+                                            <labe>名</label><br>
+                                            <input name="lastname" type="text" class="form-control" placeholder="">
+                                      </div>
+
+                                      <div class="col-md-4">
+                                            <label>性别</label>
+                                             <select name="gender" class="form-control">
+                                                <option value=""> 男 </option>
+                                                <option value=""> 女 </option>
+                                            </select>
+                                      </div>
+
+                                      <!-- <div class="col-md-6">
+                                         <div class="form-group">
+                                            <labe>名</label><br>
+                                            <input name="lastname" id="password" type="text" class="form-control" placeholder="">
+                                          </div>
+                                      </div>
+
+
+                                      <div class="ccol-md-6">
                                          <div class="form-group">
                                             <label>性别</label>
                                              <select name="gender" class="form-control">
                                                 <option value=""> 男 </option>
                                                 <option value=""> 女 </option>
-                                                <option value="...">...</option>
                                             </select>
                                           </div>
-                                    </div>
-                                </div>
+                                      </div> -->
+                                    
+
+                                      <div class="form-group col-md-10 col-md-offset-1">
+                                          <label>邮箱 </label>
+                                          <input name="email" type="email" class="form-control" placeholder="andrew@creative-tim.com">
+                                          </div>
+                                      </div>
                             </div>
                         </div>
                         <div class="wizard-footer">

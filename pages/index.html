@@ -29,8 +29,11 @@
                    return 'shabi';
         }
 
-       var idttt =  getCookie("user_id");
-        console.log(idttt);
+        var rightamout; //5题中答对的题的数量
+        var wrongamount;    //5题中答错的题的数量
+        var totalid;    //打错的题的id集合
+        var power;      //能量值
+        var difficulty=new Array();
         var questionid=new Array();
         var question;
         var html;
@@ -72,38 +75,90 @@
                 $('#nextpage').click(function(){
                     // 去掉问题&答案
                     $('.questionlist').remove();
-                    $('.answerlist').remove();
+                    // $('.answerlist').remove();
                     random();
                     //变换按钮
                     $("#submit").fadeIn(100);
                     $("#nextpage").fadeOut(100);
                     $("#showrecom").fadeOut(100);
+                    $(".tyes").remove();
+                    $(".tno").remove();
                 })
 
 
                 function wronganswer(){
-                var totalid="";
+                rightamount=0;
+                wrongamount=0;
+                totalid="";
                 //选择
                 for(var i=0;i<5;i++){
                     var id=questionid[i];
                     if(questiontype[i]=="0"){
                         getanswer[i]=$('input:radio[name="answer'+i+'"]:checked').val();
                         if(getanswer[i]==answer[i]){
-
+                                rightamount++;
+                                $("#title"+i).append('<div class="tyes" id="titie'+i+'">答对了</div>');
                         }
                         // console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  right");
                         else{
-                            console.log(id+"  wrong");
+                            wrongamount++;
+                                $("#title"+i).append('<div class="tno" id="titie'+i+'">答错了<button class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                             totalid+=id+";";
                         }
                     }
                     else{
                         // console.log(questionid[i]+"  wrong");
+                        wrongamount++;
+                                $("#title"+i).append('<div class="tno" id="titie'+i+'">答错了<button class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                         totalid+=id+";";
                     }
                 }
+
+                //直接显示解析
+                // for(var i in explain){
+                //     $("#showdetail"+i).click(function(){
+                //         $(".answerlist").remove();
+                //         $("#explain"+i).append('<div class="answerlist">'+explain[i]+'</div>');
+                //     })
+                // }
+
+                $("#showdetail"+0).click(function(){
+                        $(".answerlist").remove();
+                        $("#explain"+0).append('<div class="answerlist">'+explain[0]+'</div>');
+                })
+                $("#showdetail"+1).click(function(){
+                        $(".answerlist").remove();
+                        $("#explain"+1).append('<div class="answerlist">'+explain[1]+'</div>');
+                })
+                $("#showdetail"+2).click(function(){
+                        $(".answerlist").remove();
+                        $("#explain"+2).append('<div class="answerlist">'+explain[2]+'</div>');
+                })
+                $("#showdetail"+3).click(function(){
+                        $(".answerlist").remove();
+                        $("#explain"+3).append('<div class="answerlist">'+explain[3]+'</div>');
+                })
+                $("#showdetail"+4).click(function(){
+                        $(".answerlist").remove();
+                        $("#explain"+4).append('<div class="answerlist">'+explain[4]+'</div>');
+                })
+
+                //弹窗显示解析
+                // for(var i in explain){
+                //     $("#showdetail"+i).click(function(){
+                //         $(".theme-popover-answer").append('<div class="answerlist">'+explain[i]+'</div>');
+                //         $(".theme-popover-answer").fadeIn(100);
+                //         $(".theme-popover-mask").fadeIn(100);
+                //         for(var t in explain){
+                //         }
+                //     })
+                // }
+
                 returnid(totalid);
                 }
+
+                
+
 
                 function returnid(totalid){
                     $.post("http://hkbuebank.azurewebsites.net/api/user/getlost",{id:1,u_password:123,u_courseid:totalid}, function(data,status){
@@ -112,11 +167,16 @@
 
                 $("#submit" ).click(function() {
                     wronganswer();
-                        for(var t in explain){
-                            $("#explain"+t).append('<div class="answerlist">'+explain[t]+'</div>');
-                        }
-                        $('input').remove();
-                        $('.useranswer').remove();
+                    $("#result").append('<div id="result2">答对'+rightamount+'题，答错'+wrongamount+'题</div>');
+
+
+                        // for(var t in explain){
+                        //     $("#explain"+t).append('<div class="answerlist">'+explain[t]+'</div>');
+                        // }
+
+
+                        // $('input').remove();
+                        // $('.useranswer').remove();
                 
                 // for(var i=0;i<5;i++){
                 // getanswer[i]=document.getElementsByName('answer'+i).value;
@@ -353,9 +413,26 @@
             display:none;
             box-shadow: 0 0 10px #666;
         }
+        .theme-popover-answer {
+            z-index:9999;
+            position:fixed;
+            float: right;
+
+            border-radius:5px;
+            border:solid 2px #666;
+            background-color:#fff;
+            display:none;
+            box-shadow: 0 0 10px #666;
+        }
         #showrecom,#nextpage{
 
             display: none;
+        }
+        .tyes{
+            color: green;
+        }
+        .tno{
+            color:red;
         }
     </style>
 
@@ -368,12 +445,15 @@
 <!-- 弹窗 -->
 <div class="theme-popover">
     <div class="theme-poptit">
-        <h3>Please ask the question</h3>
+        <h3>答题情况</h3>
+        <div id="result">
+        </div>
         <button id="showanswer" type="button" class="button button-caution button-pill button-pill">
                 看答案
         </button>
         <script>
              $('#showanswer').click(function () {
+                $('#result2').remove();
                   $('.theme-popover-mask').fadeOut(100);
                   $('.theme-popover').slideUp(200);
                   $('#submit').fadeOut(100);
@@ -383,6 +463,16 @@
         </script>
     </div>
 </div>
+
+
+<div class="theme-popover-answer">
+    <div class="theme-poptit">
+        <h3>解析</h3>
+        
+    </div>
+</div>
+
+
 <div class="theme-popover-mask"></div>
 <!-- 弹窗 -->
 
@@ -553,7 +643,7 @@
                             <!-- 回答第一题 -->
                             <div class="timeline-panelright">
                                 <div class="timeline-heading" id="explain0">
-                                    <h4 class="timeline-title">Answer1</h4>
+                                    <h4 id="title0" class="timeline-title">Answer1</h4>
                                 </div>
                                 <div class="timeline-body" id="A0">
 
@@ -574,7 +664,7 @@
                             </div>
                             <div class="timeline-panelright">
                                 <div class="timeline-heading" id="explain1">
-                                    <h4 class="timeline-title">Answer2</h4>
+                                    <h4 id="title1" class="timeline-title">Answer2</h4>
                                 </div>
                                 <!-- 回答第二题 -->
                                 <div class="timeline-body" id="A1">
@@ -597,7 +687,7 @@
                             <!-- 回答第一题 -->
                             <div class="timeline-panelright">
                                 <div class="timeline-heading" id="explain2">
-                                    <h4 class="timeline-title">Answer3</h4>
+                                    <h4 id="title2" class="timeline-title">Answer3</h4>
                                 </div>
                                 <div class="timeline-body" id="A2">
                                     
@@ -619,7 +709,7 @@
                             <!-- 回答第4题 -->
                             <div class="timeline-panelright">
                                 <div class="timeline-heading" id="explain3">
-                                    <h4 class="timeline-title">Answer4</h4>
+                                    <h4 id="title3" class="timeline-title">Answer4</h4>
                                 </div>
                                 <div class="timeline-body" id="A3">
                                     
@@ -641,7 +731,7 @@
                             <!-- 回答第5题 -->
                             <div class="timeline-panelright">
                                 <div class="timeline-heading" id="explain4">
-                                    <h4 class="timeline-title">Answer5</h4>
+                                    <h4 id="title4" class="timeline-title">Answer5</h4>
                                 </div>
                                 <div class="timeline-body" id="A4">
                                     
