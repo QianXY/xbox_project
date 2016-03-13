@@ -28,14 +28,41 @@
          var name=$('#login-name').val();
             var password=$('#login-pass').val();
             $.post("http://xboxweb.azurewebsites.net/api/user/loginUser",{Name:name,Password:password}, function(data,status){
-                console.log(data.Id);
-                setCookie("user_id",data.Id,1);
-                console.log(data);
-
+                if(data.Status=="Success"){
+                    location.href="http://localhost/test/pages/index.html";
+                }
+                if(data.Status=="Password Error"){
+                }
             });
     }
+
+
+
+
+
+
         $('#login').click(function(){
-           login();
+            $(".login-form form").validate({
+                rules:{
+                    name:"required",
+                    password:{
+                        required:true,
+                        minlength:3
+                    }
+                },
+                messages:{
+                    name:"请输入用户名",
+                    password:{
+                        required:"请输入密码",
+                        minlength:"密码最小长度为3位"
+                    }
+                },
+            });
+            if(!$(".login-form form").valid()){
+                return false;
+            }
+            else
+                login();
 
         })
     });
@@ -53,8 +80,11 @@
         height:450px;
         margin: 0 auto;
     }
-    .form-group{
-        padding-top: 10px;
+    #namediv{
+        padding-top: 30px;
+    }
+    #passworddiv{
+        padding-top:10px;
     }
 
     </style>
@@ -66,19 +96,21 @@
     <!--   Big container   -->
     <div class="col-md-4 col-md-offset-4">
         <div class="login-form">
-            <div class="form-group">
-              <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name" />
-            </div>
+            <form>
+                <div id="namediv" class="form-group">
+                    <input name="name" type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name" />
+                </div>
 
-            <div class="form-group">
-              <input type="password" class="form-control login-field" value="" placeholder="Password" id="login-pass" />
-            </div>
+                <div id="passworddiv" class="form-group">
+                    <input name="password" type="password" class="form-control login-field" value="" placeholder="Password" id="login-pass" />
+                </div>
             <br>
             <a id="login" class="btn btn-primary btn-lg btn-block">登录</a>
             <br>
             <a class="btn btn-danger btn-lg btn-block" href="register.html">注册</a>
             <a class="login-link" href="#">忘记密码</a>
-          </div>
+        </form>
+        </div>
     </div>
     
 

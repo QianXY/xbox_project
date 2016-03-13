@@ -1,6 +1,21 @@
 <!doctype html>
 <html lang="en">
 <head>
+
+    <script src="../assets/js/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="../assets/js/bootstrap.min.js" type="text/javascript"></script>
+        
+    <!--   plugins   -->
+    <script src="../assets/js/jquery.bootstrap.wizard.js" type="text/javascript"></script>
+    
+    <!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
+    <script src="../assets/js/jquery.validate.min.js"></script>
+    
+    <!--  methods for manipulating the wizard and the validation -->
+    <script src="../assets/js/wizard.js"></script>
+
+
+
     <meta charset="utf-8" />
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -21,6 +36,23 @@
         padding-top: 50px;
       }
     </style>
+    <script type="text/javascript">
+      // function reginfo(){
+      //   var firstname=
+      // }
+      $(document).ready(function (){
+        $(".btn-finish").click(function(){
+
+          var firstname=$("input[name='firstname']").val();
+          var lastname=$("input[name='lastname']").val();
+          var name=firstname+lastname;
+          var email=$("input[name='email']").val();
+          var grade=$("input[name='grade']:checked").val();
+          console.log(name+email+grade);
+
+        })
+    });
+    </script>
 </head>
 
 <body>
@@ -100,7 +132,7 @@
                                     <div class="col-sm-10 col-sm-offset-1">
                                         <div class="col-sm-4">
                                             <div class="choice" data-toggle="wizard-checkbox">
-                                                <input type="checkbox" name="jobb" value="Design">
+                                                <input type="checkbox" name="grade" value="初一">
                                                 <div class="icon">
                                                     <i class="fa fa-pencil"></i>
                                                 </div>
@@ -109,7 +141,7 @@
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="choice" data-toggle="wizard-checkbox">
-                                                <input type="checkbox" name="jobb" value="Code">
+                                                <input type="checkbox" name="grade" value="初二">
                                                 <div class="icon">
                                                     <i class="fa fa-terminal"></i>
                                                 </div>
@@ -119,7 +151,7 @@
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="choice" data-toggle="wizard-checkbox">
-                                                <input type="checkbox" name="jobb" value="Develop">
+                                                <input type="checkbox" name="grade" value="初三">
                                                 <div class="icon">
                                                     <i class="fa fa-laptop"></i>
                                                 </div>
@@ -184,16 +216,5 @@
 
 </body>
 
-    <script src="../assets/js/jquery-1.10.2.js" type="text/javascript"></script>
-    <script src="../assets/js/bootstrap.min.js" type="text/javascript"></script>
-        
-    <!--   plugins   -->
-    <script src="../assets/js/jquery.bootstrap.wizard.js" type="text/javascript"></script>
-    
-    <!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
-    <script src="../assets/js/jquery.validate.min.js"></script>
-    
-    <!--  methods for manipulating the wizard and the validation -->
-    <script src="../assets/js/wizard.js"></script>
 
 </html>

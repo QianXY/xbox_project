@@ -120,9 +120,9 @@ function validateFirstStep(){
 
 		},
 		messages: {
-			firstname: "Please enter your First Name",
-			lastname: "Please enter your Last Name",
-			email: "Please enter a valid email address",
+			firstname: "请输入姓",
+			lastname: "请输入名",
+			email: "请输入邮箱地址",
 
 /*   other posible validation messages
 			username: {
