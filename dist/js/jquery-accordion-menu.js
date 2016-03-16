@@ -29,6 +29,7 @@
                 e.stopPropagation();
                 e.preventDefault();
                 if ($(this).children(".submenu").length > 0) {
+                    console.log($(this).attr("id"));
                     if ($(this).children(".submenu").css("display") == "none") {
                         $(this).children(".submenu").delay(defaults.showDelay).slideDown(defaults.speed);
                         $(this).children(".submenu").siblings("a").addClass("submenu-indicator-minus");
@@ -44,6 +45,7 @@
                         $(this).children(".submenu").siblings("a").removeClass("submenu-indicator-minus")
                     }
                 }
+                console.log($(this).attr("id"));
                 window.location.href = $(this).children("a").attr("href")
             })
         },
