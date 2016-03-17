@@ -28,11 +28,12 @@
                else
                    return 'shabi';
         }
-
+        var userid=getCookie("userid");
         var rightamout; //5题中答对的题的数量
         var wrongamount;    //5题中答错的题的数量
         var totalid;    //打错的题的id集合
-        var power;      //能量值
+        var oldpower;      //能量值
+        var newpower;
         var difficulty=new Array();
         var questionid=new Array();
         var question;
@@ -94,19 +95,15 @@
                     $(".tno").remove();
                 })
 
-                function calPower(){
-                    power=getCookie("power");
-                    console.log(power);
-                    // for(var i=0;i<5;i++){
-                    //     power+=difficulty[i]*50;
-                    // }
-                }
+           
 
 
                 function wronganswer(){
                 rightamount=0;
                 wrongamount=0;
                 totalid="";
+                oldpower=getCookie("power");
+                newpower=0;
                 //选择
                 for(var i=0;i<5;i++){
                     var id=questionid[i];
@@ -115,6 +112,7 @@
                         if(getanswer[i]==answer[i]){
                                 rightamount++;
                                 $("#title"+i).append('<div class="tyes" id="titie'+i+'">答对了</div>');
+                                newpower+=difficulty[i]*50;
                         }
                         // console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  right");
                         else{
@@ -181,49 +179,17 @@
                     $.post("http://hkbuebank.azurewebsites.net/api/user/getlost",{id:1,u_password:123,u_courseid:totalid}, function(data,status){
                     });
                 }
+                function postpower(ppp){
+                    $.post("http://hkbuebank.azurewebsites.net/api/User/UserStatus",{Id:userid,Power:ppp}, function(data,status){
+                        if(data.Status=="Success"){
+                            console.log("新能量值"+ppp+"添加成功");
+                        }
+                    });
+                }
 
                 $("#submit" ).click(function() {
                     wronganswer();
-                    $("#result").append('<div id="result2">答对'+rightamount+'题，答错'+wrongamount+'题</div>');
-
-
-                        // for(var t in explain){
-                        //     $("#explain"+t).append('<div class="answerlist">'+explain[t]+'</div>');
-                        // }
-
-
-                        // $('input').remove();
-                        // $('.useranswer').remove();
-                
-                // for(var i=0;i<5;i++){
-                // getanswer[i]=document.getElementsByName('answer'+i).value;
-                // if(getanswer[i]==answer[i])
-                //     console.log("right");
-                // else
-                //     console.log("wrong");
-                // }
-
-
-
-                // var form=new Array();
-                // for(var i=0;i<5;i++){
-                //     var form=document.getElementById("form"+i);
-                //     for(j=0;j<4;i++){
-                //         if(document.form[i].answer.checked)
-                //             getanswer[i]=document.form[i].answer.value;
-                //     }
-                //     console.log(getanswer[i]);
-                // }
-                // var char=document.getElementById("form1");
-                // for(i=1;i<5;i++){
-                //     if(char.answer1[i].checked)
-                //         console.log('a');
-                // }
-
-                
-
-                
-
+                    $("#result").append('<div id="result2">答对'+rightamount+'题，答错'+wrongamount+'题</div><div>获得'+newpower+'能量值<div>');
                  $(".theme-popover-mask").fadeIn(100);
                  $(".theme-popover").slideDown(200);
                 })
@@ -248,80 +214,8 @@
         width:100%;
     }
     </style>
-
-    <script src="../dist/js/jquery-1.11.2.min.js" type="text/javascript"></script>
-    <script src="../dist/js/awol.js" type="text/javascript"></script>
-    <script type="text/javascript">
-    // var html="";
-    // jQuery(document).ready(function () {
-    //     function AP(children)
-    //     {
-    //         html+=("<li><a href='#'><div>第一层节点</div>"+children.name+"</a>");
-    //         for(var i in children.children)
-    //         {
-    //             if(i=="0")
-    //             {
-    //                 html+="<ul class='submenu'>"+"<li><a href='#'><div>第二层节点</div>"+children.children[i].name+"</a>";
-    //             }
-    //             else
-    //             {
-    //                 html+="<li><a href='#'><div>第二层节点</div>"+children.children[i].name+"</a>";
-    //             }
-    //             if (children.children[i].children.length>0)
-    //             {
-    //                 for (var t in children.children[i].children) {
-    //                     if(t==0)
-    //                     {
-    //                         html+="<ul class='submenu'>";
-    //                         AP(children.children[i].children[t]);
-    //                     }
-    //                     else
-    //                     {
-    //                         AP(children.children[i].children[t]);
-    //                         if(t==children.children[i].children.length-1)
-    //                         {
-    //                             html+="</ul></li>";
-    //                         }
-    //                     //html+="</ul>";
-    //                 }
-    //             };
-    //                 //html+="</li>";
-    //             }
-    //             else{html+="</li>"}
-    //         }
-    //                             //html+="</ul>";
-    //                             html+="</li>";
-    //                         }
-    //                         $.ajax({
-    //                             type: "get",
-    //                             url: "http://xboxweb.azurewebsites.net/api/user/getseed",
-    //                             success: function (data) {
-    //             //var html="<ul class=\"submenu\">";
-                
-    //             var string_json = JSON.stringify(data);
-    //             var obj = JSON.parse(string_json);
-    //             for (var i in obj.children) {
-    //                 html=html.substring(0,html.length-5);
-    //                 if(i!=0)
-    //                     html+="</ul></li>";
-    //                 AP(obj.children[i]);
-    //             };
-    //             html+="</li></ul>";
-    //             $('#demo-list').append(html);
-    //             $("#demo-list").trigger("create"); 
-    //             jQuery("#jquery-accordion-menu").jqueryAccordionMenu();
-    //         }
-    //     });
-    //                         $(function () {
-    //     //顶部导航切换
-    //     $("#demo-list li").click(function () {
-    //         $("#demo-list li.active").removeClass("active")
-    //         $(this).addClass("active");
-    //     })
-    // });
-    // });
-
-
+    <script>
+    //知识树
     var html="";
     jQuery(document).ready(function () {
         function AP(children)
@@ -331,7 +225,7 @@
             html+=("<li id="+id1+"><a href='#'>"+children.name+"</a>");
             for(var i in children.children)
             {
-                var id2=children.children.Id;
+                var id2=children.children[i].Id;
                 if(i=="0")
                 {
                     html+="<ul class='submenu'>"+"<li id="+id2+"><a href='#'>"+children.children[i].name+"</a>";
@@ -368,6 +262,7 @@
 
         $.ajax({
             type: "get",
+             async:false,
             url: "http://xboxweb.azurewebsites.net/api/user/getseed",
             success: function (data) {
                 var string_json = JSON.stringify(data);
@@ -380,8 +275,9 @@
                 };
                 html+="</li></ul>";
                 $('#demo-list').append(html);
-                $("#demo-list").trigger("create"); 
-                jQuery("#jquery-accordion-menu").jqueryAccordionMenu();
+                 if ($('#demo-list').find(".submenu").length > 0) {
+                $('#demo-list').find(".submenu").siblings("a").append("<span class='submenu-indicator'>+</span>")
+            }
             }
         });
         //顶部导航切换
@@ -392,7 +288,7 @@
     });
 
     </script>
-
+    <script src="../dist/js/awol.js"></script>
 
 
 
@@ -541,6 +437,7 @@
         </button>
         <script>
              $('#showanswer').click(function () {
+                // postpower(newpower);
                 $('#result2').remove();
                 $('.answerlist').remove();
                   $('.theme-popover-mask').fadeOut(100);

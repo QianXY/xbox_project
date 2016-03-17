@@ -37,9 +37,10 @@
                     }
                     console.log(totalCourse);
                     power=data.Power;
+                    setCookie("userid",data.Id);
                     setCookie("totalCourse",totalCourse);
-                    serCookie("power",power)
-                    // location.href="http://localhost/test/pages/index.html";
+                    setCookie("power",power)
+                    location.href="http://localhost/test/pages/index.html";
                 }
                 if(data.Status=="Password Error"){
                 }
