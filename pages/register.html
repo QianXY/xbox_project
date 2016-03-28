@@ -42,32 +42,83 @@
       // }
       $(document).ready(function (){
 
+          function setCookie(cname, cvalue, exdays) {
+                  var d = new Date();
+                  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                  var expires = null; //"expires=" + d.toUTCString();
+                  this.document.cookie = cname + "=" + cvalue + "; " + expires;
+            };
+
+
+          var username;
+          var password;
+          var firstname;
+          var lastname;
+          var name;
+          var emailaddress;
+          var grade;
+          var gender;
+          var age;
+          
 
         function register(){
 
-          var username=$("input[name='username']").val();
-          var password=$("input[name='password']").val();
-          var firstname=$("input[name='firstname']").val();
-          var lastname=$("input[name='lastname']").val();
-          var name=firstname+lastname;
-          var email=$("input[name='email']").val();
-          var grade=$("input[name='grade']:checked").val();
-
-            $.post("http://xboxweb.azurewebsites.net/api/user/register",{Name:username,Password:password}, function(data,status){
-                if(data.Status=="Success"){
+            $.post("http://xboxweb.azurewebsites.net/api/user/register",{Name:username,Password:password,Email:emailaddress,Grade:grade,Lastname:lastname,Firstname:firstname,Gender:gender,Age:age,}, function(data,status){
+                if(data.Status=="success"){
                     console.log(data);
-                }
-                if(data.Status=="Password Error"){
-                  console.log(data);
+                    alert("注册成功，请登录");
+                    location.href="http://localhost/test/pages/login.html";
                 }
             });
+          // register();
         }
 
-        $(".btn-finish").click(function(){
-
+        $('.btn-finish').click(function(){
+          username=$("input[name='username']").val();
+          password=$("input[name='password']").val();
+          firstname=$("input[name='firstname']").val();
+          lastname=$("input[name='lastname']").val();
+          name=firstname+lastname;
+          emailaddress=$("input[name='email']").val();
+          grade=$("input[name='grade']:checked").val();
+          gender=$("select[name='gender']").val();
+          age=$("select[name='age']").val();
+          console.log(emailaddress);
           register();
-
         })
+
+       
+
+         $('#username').change(function () {
+              $.ajax({
+                  type: "get",
+                  //async:false,
+                  url: "http://xboxweb.azurewebsites.net/api/user/namesearch?name=" + $('#username').val(),
+                  success: function (data) {
+                      var string_json = JSON.stringify(data);
+                      if (string_json == "true") {
+                          $('#username').attr("class","form-control error");
+                          $('#username').parent().append('<label id="username-error" class="error" for="username">该用户名已被占用</label>');
+                          
+                          setTimeout(function(){
+                            $('#username-error').remove();
+                            $('#username').val("");
+                            $('#username').attr("class","form-control");
+                            },1000);//sleep(5000);
+                          
+
+                      }
+                      else{
+                          
+                          // $('#username').parent().append('<label id="username-error" class="error" for="username">shabi</label>');
+                          
+                      }
+
+                  }
+              });
+          });
+
+        
     });
     </script>
 </head>
@@ -126,16 +177,16 @@
                                   <div class="col-sm-6">
                                       <div class="form-group">
                                         <label>用户名 <small>(必填)</small></label>
-                                        <input name="username" type="text" class="form-control" placeholder="Smith...">
+                                        <input id="username" name="username" type="text" class="form-control" placeholder="">
                                       </div>
 
                                       <div class="form-group">
                                           <label>密码 </label>
-                                          <input name="password" id="password" class="form-control" placeholder="">
+                                          <input type="password" name="password" id="password" class="form-control" placeholder="最短3位">
                                       </div>
                                       <div class="form-group1">
                                           <label>确认密码 </label>
-                                          <input name="password2" class="form-control" placeholder="">
+                                          <input type="password" name="password2" class="form-control" placeholder="">
                                       </div>
                                   </div>
                               </div>
@@ -183,10 +234,11 @@
 
 
                             <div class="tab-pane" id="address">
-                                <div class="row col-md-12">
-                                    <div class="col-md-12">
+                                <div class="row col-md-12" >
+                                  <div style="position:absolute;height:300px;width:200;overflow:auto;">
+                                      <div class="col-md-12">
                                         <h4 class="info-text"> 我们还想知道您更多的秘密~ </h4>
-                                    </div>
+                                      </div>
 
                                       <div class="col-md-6 col-md-offset-1 ">
                                             <labe>姓</label><br>
@@ -196,10 +248,10 @@
                                       <div class="col-md-4">
                                             <label>年龄</label>
                                              <select name="age" class="form-control">
-                                                <option value=""> 12 </option>
-                                                <option value=""> 13 </option>
-                                                <option value=""> 14 </option>
-                                                <option value=""> 15 </option>
+                                                <option value="12"> 12 </option>
+                                                <option value="13"> 13 </option>
+                                                <option value="14"> 14 </option>
+                                                <option value="15"> 15 </option>
                                             </select>
                                       </div>
                                       <div class="col-md-6 col-md-offset-1">
@@ -210,8 +262,8 @@
                                       <div class="col-md-4">
                                             <label>性别</label>
                                              <select name="gender" class="form-control">
-                                                <option value=""> 男 </option>
-                                                <option value=""> 女 </option>
+                                                <option value="M"> 男 </option>
+                                                <option value="F"> 女 </option>
                                             </select>
                                       </div>
 
@@ -237,8 +289,21 @@
                                       <div class="form-group col-md-10 col-md-offset-1">
                                           <label>邮箱 </label>
                                           <input name="email" type="email" class="form-control" placeholder="andrew@creative-tim.com">
-                                          </div>
                                       </div>
+                                      <div class="form-group col-md-10 col-md-offset-1">
+                                          <label>邮箱 </label>
+                                          <input name="email1" type="email1" class="form-control" placeholder="andrew@creative-tim.com">
+                                      </div>
+                                      <div class="form-group col-md-10 col-md-offset-1">
+                                          <label>邮箱 </label>
+                                          <input name="email2" type="email2" class="form-control" placeholder="andrew@creative-tim.com">
+                                      </div>
+                                      <div class="form-group col-md-10 col-md-offset-1">
+                                          <label>邮箱 </label>
+                                          <input name="email3" type="email3" class="form-control" placeholder="andrew@creative-tim.com">
+                                      </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="wizard-footer">

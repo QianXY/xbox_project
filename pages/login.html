@@ -39,8 +39,11 @@
                     power=data.Power;
                     setCookie("userid",data.Id);
                     setCookie("totalCourse",totalCourse);
-                    setCookie("power",power)
-                    location.href="http://localhost/test/pages/index.html";
+                    setCookie("power",power);
+                    if(power==0)
+                        location.href="http://localhost/test/pages/random.html";
+                    else
+                        location.href="http://localhost/test/pages/index.html";
                 }
                 if(data.Status=="Password Error"){
                 }
@@ -97,6 +100,13 @@
     #passworddiv{
         padding-top:10px;
     }
+    .btn-primary{
+        color:white;
+    }
+    #register{
+        background: #efa548;
+        color: white;
+    }
 
     </style>
 </head>
@@ -118,7 +128,7 @@
             <br>
             <a id="login" class="btn btn-primary btn-lg btn-block">登录</a>
             <br>
-            <a class="btn btn-danger btn-lg btn-block" href="register.html">注册</a>
+            <a id="register" class="btn btn-lg btn-block" href="register.html">注册</a>
             <a class="login-link" href="#">忘记密码</a>
         </form>
         </div>
