@@ -30,16 +30,14 @@
             var power;
             $.post("http://xboxweb.azurewebsites.net/api/user/loginUser",{Name:name,Password:password}, function(data,status){
                 if(data.Status=="Success"){
-                    var totalCourse="";
+                    var totalCourse=JSON.stringify(data.CourseInfo);
                     console.log(data);
-                    for(var i in data.CourseInfo){
-                        totalCourse+=data.CourseInfo[i].Id+",";
-                    }
                     console.log(totalCourse);
                     power=data.Power;
                     setCookie("userid",data.Id);
                     setCookie("totalCourse",totalCourse);
                     setCookie("power",power);
+                    alert(totalCourse);
                     if(power==0)
                         location.href="http://localhost/test/pages/random.html";
                     else

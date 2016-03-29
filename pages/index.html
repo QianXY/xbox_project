@@ -227,6 +227,18 @@
                     $(".useranswer").remove();
                 })
 
+                $(".myclose").click(function(){
+                        $('.theme-popover-mask2').fadeOut(100);
+                        $('.theme-popover2').slideUp(200);
+                })
+
+                // now
+                $("#showrecom").click(function(){
+
+                        $('.theme-popover-mask2').fadeIn(100);
+                        $('.theme-popover2').slideDown(200);
+                })
+
 
 
 
@@ -234,17 +246,18 @@
         {
 
             var id1=children.Id;
-            html+=("<li id="+id1+"><a href='#'>"+children.name+"</a>");
+            html+=("<li class='needcolor' id="+id1+"><a href='#'>"+children.name+"</a><div></div>");
             for(var i in children.children)
             {
                 var id2=children.children[i].Id;
                 if(i=="0")
                 {
-                    html+="<ul class='submenu'>"+"<li id="+id2+"><a href='#'>"+children.children[i].name+"</a>";
+                    html+="<ul class='submenu'>"+"<li class='needcolor' id="+id2+"><a href='#'>"+children.children[i].name+"</a><div></div>";
                 }
                 else
                 {
-                    html+="<li id="+id2+"><a href='#'>"+children.children[i].name+"</a>";
+                    html+="<li class='needcolor' id="+id2+"><a href='#'>"+children.children[i].name+"</a><div></div>";
+
                 }
                 if (children.children[i].children.length>0)
                 {
@@ -446,28 +459,44 @@
         .theme-popover {
             z-index:9999;
             position:fixed;
-            top:50%;
-            left:50%;
-            width:500px;
-            height:260px;
-            margin:-180px 0 0 -330px;
+            top:25%;
+            left:25%;
+            width:50%;
+            height:50%;
+            margin:0px 0 0 0px;
             border-radius:5px;
             border:solid 2px #666;
             background-color:#fff;
             display:none;
             box-shadow: 0 0 10px #666;
         }
-        .theme-popover-answer {
+        .theme-popover-mask2 {
+            z-index: 9998;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:#000;
+            opacity:0.4;
+            filter:alpha(opacity=40);
+            display:none
+        }
+        .theme-popover2 {
             z-index:9999;
             position:fixed;
-            float: right;
-
+            top:5%;
+            left:20%;
+            width:60%;
+            height:90%;
+            margin:0px 0 0 0px;
             border-radius:5px;
             border:solid 2px #666;
             background-color:#fff;
             display:none;
             box-shadow: 0 0 10px #666;
         }
+        
         #showrecom,#nextpage{
 
             display: none;
@@ -481,33 +510,28 @@
         h5{
             color: black;
         }
-        .player{
-            position: absolute;
-            left: 15px;
-            top: 55px; 
-            width:15px;
-            height: 150px;
-            background-color: gray;
-            border-right-width: 0; /* removes the right border from the player for it to site nicely against the browser window */
-            border-top-left-radius: 2px;
-            border-bottom-left-radius: 2px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-            -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.1);
-            -moz-box-shadow: 0 0 5px rgba(0,0,0,0.1);
-            transition: .218s;
-            -moz-transition: .218s;
-            -ms-transition: .218s;
-            -o-transition: .218s;
-            -webkit-transition: .218s;
-            z-index: 9997;
-            opacity:0.4;
-        }
-        .playerHover, .playerFocus{
-            width:  286px;
-        }
         #studyprocess{
             float: right;
             color: red;
+        }
+        .needcolor{
+            background-color: #383838;
+        }
+        .myclose{
+            position:relative;
+            padding-top: 20px;
+            padding-right: -20px;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 18px;
+            color:black;
+            opacity:0.2;
+            cursor:pointer;
+            text-align: center;
+        }
+        h3{
+            text-align: center;
         }
     </style>
 
@@ -517,7 +541,7 @@
 <div class="container-fluid">
 
 
-<!-- 弹窗 -->
+<!-- 弹窗1 -->
 <div class="theme-popover">
     <div class="theme-poptit">
         <h3>答题情况</h3>
@@ -531,17 +555,24 @@
         </script>
     </div>
 </div>
+<div class="theme-popover-mask"></div>
 
 
-<div class="theme-popover-answer">
-    <div class="theme-poptit">
-        <h3>解析</h3>
-        
+<!-- 弹窗 -->
+
+<!-- 弹窗2 -->
+<div class="theme-popover2 col-md-12">
+    <div class="theme-poptit2 col-md-12">
+        <div class="col-md-4 col-md-offset-4">
+            <h3>本章推荐</h3>
+        </div>
+        <div class="col-md-1 col-md-offset-3">
+            <a class="myclose">x</a>
+            <!-- //now -->
+        </div>
     </div>
 </div>
-
-
-<div class="theme-popover-mask"></div>
+<div class="theme-popover-mask2"></div>
 <!-- 弹窗 -->
 
 
@@ -593,10 +624,7 @@
                     <i class="fa fa-clock-o fa-fw"></i> Questions
                 </div>
 
-        <div class="player">
-            <!-- <img id="studyprocess" src="../assets/img/studyprocess.png"> -->
-            <a id="studyprocess"><br>学<br>习<br>进<br>度<br></a>
-        </div>
+        
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <ul class="timeline">
