@@ -235,12 +235,10 @@
                             console.log(recomcontent);
                             $("#img").attr("src",recomvideoUrl);
                             var videocache='<embed id="img" src="'+recomvideoUrl+'" allowFullScreen="true" quality="high"  align="middle" allowScriptAccess="always"></embed>';
-                            var titlecache='<h3 id="titleplace2">'+recomword+'</h3>';
-                            var contentcache='<a id="contentplace2">'+recomcontent+'</a>';
+                            var contentcache='<p id="contentplace2">'+recomcontent+'</p>';
                 
                             $("#videoplace").append(videocache);
-                            $("#").append(titlecache);
-                            $("#").append(contentcache);
+                            $("#textplace1").append(contentcache);
                         }
                     });
                 }
@@ -296,7 +294,7 @@
         {
 
             var id1=children.Id;
-            html+=("<li class='needcolor' id="+id1+"><a href='#'>"+children.name+"</a><div></div>");
+            html+=("<li class='needcolor' id="+id1+"><a class='level"+children.rank+"' href='#'>"+children.name+"</a><div></div>");
             
             for(var i in children.children)
             {
@@ -309,17 +307,18 @@
                 var id2=children.children[i].Id;
                 if(i=="0")
                 {
-                    html+="<ul class='submenu'>"+"<li class='needcolor' id="+id2+"><a href='#'>"+children.children[i].name+"</a><div></div>";
+                    html+="<ul class='submenu'>"+"<li class='needcolor' id="+id2+"><a class='level"+children.children[i].rank+"' href='#'>"+children.children[i].name+"</a><div></div>";
                 }
                 else
                 {
-                    html+="<li class='needcolor' id="+id2+"><a href='#'>"+children.children[i].name+"</a><div></div>";
+                    html+="<li class='needcolor' id="+id2+"><a class='level"+children.children[i].rank+"' href='#'>"+children.children[i].name+"</a><div></div>";
 
                 }
                 var courseInfo=getCookie("totalCourse");
                 var c_json = JSON.parse(courseInfo);
                 if (children.children[i].children.length>0)
                 {
+                    // var averagelevel=0;
                     //二级有子节点
                     console.log("二级："+children.children[i].Id);
                     for (var t in children.children[i].children) {
@@ -327,8 +326,10 @@
                         for(var j in c_json){
                             if(children.children[i].children[t].Id==c_json[j].Id){
                                 console.log(" "+c_json[j].Id+":"+c_json[j].Degree+";");
+                                // averagelevel+=parseInt(c_json[j].Degree);
                             }
                         }
+
                         // console.log("三级："+children.children[i].children[t].Id);
                         if(t==0)
                         {
@@ -343,8 +344,28 @@
                                 html+="</ul></li>";
                             }
                         //html+="</ul>";
+                        }
+
                     }
-                };
+
+                    // averagelevel=Math.floor(averagelevel/children.children[i].children.length);
+
+                    // alert(averagelevel);
+                        
+                        // $("#"+id2+" div").attr("style","color:#FFFFFF ;margin-left:35px");
+                        // $("#"+id2+" a").attr("style","padding-bottom:0px");
+                        // switch(averagelevel){
+                        //     case 1:
+                        //         $("#"+id2+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:10%;height:2.5%;' id='level' src='../assets/img/color/blue1.png'/>");break;
+                        //     case 2:
+                        //     alert("fuck"+averagelevel);
+
+                        //         // $("#"+id2+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:20%;height:2.5%;' id='level' src='../assets/img/color/blue2.png'/>");break;
+                        //     case 3:
+                        //         $("#"+id2+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:30%;height:2.5%;' id='level' src='../assets/img/color/blue3.png'/>");break;
+                        //     case 4:
+                        //         $("#"+id2+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:40%;height:2.5%;' id='level' src='../assets/img/color/blue4.png'/>");break;
+                        // }
                     //html+="</li>";
                 }
                 else{html+="</li>"}
@@ -365,7 +386,7 @@
                 //     }
                 for (var i in obj.children) {
                     html=html.substring(0,html.length-5);
-                    //二级无子节点
+                    //一级无子节点
                     if(obj.children[i].rank==1&&obj.children[i].children!=0){
                         console.log("一级："+obj.children[i].Id);
                     }
@@ -379,7 +400,8 @@
                 $('#demo-list').find(".submenu").siblings("a").append("<span class='submenu-indicator'>+</span>")
 
                 
-            }
+                }
+
             }
         });
         //顶部导航切换
@@ -608,7 +630,7 @@
             cursor:pointer;
             text-align: center;
         }
-        h1{
+        h1,h3{
             text-align: center;
         }
         .video{
@@ -662,15 +684,14 @@
         <div class="col-md-1 col-md-offset-3">
             <a class="myclose">x</a>
         </div>
-        <div id="videoplace" style="height:400px;margin-top:30px" class="col-md-8 video">
+        <div id="videoplace" style="height:400px;margin-top:30px" class="col-md-6 video">
 
         </div>
-        <div id="textplace" style="height:400px;margin-top:30px" class="col-md-4">
-            <div id="titleplace" class="col-md-12">
-                
+        <div id="textplace" style="margin-top:30px" class="col-md-6">
+            <div id="textplace1" class="col-md-12">
             </div>
-            <div id="contentplace" class="col-md-12">
-
+            <div id="textplace2" class="col-md-12">
+                <h3>例题</h3>
             </div>
         </div>
     </div>

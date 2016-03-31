@@ -6,6 +6,8 @@
  	clickEffect: true
  };
 
+      var color;
+
  $(document).ready(function () {
      function getCookie(name) {
                var arr,reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
@@ -79,17 +81,25 @@
             if(id!=null||id.length>0){
                switch(master){
                case "1":
-                  $("#"+id+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:10%;height:2.5%;' id='level' src='../assets/img/color/yellow1.png'/>");levelnum(id);break;
+                  levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:10%;height:2.5%;' src='../assets/img/color/"+color+"1.png'/><a style='display:none' value='1'>1</a>");break;
                case "2":
-                  $("#"+id+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:20%;height:2.5%;' id='level' src='../assets/img/color/yellow2.png'/>");levelnum(id);break;
+                  levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:20%;height:2.5%;' src='../assets/img/color/"+color+"2.png'/><a style='display:none' value='2'>2</a>");break;
                case "3":
-                  $("#"+id+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:30%;height:2.5%;' id='level' src='../assets/img/color/yellow3.png'/>");levelnum(id);break;
+                  levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:30%;height:2.5%;' src='../assets/img/color/"+color+"3.png'/><a style='display:none' value='3'>3</a>");break;
                case "4":
-                  $("#"+id+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:40%;height:2.5%;' id='level' src='../assets/img/color/yellow4.png'/>");levelnum(id);break;
+                  levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:40%;height:2.5%;' src='../assets/img/color/"+color+"4.png'/><a style='display:none' value='4'>4</a>");break;
                }
             }
             
         }
+        //console.log($(".level2").length);
+        var secondlevel = $(".level2");
+        for(var t in secondlevel){
+              console.log(secondlevel[t]);
+              //console.log(secondlevel[t].("a")[0].val());
+              
+        }
+        //console.log()
     }
 
     function levelnum(id){
@@ -97,16 +107,19 @@
       if(test.length>0)
       {
          var value=$("#"+id+" a")[0].innerText;
-         var num=value.indexOf(".");
-         if(num==1){
-            $("#"+id+" div").attr("style","color:#FFFFFF ;margin-left:35px");
-            $("#"+id+" a").attr("style","padding-bottom:0px");
-         }
+         var num=value.split(".").length;
          if(num==2){
-            $("#"+id+" div").attr("style","color:#FFFFFF ;margin-left:50px");
-            $("#"+id+" a").attr("style","padding-bottom:0px");
+            $("#"+id).find("div:eq(0)").attr("style","color:#FFFFFF ;margin-left:35px");
+            $("#"+id).find("a:eq(0)").attr("style","padding-bottom:0px");
+            color="blue";
+         }
+         if(num==3){
+            $("#"+id).find("div:eq(0)").attr("style","color:#FFFFFF ;margin-left:50px");
+            $("#"+id).find("a:eq(0)").attr("style","padding-bottom:0px");
+            color="yellow";
          }
       }
+      return
     }
 
 
