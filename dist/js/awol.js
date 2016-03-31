@@ -79,13 +79,13 @@
             if(id!=null||id.length>0){
                switch(master){
                case "1":
-                  $("#"+id+" div").append("<img src='../assets/img/1.png'/>");levelnum(id);break;
+                  $("#"+id+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:10%;height:2.5%;' id='level' src='../assets/img/color/yellow1.png'/>");levelnum(id);break;
                case "2":
-                  $("#"+id+" div").append("<img src='../assets/img/2.png'/>");levelnum(id);break;
+                  $("#"+id+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:20%;height:2.5%;' id='level' src='../assets/img/color/yellow2.png'/>");levelnum(id);break;
                case "3":
-                  $("#"+id+" div").append("<img src='../assets/img/3.png'/>");levelnum(id);break;
+                  $("#"+id+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:30%;height:2.5%;' id='level' src='../assets/img/color/yellow3.png'/>");levelnum(id);break;
                case "4":
-                  $("#"+id+" div").append("<img src='../assets/img/4.png'/>");levelnum(id);break;
+                  $("#"+id+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:40%;height:2.5%;' id='level' src='../assets/img/color/yellow4.png'/>");levelnum(id);break;
                }
             }
             

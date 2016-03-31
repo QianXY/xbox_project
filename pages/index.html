@@ -7,11 +7,10 @@
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+   
 
     <script src="../dist/js/jquery-latest.js" type="text/javascript"></script>
-    <script src="../dist/js/js.js" type="text/javascript"></script>
-
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
 
@@ -32,6 +31,15 @@
                else
                    return 'shabi';
         }
+
+        function setCookie(cname, cvalue, exdays) {
+                  var d = new Date();
+                  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                  var expires = null; //"expires=" + d.toUTCString();
+                  this.document.cookie = cname + "=" + cvalue + "; " + expires;
+            }
+
+
         var userid=getCookie("userid");
         var rightamout; //5题中答对的题的数量
         var wrongamount;    //5题中答错的题的数量
@@ -52,12 +60,22 @@
         var oldtime;
         var newtime;
         var time;
+        var currentCourse="";
+        //推荐内容
+        var recomvideoUrl;
+        var recomcontent;
+        var recomquestion;
+        var recomword;
         $(document).ready(function () {
+            // alert(totalCourse);
             // var a="149448";
             // if(totalCourse.indexOf(a)>0)
             //     console.log(totalCourse);
             // else
             //     console.log("shashabi");
+                $(function () { $("[data-toggle='tooltip']").tooltip(); });
+
+
                 function random(apilink){
                     $.ajax({
                     type: "GET",
@@ -101,6 +119,10 @@
                     $("#showrecom").fadeOut(100);
                     $(".tyes").remove();
                     $(".tno").remove();
+                    $(".yesorno").remove();
+                    for(var i=0;i<5;i++){
+                        $("#logo"+i).append('<i class="glyphicon glyphicon-education"></i>');
+                    }
                 })
 
            
@@ -122,12 +144,16 @@
                         }
                         if(getanswer[i]==answer[i]){
                                 rightamount++;
+                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/yes.png">');
+                                $(".glyphicon").remove();
                                 $("#title"+i).append('<div class="tyes" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5>答对了<button class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                                 newpower+=difficulty[i]*50;
                         }
                         // console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  right");
                         else{
-                            wrongamount++;
+                                wrongamount++;
+                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/no.png">');
+                                $(".glyphicon").remove();
                                 $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5>答错了<button class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                             totalid+=id+";";
                         }
@@ -185,14 +211,37 @@
                 //     })
                 // }
 
-                returnid(totalid);
+                // returnid(totalid);
                 }
 
                 
 
 
-                function returnid(totalid){
-                    $.post("http://xboxweb.azurewebsites.net/api/user/getlost",{id:1,u_password:123,u_courseid:totalid}, function(data,status){
+                // function returnid(totalid){
+                //     $.post("http://xboxweb.azurewebsites.net/api/user/getlost",{id:1,u_password:123,u_courseid:totalid}, function(data,status){
+                //     });
+                // }
+                function getrecom(currentCourse){
+                    $.ajax({
+                    type: "GET",
+                    url: "http://xboxweb.azurewebsites.net/api/explain/explain/"+currentCourse,
+                        success: function (data) {
+                            console.log(data);
+                            recomvideoUrl=data.video_list[0].embed;
+                            recomword=data.word;
+                            recomcontent=data.content;
+                            console.log(recomvideoUrl);
+                            console.log(recomword);
+                            console.log(recomcontent);
+                            $("#img").attr("src",recomvideoUrl);
+                            var videocache='<embed id="img" src="'+recomvideoUrl+'" allowFullScreen="true" quality="high"  align="middle" allowScriptAccess="always"></embed>';
+                            var titlecache='<h3 id="titleplace2">'+recomword+'</h3>';
+                            var contentcache='<a id="contentplace2">'+recomcontent+'</a>';
+                
+                            $("#videoplace").append(videocache);
+                            $("#").append(titlecache);
+                            $("#").append(contentcache);
+                        }
                     });
                 }
                 function postpower(ppp){
@@ -230,25 +279,33 @@
                 $(".myclose").click(function(){
                         $('.theme-popover-mask2').fadeOut(100);
                         $('.theme-popover2').slideUp(200);
+                        $('#img').remove();
                 })
 
-                // now
+                
                 $("#showrecom").click(function(){
-
                         $('.theme-popover-mask2').fadeIn(100);
                         $('.theme-popover2').slideDown(200);
+                        getrecom(currentCourse);
                 })
 
 
 
-
+                //AP
                 function AP(children)
         {
 
             var id1=children.Id;
             html+=("<li class='needcolor' id="+id1+"><a href='#'>"+children.name+"</a><div></div>");
+            
             for(var i in children.children)
             {
+                //二级有子节点
+                // if(children.children[i].rank==2&&children.children[i].children!=0){
+                //     console.log("二级："+children.children[i].Id);
+                // }
+
+
                 var id2=children.children[i].Id;
                 if(i=="0")
                 {
@@ -259,9 +316,20 @@
                     html+="<li class='needcolor' id="+id2+"><a href='#'>"+children.children[i].name+"</a><div></div>";
 
                 }
+                var courseInfo=getCookie("totalCourse");
+                var c_json = JSON.parse(courseInfo);
                 if (children.children[i].children.length>0)
                 {
+                    //二级有子节点
+                    console.log("二级："+children.children[i].Id);
                     for (var t in children.children[i].children) {
+                        // now
+                        for(var j in c_json){
+                            if(children.children[i].children[t].Id==c_json[j].Id){
+                                console.log(" "+c_json[j].Id+":"+c_json[j].Degree+";");
+                            }
+                        }
+                        // console.log("三级："+children.children[i].children[t].Id);
                         if(t==0)
                         {
                             html+="<ul class='submenu'>";
@@ -292,8 +360,15 @@
             success: function (data) {
                 var string_json = JSON.stringify(data);
                 var obj = JSON.parse(string_json);
+                // if(obj.children[0].rank==1){
+                //         console.log(obj.children[0].Id);
+                //     }
                 for (var i in obj.children) {
                     html=html.substring(0,html.length-5);
+                    //二级无子节点
+                    if(obj.children[i].rank==1&&obj.children[i].children!=0){
+                        console.log("一级："+obj.children[i].Id);
+                    }
                     if(i!=0)
                         html+="</ul></li>";
                     AP(obj.children[i]);
@@ -302,6 +377,8 @@
                 $('#demo-list').append(html);
                  if ($('#demo-list').find(".submenu").length > 0) {
                 $('#demo-list').find(".submenu").siblings("a").append("<span class='submenu-indicator'>+</span>")
+
+                
             }
             }
         });
@@ -317,13 +394,14 @@
                 // class='questionlist'  class="useranswer
                 $(".questionlist").remove();
                 $(".useranswer").remove();
-                //now
                 $(".tyes").remove();
                 $(".tno").remove();
                 $("#nextpage").fadeOut(100);
                 $("#showrecom").fadeOut(100);
                 $("#submit").fadeIn(100);
                 random(apilink);
+                currentCourse=getid;
+
             }
             else{
 
@@ -486,8 +564,8 @@
             z-index:9999;
             position:fixed;
             top:5%;
-            left:20%;
-            width:60%;
+            left:10%;
+            width:80%;
             height:90%;
             margin:0px 0 0 0px;
             border-radius:5px;
@@ -530,7 +608,22 @@
             cursor:pointer;
             text-align: center;
         }
-        h3{
+        h1{
+            text-align: center;
+        }
+        .video{
+            background: url("../assets/img/imac.png")  no-repeat;
+            background-size: 480px 400px;
+            position: relative;
+        }
+        #img{
+            z-index:9999;
+            width: 447px;
+            height: 263px;
+            padding-left: 4px;
+            padding-top: 18px;
+        }
+        #titleplace2{
             text-align: center;
         }
     </style>
@@ -564,11 +657,21 @@
 <div class="theme-popover2 col-md-12">
     <div class="theme-poptit2 col-md-12">
         <div class="col-md-4 col-md-offset-4">
-            <h3>本章推荐</h3>
+            <h1>本章推荐</h1>
         </div>
         <div class="col-md-1 col-md-offset-3">
             <a class="myclose">x</a>
-            <!-- //now -->
+        </div>
+        <div id="videoplace" style="height:400px;margin-top:30px" class="col-md-8 video">
+
+        </div>
+        <div id="textplace" style="height:400px;margin-top:30px" class="col-md-4">
+            <div id="titleplace" class="col-md-12">
+                
+            </div>
+            <div id="contentplace" class="col-md-12">
+
+            </div>
         </div>
     </div>
 </div>
@@ -631,7 +734,8 @@
                         <!-- 第一题 -->
                         <li >
                             <!-- 问第一题 -->
-                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
+                            <div id="logo0" class="timeline-badge info">
+                                <i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -653,7 +757,8 @@
                         <!-- 第二题 -->
                         <li>
                             <!-- 问第二题 -->
-                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
+                            <div id="logo1" class="timeline-badge info">
+                                <i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -675,7 +780,8 @@
                         <!-- 第3题 -->
                         <li>
                             <!-- 问第三题 -->
-                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
+                            <div id="logo2" class="timeline-badge info">
+                                <i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -697,7 +803,8 @@
                         <!-- 第4题 -->
                         <li>
                             <!-- 问第四题 -->
-                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
+                            <div id="logo3" class="timeline-badge info">
+                                <i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -719,7 +826,8 @@
                         <!-- 第5题 -->
                         <li>
                             <!-- 问第五题 -->
-                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
+                            <div id="logo4" class="timeline-badge info">
+                                <i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
