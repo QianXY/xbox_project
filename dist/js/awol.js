@@ -7,6 +7,12 @@
  };
 
       var color;
+      function setCookie(cname, cvalue, exdays) {
+                  var d = new Date();
+                  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                  var expires = null; //"expires=" + d.toUTCString();
+                  this.document.cookie = cname + "=" + cvalue + "; " + expires;
+            }
 
  $(document).ready(function () {
      function getCookie(name) {
@@ -153,9 +159,46 @@
                           case 4:
                           $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award2.png'/><a style='display:none' value='4'>4</a>");break;
                           default:
-                          $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award1.png'/><a style='display:none' value='4'>4</a>");break;
+                          $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award0.png'/><a style='display:none' value='4'>4</a>");break;
                         }
-                      });
+                  });
+
+                  var block_status = 0;
+                  $(".level2").each(function (index) {
+                      if (block_status == 0) {
+                          var t = $(this).children("div:eq(0)").children("a[style='display:none']");
+                          console.log(t);
+                          if (t.length > 0) {
+                              console.log(t[0].text);
+                              if (parseInt(t[0].text) < 2) {
+                                  block_status = 1;
+                                  setCookie("currentlevel",$(this).find("li:eq(0) a").context.innerText);
+                                  setCookie("currentlevelid",$(this).attr("id"));
+                                  // console.log($(this).find("li:eq(0) a").context.innerText);
+                              }
+                          }
+                          else
+                          {
+                            setCookie("currentlevel",$(this).find("li:eq(0) a").context.innerText);
+                            
+                                  setCookie("currentlevelid",$(this).attr("id"));
+                                  // console.log($(this).find("li:eq(0) a").context.innerText);
+                            block_status =1;
+                          }
+                      }
+                      else
+                      {
+                          $(this).addClass("block_click");
+                          $(this).find("a").attr("style","color:gray");
+
+                          $(this).find("li").each(function (index) {
+                              $(this).addClass("block_click");
+                              $(this).find("a").attr("style","color:gray");
+
+                          });
+                      }
+                  });
+
     }
 
     function levelnum(id){

@@ -40,7 +40,35 @@
             }
 
 
+function updateStatus(userid)
+        {
+            if (userid != "shabi") {
+                $.ajax({
+                    type: "post",
+                    url: "http://xboxweb.azurewebsites.net/api/user/UserStatus",
+                    data: "Id=" + userid,
+                    async: false,
+                    success: function (data) {
+                        if (data.Status == "Success") {
+                            var totalCourse = JSON.stringify(data.CourseInfo);
+                            console.log(data);
+                            console.log(totalCourse);
+                            power = data.Power;
+                            setCookie("userid", data.Id);
+                            setCookie("totalCourse", totalCourse);
+                            setCookie("power", power);
+                        }
+                    }
+                });
+            }
+        }
+
+
         var userid=getCookie("userid");
+        if (userid != "shabi")
+        {
+                    updateStatus(userid);
+        }
         var rightamout; //5题中答对的题的数量
         var wrongamount;    //5题中答错的题的数量
         var totalid;    //打错的题的id集合
@@ -68,6 +96,8 @@
         var recomword;
         var getid;
         var length;
+        var current;
+        var currentid;
         $(document).ready(function () {
             // alert(totalCourse);
             // var a="149448";
@@ -76,6 +106,11 @@
             // else
             //     console.log("shashabi");
                 $(function () { $("[data-toggle='tooltip']").tooltip(); });
+                current=getCookie("currentlevel");
+                currentid=getCookie("currentlevelid");
+                $("#currentinfo").append(current);
+                var test="http://xboxweb.azurewebsites.net/api/question/qslist/"+currentid;
+                random(test);
 
 
                 function random(apilink){
@@ -423,7 +458,7 @@
             // console.log($(this).attr("id"));
             getid=$(this).attr("id");
             length=$("#"+getid).children(".submenu").length;
-            if(length==0){
+            if(length==0&&!$(this).hasClass("block_click")){
                 apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+getid;
                 // class='questionlist'  class="useranswer
                 $(".questionlist").remove();
@@ -669,6 +704,12 @@
             max-height: 400px;
             overflow: auto;
         }
+        .needcolor{
+            background-color: #074b5b;
+        }
+        #currentinfo{
+            width: 300px;
+        }
     </style>
 
 </head>
@@ -678,12 +719,13 @@
 
 
 <!-- 弹窗1 -->
-<div class="theme-popover">
-    <div class="theme-poptit">
-        <h3>答题情况</h3>
-        <div id="result">
+<div class="theme-popover col-md-12" style="background-image:url(../assets/img/ele.png);background-size:666px 319px;">
+    <!-- now -->
+    <div class="theme-poptit col-md-12" >
+        <h3 style="height:30px">答题情况</h3>
+        <div style="height:190px" class="col-md-6 col-md-offset-5" id="result">
         </div>
-        <button id="showanswer" type="button" class="button button-caution button-pill button-pill">
+        <button id="showanswer" type="button" class="col-md-2 col-md-offset-5 button button-caution button-pill button-pill">
                 看答案
         </button>
         <script>
@@ -730,16 +772,25 @@
 
 
     <!-- 导航栏 -->
-  <div class="row" id="top">
+  <div class="row col-md-12" id="top">
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-top: 0">
-            <div class="navbar-header">
+            <div class="navbar-header col-md-12">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html" id="title">做题不无聊 V0.9</a>
+                <div class="col-md-11" style="padding-left:0">
+                    <div class="col-md-5">
+                    <a class="navbar-brand" style="padding-left:0" href="index.html" id="title">做题不无聊 V0.9</a>
+                    </div>
+                    <!-- now -->
+                    <div class="col-md-6">当前章节：<p id="currentinfo"></p></div>
+                </div>
+                <div class="col-md-1" style="padding-right:0">
+                    <a class="navbar-brand" style="padding-right:0" href="person.html" >个人中心</a>
+                </div>
             </div>
             <!-- /.navbar-header -->
             
@@ -747,6 +798,7 @@
             
         </nav>
     </div>
+
 
 
 

@@ -109,7 +109,7 @@
 	width: 100%;
 	float: left;
 	font-size: 11px;
-	background: #383838;
+	background: #074b5b;
 	border-top: none;
 	position: relative;
 	border-left: solid 6px transparent;
@@ -235,19 +235,19 @@
 }
 
 .red.jquery-accordion-menu .jquery-accordion-menu-footer,.red.jquery-accordion-menu .jquery-accordion-menu-header,.red.jquery-accordion-menu ul li a {
-	background: #ED5565
+	background: #20a8d1
 }
 
 .red.jquery-accordion-menu>ul>li.active>a,.red.jquery-accordion-menu>ul>li:hover>a {
-	background: #DA4453
+	background: #20a8d1
 }
 
 .red.jquery-accordion-menu>ul>li>a {
-	border-bottom-color: #DA4453
+	border-bottom-color: #20a8d1
 }
 
 .red.jquery-accordion-menu ul ul.submenu li:hover>a {
-	border-left-color: #DA4453
+	border-left-color: #20a8d1
 }
 
 .white.jquery-accordion-menu .jquery-accordion-menu-footer,.white.jquery-accordion-menu .jquery-accordion-menu-header,.white.jquery-accordion-menu ul li a {

@@ -28,15 +28,21 @@
          var name=$('#login-name').val();
             var password=$('#login-pass').val();
             var power;
+            var grade;
+            var name;
             $.post("http://xboxweb.azurewebsites.net/api/user/loginUser",{Name:name,Password:password}, function(data,status){
                 if(data.Status=="Success"){
                     var totalCourse=JSON.stringify(data.CourseInfo);
                     console.log(data);
                     console.log(totalCourse);
                     power=data.Power;
+                    grade=data.Grade;
+                    name=data.Name;
                     setCookie("userid",data.Id);
                     setCookie("totalCourse",totalCourse);
                     setCookie("power",power);
+                    setCookie("grade",grade);
+                    setCookie("name",name);
                     alert(totalCourse);
                     if(power==0)
                         location.href="http://localhost/test/pages/random.html";

@@ -14,18 +14,101 @@
     <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
     <!-- /#wrapper -->
     <style type="text/css">
+    .chapter2{
+        vertical-align: middle;
+    }
+    #studycenter{
+        padding-left: 0;
+    }
     </style>
+
+
+
+
+    <script type="text/javascript">
+            function setCookie(cname, cvalue, exdays) {
+                  var d = new Date();
+                  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                  var expires = null; //"expires=" + d.toUTCString();
+                  this.document.cookie = cname + "=" + cvalue + "; " + expires;
+            };
+
+            function getCookie(name) {
+               var arr,reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+               if (arr = document.cookie.match(reg))
+                   return unescape(arr[2]);
+               else
+                   return 'shabi';
+            }
+
+            var name;
+            var grade;
+
+    $(document).ready(function (){
+            name=getCookie("name");
+            grade=getCookie("grade");
+            $("#personalinfo").append(name+"<br>"+grade);
+
+            
+    })
+    </script>
 
 </head>
 
 
 
 <body>
-    <div class="col-md-12 background" style="height:100%;background-image:url(../assets/img/person/background.png)">
-        <div class="col-md-12 chapter1" style="height:25%;background-image:url(../assets/img/person/background.png)"></div>
-        <div class="col-md-12 chapter2" style="height:25%;background-image:url(../assets/img/person/background.png)"></div>
-        <div class="col-md-12 chapter3" style="height:25%;background-image:url(../assets/img/person/background.png)"></div>
-        <div class="col-md-12 chapter4" style="height:25%;background-image:url(../assets/img/person/background.png)"></div>
+    <div class="col-md-10 col-md-offset-1 background" style="padding:0 0 0 0">
+        <!-- 1模块 -->
+        <div class="col-md-12 chapter1" style="padding:0 0 0 0;height:25%;width:100%;background-image:url(../assets/img/person/background.png)">
+            <div id="personalinfo"></div>
+        </div>
+
+
+        <!-- 2模块 -->
+        <div class="col-md-12 chapter2" style="padding:0 0 0 0;height:25%;width:100%;background-image:url(../assets/img/person/background1.png)">
+            <div id="studycenter" class="col-md-2">
+                <img src="../assets/img/person/10.png" >
+            </div>
+            <div class="col-md-2">
+                <img src="../assets/img/person/11.png" >
+            </div>
+
+            <div class="col-md-2 col-md-offset-1">
+                <img src="../assets/img/person/12.png" >
+            </div>
+
+            <div class="col-md-2 col-md-offset-1">
+                <img src="../assets/img/person/13.png" >
+            </div>
+        </div>
+
+
+        <!-- 3模块 -->
+        <div class="col-md-12 chapter3" style="padding:0 0 0 0;height:25%;width:100%;background-image:url(../assets/img/person/background2.png)">
+            <div id="studycenter" class="col-md-2">
+                <img src="../assets/img/person/20.png" >
+            </div>
+            <div class="col-md-2">
+                <img src="../assets/img/person/21.png" >
+            </div>
+
+            <div class="col-md-2 col-md-offset-1">
+                <img src="../assets/img/person/22.png" >
+            </div>
+
+            <div class="col-md-2 col-md-offset-1">
+                <img src="../assets/img/person/23.png" >
+            </div>
+        </div>
+
+
+        <!-- 4模块 -->
+        <div class="col-md-12 chapter4" style="padding:0 0 0 0;height:25%;width:100%;background-image:url(../assets/img/person/background.png)">
+            <div class="col-md-2 col-md-3">
+                <img  src="../assets/img/person/41.png" >
+            </div>
+        </div>
     </div>
 
 </body>
