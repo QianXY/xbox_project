@@ -94,12 +94,68 @@
         }
         //console.log($(".level2").length);
         var secondlevel = $(".level2");
-        for(var t in secondlevel){
-              console.log(secondlevel[t]);
-              //console.log(secondlevel[t].("a")[0].val());
-              
-        }
-        //console.log()
+        var sumlevel1=0;
+        var sum1=0;
+        var sumlevel2=0;
+        var sum2=0;
+        // for(var t in secondlevel){
+              // for(var i=0;i<=secondlevel.length;i++){
+                  // console.log(secondlevel[i].children[1].children[1].innerHTML);
+                  $(".level2").each(function(index) {
+                    sum1=0;
+                    sumlevel1=0;
+                    if ($(this).find(".submenu").length > 0) {
+                      $(this).find("a[style='display:none']").each(function(){
+                        sumlevel1+=parseInt($(this)[0].text);
+                        sum1++;
+                      });
+                      sumlevel1=Math.floor(sumlevel1/sum1);
+                      if(sumlevel1!=0){
+
+                        $(this).find("div:eq(0)").attr("style","color:#FFFFFF ;margin-left:35px");
+                        $(this).find("a:eq(0)").attr("style","padding-bottom:0px");
+                        switch(sumlevel1){
+                          case 1:
+                          $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:10%;height:2.5%;' src='../assets/img/color/blue1.png'/><a style='display:none' value='1'>1</a>");break;
+                          case 2:
+                          $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:20%;height:2.5%;' src='../assets/img/color/blue2.png'/><a style='display:none' value='2'>2</a>");break;
+                          case 3:
+                          $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:30%;height:2.5%;' src='../assets/img/color/blue3.png'/><a style='display:none' value='3'>3</a>");break;
+                          case 4:
+                          $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:40%;height:2.5%;' src='../assets/img/color/blue4.png'/><a style='display:none' value='4'>4</a>");break;
+                        }
+                      }
+                    }
+                  });
+
+
+                  $(".level1").each(function(index) {
+                    sum2=0;
+                    sumlevel2=0;
+                      $(this).find(".level2").each(function(){
+                      if($(this).children("div:eq(0)").find("a").length>0)
+                      {
+                        sumlevel2+=parseInt($(this).children("div:eq(0)").find("a")[0].text);
+                        sum2++;
+                      }
+                      });
+
+                      sumlevel2=Math.floor(sumlevel2/sum2);
+                      console.log(sumlevel2);
+                    
+                        switch(sumlevel2){
+                          // case 1:
+                          // $(this).find("a:eq(0)").append("<img style='width:10%;height:10%;' src='../assets/img/award/award0.png'/><a style='display:none' value='1'>1</a>");break;
+                          // case 2:
+                          // $(this).find("a:eq(0)").append("<img style='width:10%;height:10%;' src='../assets/img/award/award0.png'/><a style='display:none' value='1'>1</a>");break;
+                          case 3:
+                          $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award1.png'/><a style='display:none' value='3'>3</a>");break;
+                          case 4:
+                          $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award2.png'/><a style='display:none' value='4'>4</a>");break;
+                          default:
+                          $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award1.png'/><a style='display:none' value='4'>4</a>");break;
+                        }
+                      });
     }
 
     function levelnum(id){

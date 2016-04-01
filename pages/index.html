@@ -66,6 +66,8 @@
         var recomcontent;
         var recomquestion;
         var recomword;
+        var getid;
+        var length;
         $(document).ready(function () {
             // alert(totalCourse);
             // var a="149448";
@@ -146,7 +148,7 @@
                                 rightamount++;
                                 $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/yes.png">');
                                 $(".glyphicon").remove();
-                                $("#title"+i).append('<div class="tyes" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5>答对了<button class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
+                                $("#title"+i).append('<div class="tyes" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                                 newpower+=difficulty[i]*50;
                         }
                         // console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  right");
@@ -154,7 +156,7 @@
                                 wrongamount++;
                                 $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/no.png">');
                                 $(".glyphicon").remove();
-                                $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5>答错了<button class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
+                                $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                             totalid+=id+";";
                         }
                     }
@@ -166,7 +168,7 @@
                         }
                         // console.log(questionid[i]+"  wrong");
                         wrongamount++;
-                                $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5>答错了<button class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
+                                $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                         totalid+=id+";";
                     }
                 }
@@ -241,6 +243,16 @@
                             $("#textplace1").append(contentcache);
                         }
                     });
+                    $.ajax({
+                        type: "get",
+                        async:false,
+                        url: "http://xboxweb.azurewebsites.net/api/question/ExplainQuestion/"+getid,
+                        success: function (data) {
+
+                            $("#recomquestion").append(data.content);
+                            $("#recomexplain").append(data.answerExplain);
+                        }
+                    });
                 }
                 function postpower(ppp){
                     $.post("http://xboxweb.azurewebsites.net/api/user/updatepower",{Id:userid,Power:ppp}, function(data,status){
@@ -294,7 +306,7 @@
         {
 
             var id1=children.Id;
-            html+=("<li class='needcolor' id="+id1+"><a class='level"+children.rank+"' href='#'>"+children.name+"</a><div></div>");
+            html+=("<li class='needcolor level"+children.rank+"' id="+id1+"><a href='#'>"+children.name+"</a><div></div>");
             
             for(var i in children.children)
             {
@@ -307,11 +319,11 @@
                 var id2=children.children[i].Id;
                 if(i=="0")
                 {
-                    html+="<ul class='submenu'>"+"<li class='needcolor' id="+id2+"><a class='level"+children.children[i].rank+"' href='#'>"+children.children[i].name+"</a><div></div>";
+                    html+="<ul class='submenu'>"+"<li class='needcolor level"+children.children[i].rank+"' id="+id2+"><a href='#'>"+children.children[i].name+"</a><div></div>";
                 }
                 else
                 {
-                    html+="<li class='needcolor' id="+id2+"><a class='level"+children.children[i].rank+"' href='#'>"+children.children[i].name+"</a><div></div>";
+                    html+="<li class='needcolor level"+children.children[i].rank+"' id="+id2+"><a href='#'>"+children.children[i].name+"</a><div></div>";
 
                 }
                 var courseInfo=getCookie("totalCourse");
@@ -322,7 +334,6 @@
                     //二级有子节点
                     console.log("二级："+children.children[i].Id);
                     for (var t in children.children[i].children) {
-                        // now
                         for(var j in c_json){
                             if(children.children[i].children[t].Id==c_json[j].Id){
                                 console.log(" "+c_json[j].Id+":"+c_json[j].Degree+";");
@@ -404,23 +415,28 @@
 
             }
         });
+        
         //顶部导航切换
         $("#demo-list li").click(function () {
             $("#demo-list li.active").removeClass("active");
             $(this).addClass("active");
             // console.log($(this).attr("id"));
-            var getid=$(this).attr("id");
-            var length=$("#"+getid).children(".submenu").length;
+            getid=$(this).attr("id");
+            length=$("#"+getid).children(".submenu").length;
             if(length==0){
                 apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+getid;
                 // class='questionlist'  class="useranswer
                 $(".questionlist").remove();
+                $('.answerlist').remove();
                 $(".useranswer").remove();
                 $(".tyes").remove();
                 $(".tno").remove();
                 $("#nextpage").fadeOut(100);
                 $("#showrecom").fadeOut(100);
                 $("#submit").fadeIn(100);
+                $(".yesorno").remove();
+                $(".glyphicon").remove();
+                $(".timeline-badge").append('<i class="glyphicon glyphicon-education"></i>');
                 random(apilink);
                 currentCourse=getid;
 
@@ -428,6 +444,7 @@
             else{
 
             }
+            
         })
         });
     </script>
@@ -648,6 +665,10 @@
         #titleplace2{
             text-align: center;
         }
+        #textplace{
+            max-height: 400px;
+            overflow: auto;
+        }
     </style>
 
 </head>
@@ -689,9 +710,14 @@
         </div>
         <div id="textplace" style="margin-top:30px" class="col-md-6">
             <div id="textplace1" class="col-md-12">
+                <h3>概念</h3>
             </div>
             <div id="textplace2" class="col-md-12">
                 <h3>例题</h3>
+                <h4 >题目</h5>
+                    <div id="recomquestion"></div>
+                <h4 >解析</h5>
+                    <div id="recomexplain"></div>
             </div>
         </div>
     </div>
