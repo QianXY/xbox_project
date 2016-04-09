@@ -125,9 +125,9 @@
                       });
                       // sumlevel1=Math.floor(sumlevel1/sum1);
                       sumlevel1=sumlevel1/sum1;
-                      console.log(sumlevel1);
-                      if(sumlevel1!=0){
+                      if(!isNaN(sumlevel1)){
 
+                      console.log(sumlevel1);
                         $(this).find("div:eq(0)").attr("style","margin-left:35px;margin-top:40px");
                         $(this).find("a:eq(0)").attr("style","padding-bottom:0px");
                         // switch(sumlevel1){
@@ -181,11 +181,11 @@
                           // console.log(t);
                           if (t.length > 0) {
                               // console.log(t[0].text);
-                              if (parseInt(t[0].text) < 2) {
+                              if (parseInt(t[0].text) < 3) {
                                   block_status = 1;
                                   setCookie("currentlevel",$(this).find("li:eq(0) a").context.innerText);
                                   setCookie("currentlevelid",$(this).attr("id"));
-
+                                  $("#currentinfo").empty();
                                   $("#currentinfo").append($(this).find("li:eq(0) a").context.innerText);
                                   // console.log($(this).find("li:eq(0) a").context.innerText);
                               }
@@ -195,6 +195,7 @@
                             setCookie("currentlevel",$(this).find("li:eq(0) a").context.innerText);
 
                                   setCookie("currentlevelid",$(this).attr("id"));
+                                  $("#currentinfo").empty();
                                   $("#currentinfo").append($(this).find("li:eq(0) a").context.innerText);
                                   // console.log($(this).find("li:eq(0) a").context.innerText);
                             block_status =1;

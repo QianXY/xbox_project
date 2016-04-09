@@ -106,8 +106,8 @@ function updateStatus(userid)
             // else
             //     console.log("shashabi");
                 $(function () { $("[data-toggle='tooltip']").tooltip(); });
-                current=getCookie("currentlevel");
-                currentid=getCookie("currentlevelid");
+                // current=getCookie("currentlevel");
+                currentid=getCookie("CourseNow");
                 // $("#currentinfo").append(current);
                 apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+currentid;
                 random(apilink);
