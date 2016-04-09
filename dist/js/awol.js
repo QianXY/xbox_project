@@ -83,18 +83,25 @@
         for(var i in c_json)
         {
             var id = c_json[i].Id;
-            var master = c_json[i].Degree;
+            var master = parseInt(c_json[i].Degree);
             if(id!=null||id.length>0){
-               switch(master){
-               case "1":
-                  levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:10%;height:2.5%;' src='../assets/img/color/"+color+"1.png'/><a style='display:none' value='1'>1</a>");break;
-               case "2":
-                  levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:20%;height:2.5%;' src='../assets/img/color/"+color+"2.png'/><a style='display:none' value='2'>2</a>");break;
-               case "3":
-                  levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:30%;height:2.5%;' src='../assets/img/color/"+color+"3.png'/><a style='display:none' value='3'>3</a>");break;
-               case "4":
-                  levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:40%;height:2.5%;' src='../assets/img/color/"+color+"4.png'/><a style='display:none' value='4'>4</a>");break;
-               }
+               // switch(master){
+               // case "1":
+               //    levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:8%;height:2%;' src='../assets/img/color/"+color+"1.png'/><a style='display:none' value='1'>1</a>");break;
+               // case "2":
+               //    levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:16%;height:2%;' src='../assets/img/color/"+color+"2.png'/><a style='display:none' value='2'>2</a>");break;
+               // case "3":
+               //    levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:24%;height:2%;' src='../assets/img/color/"+color+"3.png'/><a style='display:none' value='3'>3</a>");break;
+               // case "4":
+               //    levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:32%;height:2%;' src='../assets/img/color/"+color+"4.png'/><a style='display:none' value='4'>4</a>");break;
+               
+
+            if(id!=""){
+              levelnum(id);
+              $("#"+id).find("div:eq(0)").append('<div class="progress progress-striped active" style="width:80%"><div data-toggle="tooltip" data-placement="right" data-original-title="'+master*10+'%" class="progress-bar progress-bar-'+color+'" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: '+master*10+'%;"></div></div><a style="display:none" value="'+master+'"></a>');
+            }
+              
+               // }
             }
             
         }
@@ -112,24 +119,28 @@
                     sumlevel1=0;
                     if ($(this).find(".submenu").length > 0) {
                       $(this).find("a[style='display:none']").each(function(){
-                        sumlevel1+=parseInt($(this)[0].text);
+                        sumlevel1+=parseInt(this.attributes[1].value);
                         sum1++;
+                        // console.log(this.attributes[1].value);
                       });
-                      sumlevel1=Math.floor(sumlevel1/sum1);
+                      // sumlevel1=Math.floor(sumlevel1/sum1);
+                      sumlevel1=sumlevel1/sum1;
+                      console.log(sumlevel1);
                       if(sumlevel1!=0){
 
-                        $(this).find("div:eq(0)").attr("style","color:#FFFFFF ;margin-left:35px");
+                        $(this).find("div:eq(0)").attr("style","margin-left:35px;margin-top:40px");
                         $(this).find("a:eq(0)").attr("style","padding-bottom:0px");
-                        switch(sumlevel1){
-                          case 1:
-                          $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:10%;height:2.5%;' src='../assets/img/color/blue1.png'/><a style='display:none' value='1'>1</a>");break;
-                          case 2:
-                          $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:20%;height:2.5%;' src='../assets/img/color/blue2.png'/><a style='display:none' value='2'>2</a>");break;
-                          case 3:
-                          $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:30%;height:2.5%;' src='../assets/img/color/blue3.png'/><a style='display:none' value='3'>3</a>");break;
-                          case 4:
-                          $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:40%;height:2.5%;' src='../assets/img/color/blue4.png'/><a style='display:none' value='4'>4</a>");break;
-                        }
+                        // switch(sumlevel1){
+                        //   case 1:
+                        //   $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:8%;height:2%;' src='../assets/img/color/blue1.png'/><a style='display:none' value='1'>1</a>");break;
+                        //   case 2:
+                        //   $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:16%;height:2%;' src='../assets/img/color/blue2.png'/><a style='display:none' value='2'>2</a>");break;
+                        //   case 3:
+                        //   $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:24%;height:2%;' src='../assets/img/color/blue3.png'/><a style='display:none' value='3'>3</a>");break;
+                        //   case 4:
+                        //   $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:32%;height:2%;' src='../assets/img/color/blue4.png'/><a style='display:none' value='4'>4</a>");break;
+                        // }
+                        $(this).find("div:eq(0)").append('<div class="progress progress-striped active"style="width:80%"><div data-toggle="tooltip" data-placement="right" data-original-title="'+sumlevel1*10+'%" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+sumlevel1*10+'%;"></div></div><a style="display:none" value="'+sumlevel1+'"></a>');
                       }
                     }
                   });
@@ -141,13 +152,13 @@
                       $(this).find(".level2").each(function(){
                       if($(this).children("div:eq(0)").find("a").length>0)
                       {
-                        sumlevel2+=parseInt($(this).children("div:eq(0)").find("a")[0].text);
+                        sumlevel2+=parseInt($(this).children("div:eq(0)").find("a")[0].value);
                         sum2++;
                       }
                       });
 
                       sumlevel2=Math.floor(sumlevel2/sum2);
-                      console.log(sumlevel2);
+                      // console.log(sumlevel2);
                     
                         switch(sumlevel2){
                           // case 1:
@@ -167,21 +178,24 @@
                   $(".level2").each(function (index) {
                       if (block_status == 0) {
                           var t = $(this).children("div:eq(0)").children("a[style='display:none']");
-                          console.log(t);
+                          // console.log(t);
                           if (t.length > 0) {
-                              console.log(t[0].text);
+                              // console.log(t[0].text);
                               if (parseInt(t[0].text) < 2) {
                                   block_status = 1;
                                   setCookie("currentlevel",$(this).find("li:eq(0) a").context.innerText);
                                   setCookie("currentlevelid",$(this).attr("id"));
+
+                                  $("#currentinfo").append($(this).find("li:eq(0) a").context.innerText);
                                   // console.log($(this).find("li:eq(0) a").context.innerText);
                               }
                           }
                           else
                           {
                             setCookie("currentlevel",$(this).find("li:eq(0) a").context.innerText);
-                            
+
                                   setCookie("currentlevelid",$(this).attr("id"));
+                                  $("#currentinfo").append($(this).find("li:eq(0) a").context.innerText);
                                   // console.log($(this).find("li:eq(0) a").context.innerText);
                             block_status =1;
                           }
@@ -208,14 +222,14 @@
          var value=$("#"+id+" a")[0].innerText;
          var num=value.split(".").length;
          if(num==2){
-            $("#"+id).find("div:eq(0)").attr("style","color:#FFFFFF ;margin-left:35px");
+            $("#"+id).find("div:eq(0)").attr("style","margin-left:35px;margin-top:40px");
             $("#"+id).find("a:eq(0)").attr("style","padding-bottom:0px");
-            color="blue";
+            color="info";
          }
          if(num==3){
-            $("#"+id).find("div:eq(0)").attr("style","color:#FFFFFF ;margin-left:50px");
+            $("#"+id).find("div:eq(0)").attr("style","margin-left:50px;margin-top:40px");
             $("#"+id).find("a:eq(0)").attr("style","padding-bottom:0px");
-            color="yellow";
+            color="warning";
          }
       }
       return

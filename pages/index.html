@@ -51,8 +51,8 @@ function updateStatus(userid)
                     success: function (data) {
                         if (data.Status == "Success") {
                             var totalCourse = JSON.stringify(data.CourseInfo);
-                            console.log(data);
-                            console.log(totalCourse);
+                            // console.log(data);
+                            // console.log(totalCourse);
                             power = data.Power;
                             setCookie("userid", data.Id);
                             setCookie("totalCourse", totalCourse);
@@ -108,9 +108,9 @@ function updateStatus(userid)
                 $(function () { $("[data-toggle='tooltip']").tooltip(); });
                 current=getCookie("currentlevel");
                 currentid=getCookie("currentlevelid");
-                $("#currentinfo").append(current);
-                var test="http://xboxweb.azurewebsites.net/api/question/qslist/"+currentid;
-                random(test);
+                // $("#currentinfo").append(current);
+                apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+currentid;
+                random(apilink);
 
 
                 function random(apilink){
@@ -148,7 +148,7 @@ function updateStatus(userid)
                 $('#nextpage').click(function(){
                     // 去掉问题&答案
                     $('.questionlist').remove();
-                    $('.answerlist').remove();
+                    // $('.answerlist').remove();
                     random(apilink);
                     //变换按钮
                     $("#submit").fadeIn(100);
@@ -290,7 +290,7 @@ function updateStatus(userid)
                     });
                 }
                 function postpower(ppp){
-                    $.post("http://xboxweb.azurewebsites.net/api/user/updatepower",{Id:userid,Power:ppp}, function(data,status){
+                    $.post("http://xboxweb.azurewebsites.net/api/user/updatepower",{Id:userid,Power:ppp,CourseNow:currentCourse}, function(data,status){
                             if(data=="success"){
                                 console.log("新增"+newpower+"能量值");
                             }
@@ -472,6 +472,8 @@ function updateStatus(userid)
                 $(".yesorno").remove();
                 $(".glyphicon").remove();
                 $(".timeline-badge").append('<i class="glyphicon glyphicon-education"></i>');
+                $("#currentinfo").empty();
+                $("#currentinfo").append($(this).find("li:eq(0) a").context.innerText);
                 random(apilink);
                 currentCourse=getid;
 
@@ -710,6 +712,19 @@ function updateStatus(userid)
         #currentinfo{
             width: 300px;
         }
+        .progress{
+            overflow: visible;
+                border-radius: 4px;
+                background-color: rgba(255, 255, 255, 0.7);
+                margin-bottom: 0;
+        }
+        .progress-bar-info {
+            overflow: visible;
+            background-color: #20A8D1;
+        }
+        .progress-bar{
+                border-radius: 4px;
+        }
     </style>
 
 </head>
@@ -719,7 +734,7 @@ function updateStatus(userid)
 
 
 <!-- 弹窗1 -->
-<div class="theme-popover col-md-12" style="background-image:url(../assets/img/ele.png);background-size:666px 319px;">
+<div class="theme-popover col-md-12" style="background-image:url(../assets/img/ele.png);background-size:100% 100%;">
     <!-- now -->
     <div class="theme-poptit col-md-12" >
         <h3 style="height:30px">答题情况</h3>
