@@ -19,7 +19,7 @@
     
     <link href="../dist/css/ucc.css" rel="stylesheet">
 
-
+  
 
     <!-- Custom Theme JavaScript -->
     
@@ -108,6 +108,7 @@ function updateStatus(userid)
                 $(function () { $("[data-toggle='tooltip']").tooltip(); });
                 // current=getCookie("currentlevel");
                 currentid=getCookie("CourseNow");
+                console.log($("#149419"));
                 // $("#currentinfo").append(current);
                 apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+currentid;
                 random(apilink);
@@ -290,7 +291,8 @@ function updateStatus(userid)
                     });
                 }
                 function postpower(ppp){
-                    $.post("http://xboxweb.azurewebsites.net/api/user/updatepower",{Id:userid,Power:ppp,CourseNow:currentCourse}, function(data,status){
+                    var qqq=parseInt(ppp/50);
+                    $.post("http://xboxweb.azurewebsites.net/api/user/updatepower",{Id:userid,Power:ppp,CourseNow:currentCourse,MasterCourse:qqq}, function(data,status){
                             if(data=="success"){
                                 console.log("新增"+newpower+"能量值");
                             }
@@ -725,6 +727,7 @@ function updateStatus(userid)
         .progress-bar{
                 border-radius: 4px;
         }
+     
     </style>
 
 </head>
