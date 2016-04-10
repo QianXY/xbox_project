@@ -38,8 +38,6 @@
                   var expires = null; //"expires=" + d.toUTCString();
                   this.document.cookie = cname + "=" + cvalue + "; " + expires;
             }
-
-
 function updateStatus(userid)
         {
             if (userid != "shabi") {
@@ -62,6 +60,8 @@ function updateStatus(userid)
                 });
             }
         }
+
+
 
 
         var userid=getCookie("userid");
@@ -99,6 +99,32 @@ function updateStatus(userid)
         var current;
         var currentid;
         $(document).ready(function () {
+
+
+                function updateStatus_cookie(userid)
+        {
+            if (userid != "shabi") {
+                $.ajax({
+                    type: "post",
+                    url: "http://xboxweb.azurewebsites.net/api/user/UserStatus",
+                    data: "Id=" + userid,
+                    async: false,
+                    success: function (data) {
+                        if (data.Status == "Success") {
+                            var totalCourse = JSON.stringify(data.CourseInfo);
+                            // console.log(data);
+                            // console.log(totalCourse);
+                            power = data.Power;
+                            setCookie("userid", data.Id);
+                            setCookie("totalCourse", totalCourse);
+                            setCookie("power", power);
+                        }
+                    }
+                });
+            }
+        }
+
+
             // alert(totalCourse);
             // var a="149448";
             // if(totalCourse.indexOf(a)>0)
@@ -108,6 +134,7 @@ function updateStatus(userid)
                 $(function () { $("[data-toggle='tooltip']").tooltip(); });
                 // current=getCookie("currentlevel");
                 currentid=getCookie("CourseNow");
+                currentCourse=currentid;
                 console.log($("#149419"));
                 // $("#currentinfo").append(current);
                 apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+currentid;
@@ -127,7 +154,6 @@ function updateStatus(userid)
                                 question=obj[i].content;
                                 explain[i]=obj[i].answerExplain;
                                 answer[i]=obj[i].rightAnswer;
-                                html=questionid+question;
                                 difficulty[i]=obj[i].difficulty;
                                 $('#Q'+i).append("<div class='questionlist' id='"+questionid[i]+"'>"+question+"</div>");
                                 // console.log(answer[i]);
@@ -182,7 +208,7 @@ function updateStatus(userid)
                         }
                         if(getanswer[i]==answer[i]){
                                 rightamount++;
-                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/yes.png">');
+                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/yes.gif">');
                                 $(".glyphicon").remove();
                                 $("#title"+i).append('<div class="tyes" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                                 newpower+=difficulty[i]*50;
@@ -190,7 +216,7 @@ function updateStatus(userid)
                         // console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  right");
                         else{
                                 wrongamount++;
-                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/no.png">');
+                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/no.gif">');
                                 $(".glyphicon").remove();
                                 $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                             totalid+=id+";";
@@ -259,37 +285,7 @@ function updateStatus(userid)
                 //     $.post("http://xboxweb.azurewebsites.net/api/user/getlost",{id:1,u_password:123,u_courseid:totalid}, function(data,status){
                 //     });
                 // }
-                function getrecom(currentCourse){
-                    $.ajax({
-                    type: "GET",
-                    url: "http://xboxweb.azurewebsites.net/api/explain/explain/"+currentCourse,
-                        success: function (data) {
-                            console.log(data);
-                            recomvideoUrl=data.video_list[0].embed;
-                            recomword=data.word;
-                            recomcontent=data.content;
-                            console.log(recomvideoUrl);
-                            console.log(recomword);
-                            console.log(recomcontent);
-                            $("#img").attr("src",recomvideoUrl);
-                            var videocache='<embed id="img" src="'+recomvideoUrl+'" allowFullScreen="true" quality="high"  align="middle" allowScriptAccess="always"></embed>';
-                            var contentcache='<p id="contentplace2">'+recomcontent+'</p>';
                 
-                            $("#videoplace").append(videocache);
-                            $("#textplace1").append(contentcache);
-                        }
-                    });
-                    $.ajax({
-                        type: "get",
-                        async:false,
-                        url: "http://xboxweb.azurewebsites.net/api/question/ExplainQuestion/"+getid,
-                        success: function (data) {
-
-                            $("#recomquestion").append(data.content);
-                            $("#recomexplain").append(data.answerExplain);
-                        }
-                    });
-                }
                 function postpower(ppp){
                     var qqq=parseInt(ppp/50);
                     $.post("http://xboxweb.azurewebsites.net/api/user/updatepower",{Id:userid,Power:ppp,CourseNow:currentCourse,MasterCourse:qqq}, function(data,status){
@@ -310,6 +306,25 @@ function updateStatus(userid)
                         $('#submit').fadeOut(100);
                         $('#showrecom').fadeIn(100);
                         $('#nextpage').fadeIn(100);
+
+                        //now
+                        //$("#demo-list").empty();
+                        updateStatus_cookie(userid);
+                        var courseInfo=getCookie("totalCourse");
+                        if(courseInfo!=null){
+                            var c_json = JSON.parse(courseInfo);
+                            for(var i in c_json){
+                                var id = c_json[i].Id;
+                                var master = parseInt(c_json[i].Degree);
+                                if(id!=null||id.length>0){
+                                    // console.log($("#"+id+" .progress-bar"));
+                                    $("#"+id+" .progress-bar").attr("data-original-title",master+"%");
+                                    $("#"+id+" .progress-bar").attr("style","width:"+master+"%");
+                                }
+                            }
+                        }
+                        //getseed();
+                        //jQuery.getScript("../dist/js/awol.js");
                 })
 
                 $("#submit" ).click(function() {
@@ -331,9 +346,7 @@ function updateStatus(userid)
 
                 
                 $("#showrecom").click(function(){
-                        $('.theme-popover-mask2').fadeIn(100);
-                        $('.theme-popover2').slideDown(200);
-                        getrecom(currentCourse);
+                        location.href="recommend.html";
                 })
 
 
@@ -422,7 +435,9 @@ function updateStatus(userid)
             
         }
 
-        $.ajax({
+        getseed();
+        function getseed(){
+            $.ajax({
             type: "get",
             async:false,
             url: "http://xboxweb.azurewebsites.net/api/user/getseed",
@@ -451,7 +466,8 @@ function updateStatus(userid)
                 }
 
             }
-        });
+            });
+        }
         
         //顶部导航切换
         $("#demo-list li").click(function () {

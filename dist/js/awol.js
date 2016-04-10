@@ -22,6 +22,16 @@
                else
                    return null;
         }
+
+        function setcurrentlevelid(currentlevelid){
+          var userid=getCookie("userid");
+          $.post("http://xboxweb.azurewebsites.net/api/user/updatecurrentlevel",{Id:userid,CurrentlevelId:currentlevelid}, function(data,status){
+                            if(data=="success"){
+                                console.log("setcurrentlevelid"+data);
+                            }
+                    });
+        }
+
    //实现点击动画效果
    function	ClickEffect(){
    	var ink, d, x, y;
@@ -175,6 +185,7 @@
                   });
 
                   var block_status = 0;
+                  //var now_title;
                   $(".level2").each(function (index) {
                       if (block_status == 0) {
                           var t = $(this).children("div:eq(0)").children("a[style='display:none']")
@@ -222,8 +233,7 @@
                           else
                           {
                              setCookie("currentlevel",$(this).find("li:eq(0) a:eq(0)").context.children[0].text);
-
-                                  setCookie("currentlevelid",$(this).attr("id"));
+                             setCookie("currentlevelid",$(this).attr("id"));
                                   $("#currentinfo").empty();
                                   $("#currentinfo").append($(this).find("li:eq(0) a:eq(0)").context.children[0].text);
                                   // console.log($(this).find("li:eq(0) a").context.innerText);
@@ -255,6 +265,8 @@
                           });
                         
                       }
+                      
+
                   });
 
     }
@@ -278,6 +290,11 @@
       }
       return
     }
+
+
+    var testid=getCookie("currentlevelid");
+    setcurrentlevelid(testid);
+
 
 
 });

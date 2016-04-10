@@ -64,8 +64,8 @@
         var recomword;
         var getid;
         var length;
-        var current;
-        var currentid;
+        var current=getCookie("currentlevel");
+        var currentid=getCookie("currentlevelid");
         $(document).ready(function () {
             // alert(totalCourse);
             // var a="149448";
@@ -77,9 +77,34 @@
                 current=getCookie("currentlevel");
                 currentid=getCookie("currentlevelid");
                 $("#currentinfo").append(current);
-                // test="http://xboxweb.azurewebsites.net/api/question/ExplainQuestion/"+currentid;
-                apilink="http://xboxweb.azurewebsites.net/api/question/ExplainQuestion/149420";
+                apilink="http://xboxweb.azurewebsites.net/api/question/ExplainQuestion/"+currentid;
+                // apilink="http://xboxweb.azurewebsites.net/api/question/ExplainQuestion/149420";
                 random(apilink);
+                getrecom();
+
+
+
+                function getrecom(){
+                    $.ajax({
+                    type: "GET",
+                    url: "http://xboxweb.azurewebsites.net/api/explain/explain/"+currentid,
+                        success: function (data) {
+                            console.log(data);
+                            recomvideoUrl=data.video_list[0].embed;
+                            recomword=data.word;
+                            recomcontent=data.content;
+                            console.log(recomvideoUrl);
+                            console.log(recomword);
+                            console.log(recomcontent);
+                            $("#img").attr("src",recomvideoUrl);
+                            var videocache='<embed id="img" src="'+recomvideoUrl+'" allowFullScreen="true" quality="high"  style="width:100%;height:68%" align="middle" allowScriptAccess="always"></embed>';
+                            var contentcache='<p id="contentplace2">'+recomcontent+'</p>';
+                
+                            $("#videoplace").append(videocache);
+                            $("#textplace2").append(contentcache);
+                        }
+                    });
+                }
 
 
                 function random(apilink){
@@ -121,7 +146,7 @@
 
                 $("#showdetail"+0).click(function(){
                         $(".answerlist").remove();
-                        $("#explain0").append('<div class="answerlist">'+explain+'</div>');
+                        $("#explain0").append('<div class="explainlist">'+explain+'</div>');
                 })
                 }
 
@@ -141,6 +166,7 @@
                     $('.questionlist').remove();
                     $(".tno").remove();
                     $("#submit").fadeIn(100);
+                    $(".explainlist").remove();
                     random(apilink);
                 })
 
@@ -320,12 +346,14 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="col-md-12">
-                        <div id="videoplace" style="height:400px;margin-top:30px;margin-bottom:30px;" class="col-md-7 video">
+                        <div id="videoplace" style="height:70%;margin-top:30px;margin-bottom:30px;" class="col-md-7 video">
 
                         </div>
                         <div id="textplace" style="margin-top:30px" class="col-md-4 col-md-offset-1">
                             <div id="textplace1" class="col-md-12">
                                 <h3>概念</h3>
+                                <div id="textplace2">
+                                </div>
                             </div>
                         </div>
                     </div>
