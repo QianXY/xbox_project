@@ -27,7 +27,7 @@
           var userid=getCookie("userid");
           $.post("http://xboxweb.azurewebsites.net/api/user/updatecurrentlevel",{Id:userid,CurrentlevelId:currentlevelid}, function(data,status){
                             if(data=="success"){
-                                console.log("setcurrentlevelid"+data);
+                                // console.log("setcurrentlevelid"+data);
                             }
                     });
         }
@@ -128,14 +128,21 @@
                     sum1=0;
                     sumlevel1=0;
                     if ($(this).find(".submenu").length > 0) {
+                        //sum1 = $(this).find("li").length;
+                        // console.log($(this));
                       $(this).find("a[style='display:none']").each(function(){
                         sumlevel1+=parseInt(this.attributes[1].value);
-                        sum1++;
+                        // sum1++;
                         // console.log(this.attributes[1].value);
                       });
+                      $(this).find("ul>li").each(function(){
+                        sum1++;
+                      });
+                      //var tttt = $(this).find(".submenu");
                       // sumlevel1=Math.floor(sumlevel1/sum1);
+                      // console.log(sum1);
                       sumlevel1=(sumlevel1/sum1).toFixed(2);
-                      if(!isNaN(sumlevel1)){
+                      if(!isNaN(sumlevel1)&&sumlevel1!=0){
 
                       // console.log(sumlevel1);
                         $(this).find("div:eq(0)").attr("style","margin-left:35px;margin-top:40px");
@@ -162,113 +169,168 @@
                       $(this).find(".level2").each(function(){
                       if($(this).children("div:eq(0)").find("a").length>0)
                       {
-                        sumlevel2+=parseInt($(this).children("div:eq(0)").find("a")[0].value);
-                        sum2++;
+                        var cash=$(this).children("div:eq(0)")[0].innerText;
+                        sumlevel2+=parseInt(cash);
+                        // sum2++;
                       }
                       });
 
-                      sumlevel2=Math.floor(sumlevel2/sum2);
-                      // console.log(sumlevel2);
-                    
-                        switch(sumlevel2){
-                          // case 1:
-                          // $(this).find("a:eq(0)").append("<img style='width:10%;height:10%;' src='../assets/img/award/award0.png'/><a style='display:none' value='1'>1</a>");break;
-                          // case 2:
-                          // $(this).find("a:eq(0)").append("<img style='width:10%;height:10%;' src='../assets/img/award/award0.png'/><a style='display:none' value='1'>1</a>");break;
-                          case 3:
-                          $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award1.png'/><a style='display:none' value='3'>3</a>");break;
-                          case 4:
-                          $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award2.png'/><a style='display:none' value='4'>4</a>");break;
-                          default:
-                          $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award0.png'/><a style='display:none' value='4'>4</a>");break;
+                      $(this).find(">ul>li").each(function(){
+                        sum2++;
+                      });
+
+                      sumlevel2=(sumlevel2/sum2).toFixed(2);
+                      console.log("sumlevel2="+sumlevel2);
+
+                      if(sumlevel2>=0&&sumlevel2<5){
+                        $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award0.png'/><a style='display:none' value='3'>3</a>");
+                      }
+                      else{
+                        if(sumlevel2>=5&&sumlevel2<=15){
+                          $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award1.png'/><a style='display:none' value='3'>3</a>");
                         }
+                        else{
+                          $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award2.png'/><a style='display:none' value='3'>3</a>");
+                        }
+                      }
+
+                    
+                        // switch(sumlevel2){
+                        //   // case 1:
+                        //   // $(this).find("a:eq(0)").append("<img style='width:10%;height:10%;' src='../assets/img/award/award0.png'/><a style='display:none' value='1'>1</a>");break;
+                        //   // case 2:
+                        //   // $(this).find("a:eq(0)").append("<img style='width:10%;height:10%;' src='../assets/img/award/award0.png'/><a style='display:none' value='1'>1</a>");break;
+                        //   case 3:
+                        //   $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award1.png'/><a style='display:none' value='3'>3</a>");break;
+                        //   case 4:
+                        //   $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award2.png'/><a style='display:none' value='4'>4</a>");break;
+                        //   default:
+                        //   $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award0.png'/><a style='display:none' value='4'>4</a>");break;
+                        // }
+                        // console.log(sumlevel2);
                   });
 
                   var block_status = 0;
                   //var now_title;
-                  $(".level2").each(function (index) {
-                      if (block_status == 0) {
+                  $(".level2").each(function () {
                           var t = $(this).children("div:eq(0)").children("a[style='display:none']")
                           if (t.length > 0) {
-                             //console.log(t[0].text);
-                              if (parseInt(t[0].text) <= 20) {
-                                  block_status = 1;
-                                  var aaa=$(this).find("li:eq(0) a:eq(0)").context.children[0].text;
-                                  console.log(aaa);
-                                  setCookie("currentlevel", $(this).find("li:eq(0) a:eq(0)").context.children[0].text);
-                                  setCookie("currentlevelid", $(this).attr("id"));
-                                  $("#currentinfo").empty();
-                                  $("#currentinfo").append($(this).find("li:eq(0) a:eq(0)").context.children[0].text);
-                                  // console.log($(this).find("li:eq(0) a").context.innerText);
-                              }
-                              else
-                              {
-                                  var block_status_2 = 0;
-                                  var test = $(this).find("li").each(function (index) {
-                                      if (block_status_2 == 1) {
-                                          $(this).addClass("block_click");
-                                          $(this).find("a").attr("style", "color:gray");
-                                      }
-                                      else {
+                              // console.log(t[0].text);
+                              if (parseInt(t[0].text) == undefined || parseInt(t[0].text) <= 20) {
+                                  var ul = $(this).find("ul");
+                                  if ($(this).find("ul").length == 0) {
+                                      block_status = 1;
+                                      setCookie("currentlevel", $(this).find("li:eq(0) a:eq(0)").context.children[0].text);
+                                      setCookie("currentlevelid", $(this).attr("id"));
+                                      $("#currentinfo").empty();
+                                      $("#currentinfo").append($(this).find("li:eq(0) a:eq(0)").context.children[0].text);
+                                  }
+                                  else {
+                                      $(this).find("li").each(function (index) {
+                                          var t1 = $(this);
                                           var t = $(this).find("div:eq(0)")[0].children[1];
-                                          if (parseInt(t.text) <= 20) {
-                                              block_status = 1;
-                                              var aaa=$(this).find("li:eq(0) a:eq(0)");
-                                              console.log(aaa);
+                                          if (t == undefined || parseInt(t.text) <= 20) {
+                                              if (block_status == 0) {
+                                                  var title = $(this).find("li:eq(0) a:eq(0)").context.children[0].text;
+                                                  title = title.substring(0, title.length);
+                                                  setCookie("currentlevel", title);
+                                                  setCookie("currentlevelid", $(this).attr("id"));
+                                                  $("#currentinfo").empty();
+                                                  $("#currentinfo").append(title);
+                                                  block_status = 1;
+                                              }
+                                              else {
+                                                  $(this).addClass("block_click");
+                                                  $(this).find("a:eq(0)").attr("style", "color:gray");
+                                                  //console.log($(this));
+                                              }
+                                          }
+                                          else {
+                                              // console.log($(this));
+                                          }
+                                      });
+                                  }
+                              }
+                                  //第二节点大于20，做子节点遍历
+                              else {
+                                  $(this).find("li").each(function (index) {
+                                      var t1 = $(this);
+                                      var t = $(this).find("div:eq(0)")[0].children[1];
+                                      if (t == undefined || parseInt(t.text) <= 20) {
+                                          if (block_status == 0) {
                                               var title = $(this).find("li:eq(0) a:eq(0)").context.children[0].text;
-                                              title = title.substring(0, title.length - 1);
+                                              title = title.substring(0, title.length);
                                               setCookie("currentlevel", title);
                                               setCookie("currentlevelid", $(this).attr("id"));
                                               $("#currentinfo").empty();
                                               $("#currentinfo").append(title);
-                                              block_status_2 = 1;
-                                              // return false;
+                                              block_status = 1;
+                                          }
+                                          else {
+                                              $(this).addClass("block_click");
+                                              $(this).find("a:eq(0)").attr("style", "color:gray");
+                                              //console.log($(this));
                                           }
                                       }
-                                      
+                                      else {
+                                          // console.log($(this));
+                                      }
                                   });
-                                  // console.log(test);
                               }
                           }
-                          else
-                          {
-                             setCookie("currentlevel",$(this).find("li:eq(0) a:eq(0)").context.children[0].text);
-                             setCookie("currentlevelid",$(this).attr("id"));
-                                  $("#currentinfo").empty();
-                                  $("#currentinfo").append($(this).find("li:eq(0) a:eq(0)").context.children[0].text);
-                                  // console.log($(this).find("li:eq(0) a").context.innerText);
-                            block_status =1;
+                              //else的话，节点里全都灭了,注意，cookie里设置是全灭的第一个三级
+                          else {
+                              if (block_status == 0) {
+                                 // $(this).addClass("block_click");
+                                  // $(this).find("a:eq(0)").attr("style", "color:gray");
+                                  if ($(this).find("ul").length == 0) {
+                                      var title = $(this).find("li:eq(0) a:eq(0)").context.children[0].text;
+                                      title = title.substring(0, title.length);
+                                      setCookie("currentlevel", title);
+                                      setCookie("currentlevelid", $(this).attr("id"));
+                                      $("#currentinfo").empty();
+                                      $("#currentinfo").append(title);
+                                      block_status = 1;
+                                  }
+                                  else {
+                                      $(this).find("li").each(function () {
+                                          if (block_status == 0) {
+                                              var title = $(this).context.children[0].text;
+                                              title = title.substring(0, title.length);
+                                              setCookie("currentlevel", title);
+                                              setCookie("currentlevelid", $(this).attr("id"));
+                                              $("#currentinfo").empty();
+                                              $("#currentinfo").append(title);
+                                              block_status = 1;
+                                          }
+                                          else {
+                                              $(this).addClass("block_click");
+                                              $(this).find("a:eq(0)").attr("style", "color:gray");
+                                          }
+                                      });
+                                      //console.log(ttt);
+                                  }
+                                 
+                              }
+                              else {
+                                  $(this).addClass("block_click");
+                                  $(this).find("a:eq(0)").attr("style", "color:gray");
+                                  $(this).find("li").each(function (index) {
+                                      $(this).find("a").each(function (index) {
+                                          // console.log(this);
+                                          if ($(this).text().length > 5 && this.nextSibling.children.length == 0) {
+                                              $(this).attr("style", "color:gray");
+                                          }
+                                          else {
+                                              //$(this).attr("style", "color:gray");
+                                          }
+
+                                      });
+                                  });
+                              }
                           }
-                      }
-                      else
-                      {
-                        if(this.children[1].children.length==0){
-
-
-                          $(this).addClass("block_click");
-                          $(this).find("a:eq(0)").attr("style", "color:gray");
-                        }
-
-                          $(this).find("li").each(function (index) {
-                              $(this).find("a").each(function (index) {
-                                // console.log(this);
-                                  if($(this).text().length>5&&this.nextSibling.children.length==0)
-                                  {
-                                      $(this).attr("style", "color:gray");
-                                  }
-                                  else
-                                  {
-                                      //$(this).attr("style", "color:gray");
-                                  }
-                              
-                              });
-                          });
-                        
-                      }
-                      
-
+                     
                   });
-
     }
 
     function levelnum(id){

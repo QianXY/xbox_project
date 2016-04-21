@@ -277,6 +277,7 @@
         }
         #currentinfo{
             width: 300px;
+            color:white;
         }
         #submit{
             z-index: 10;
@@ -288,6 +289,15 @@
         }
         .panel-default{
             margin-bottom: 0;
+        }
+        .navbar-header{
+            background: url("../assets/img/back/background.png")
+        }
+        #textplace1{
+            color:#C7C5C5;
+        }
+        .navbar-header{
+            box-shadow: 0 5px 20px #333;
         }
     </style>
 
@@ -308,15 +318,24 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <div class="col-md-11" style="padding-left:0">
-                    <div class="col-md-5">
-                    <a class="navbar-brand" style="padding-left:0" href="index.html" id="title">做题不无聊 V0.9</a>
+                <div class="col-md-12" style="padding-left:0">
+                    <div align="left" class="col-md-4" style="padding-top:10px">
+                    <!-- <a class="navbar-brand" style="padding-left:0" href="index.html" id="title">做题不无聊 V0.9</a> -->
+                    <img src="../assets/img/back/title.png" style="width:40%;height:4%">
                     </div>
                     <!-- now -->
-                    <div class="col-md-6">当前章节：<p id="currentinfo"></p></div>
-                </div>
-                <div class="col-md-1" style="padding-right:0">
-                    <a class="navbar-brand" style="padding-right:0" href="person.html" >个人中心</a>
+                    
+                    <div  class="col-md-4" style="padding-top:10px">
+                        <div align="right" class="col-md-4"><img src="../assets/img/back/elephant.png" style="width:50%;height:8%"></div>
+                        <div align="left" class="col-md-8">
+                            <img src="../assets/img/back/now.png" style="width:40%;height:4%">
+                            <p id="currentinfo"></p>
+                        </div>
+                    </div>
+
+                    <div align="right" class="col-md-4" style="padding-right:0;padding-top:10px;">
+                        <a href="person.html"><img src="../assets/img/back/personal.png" style="width:20%;height:4%"></a>
+                    </div>
                 </div>
             </div>
             
@@ -337,19 +356,19 @@
 
         <!-- 右侧做题 -->    
         <div id="exam" class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-clock-o fa-fw"></i> 本章推荐
+            <div class="panel panel-default" style="background:url(../assets/img/back/gray.png);background-size:100% 100%">
+                <div class="panel-heading" align="center">
+                    <img src="../assets/img/back/recom.png" style="height:6%;width:15%">
                 </div>
             </div>
 
-            <div class="panel panel-default">
+            <div class="panel panel-default" style="background-image:url(../assets/img/back/blackboard.png);background-size:100% 100%">
                 <div class="panel-body">
                     <div class="col-md-12">
-                        <div id="videoplace" style="height:70%;margin-top:30px;margin-bottom:30px;" class="col-md-7 video">
+                        <div id="videoplace" style="height:70%;width:60%;margin-top:30px;margin-bottom:30px;margin-left:5px" class="col-md-7 video">
 
                         </div>
-                        <div id="textplace" style="margin-top:30px" class="col-md-4 col-md-offset-1">
+                        <div id="textplace" style="margin-top:30px;margin-left:50px" class="col-md-4">
                             <div id="textplace1" class="col-md-12">
                                 <h3>概念</h3>
                                 <div id="textplace2">
@@ -360,14 +379,14 @@
                 </div>
             </div>
 
-            <div class="panel panel-default">
+            <div class="panel panel-default" >
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <ul class="timeline">
                         <!-- 第一题 -->
                         <li >
                             <!-- 问第一题 -->
-                            <div id="logo0" class="timeline-badge info">
+                            <div id="logo0" class="timeline-badge info" >
                                 <i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">

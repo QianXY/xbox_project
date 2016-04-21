@@ -20,6 +20,27 @@
     #studycenter{
         padding-left: 0;
     }
+    #powerplace{
+        background-image:url(../assets/img/person/power2.png);
+        width: 100%;
+        height: 75%;
+        background-size:100% 100%;
+        z-index: 98;
+        margin-top:5px;
+    }
+    #powertitle{
+        z-index: 99;
+    }
+    #powerplace2{
+        padding-top: 55%;
+        font-size: 30px;
+    }
+    #personalinfo{
+        font-size: 30px;
+    }
+    .images{
+        box-shadow: 0 0 10px #666;
+    }
     </style>
 
 
@@ -43,11 +64,61 @@
 
             var name;
             var grade;
+            var power;
+            var coursenow;
 
     $(document).ready(function (){
             name=getCookie("name");
             grade=getCookie("grade");
+            power=getCookie("power");
+            coursenow=getCookie("CourseNow");
             $("#personalinfo").append(name+"<br>"+grade);
+            $("#powerplace2").append(power);
+            $("#currentinfo").append(coursenow);
+
+            if(power>=0){
+                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/1.png" style="width:100%;height:80%"></div>');
+            }
+            if(power>=500){
+                
+                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/2.png" style="width:100%;height:80%"></div>');
+            }
+            if(power>=2000){
+                
+                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/3.png" style="width:100%;height:80%"></div>');
+            }
+            if(power>=5000){
+                
+                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/4.png" style="width:100%;height:80%"></div>');
+            }
+            if(power>=10000){
+                
+                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/5.png" style="width:100%;height:80%"></div>');
+            }
+            if(power>=20000){
+                
+                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/6.png" style="width:100%;height:80%"></div>');
+            }
+            if(power>=40000){
+                
+                $("#huizhang2").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/7.png" style="width:100%;height:80%"></div>');
+            }
+            if(power>=70000){
+                
+                $("#huizhang2").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/8.png" style="width:100%;height:80%"></div>');
+            }
+            if(power>=100000){
+                
+                $("#huizhang2").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/9.png" style="width:100%;height:80%"></div>');
+            }
+            if(power>=150000){
+                
+                $("#huizhang2").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/10.png" style="width:100%;height:80%"></div>');
+            }
+            if(power>=200000){
+                
+                $("#huizhang2").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/11.png" style="width:100%;height:80%"></div>');
+            }
 
             
     })
@@ -61,52 +132,70 @@
     <div class="col-md-10 col-md-offset-1 background" style="padding:0 0 0 0">
         <!-- 1模块 -->
         <div class="col-md-12 chapter1" style="padding:0 0 0 0;height:25%;width:100%;background-image:url(../assets/img/person/background.png)">
-            <div id="personalinfo"></div>
+
+            <div align="left" style="height:100%;padding-top:20px" class="col-md-2 col-md-offset-2" id="personalinfo"></div>
+            <div class="col-md-4" style="height:100%;padding-top:20px">
+                <img src="../assets/img/back/now.png" style="width:40%;height:20%">
+                <br>
+                <p id="currentinfo"></p>
+            </div>
+            <div align="center" class="col-md-4"><img src="../assets/img/person/elephant.png" style="width:40%;height:90%"></div>
         </div>
 
 
         <!-- 2模块 -->
-        <div class="col-md-12 chapter2" style="padding:0 0 0 0;height:25%;width:100%;background-image:url(../assets/img/person/background1.png)">
-            <div id="studycenter" class="col-md-2">
-                <img src="../assets/img/person/10.png" >
+        <div class="col-md-12 chapter2" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background1.png)">
+            <div id="studycenter" class="col-md-1">
+                <img style="magin-top:20%;height:50%;width:40%" src="../assets/img/person/10.png" >
             </div>
-            <div class="col-md-2">
-                <img src="../assets/img/person/11.png" >
-            </div>
+            <div class="col-md-11">
+                <div style="height:100%;" class="col-md-2">
+                    <a href="index.html"><img style="height:95%" src="../assets/img/person/11.png" ></a>
+                </div>
 
-            <div class="col-md-2 col-md-offset-1">
-                <img src="../assets/img/person/12.png" >
+                <div style="height:100%;" class="col-md-2 col-md-offset-2">
+                    <a href="recommend.html"><img style="height:95%" src="../assets/img/person/12.png" ></a>
+                </div>
             </div>
+            
 
-            <div class="col-md-2 col-md-offset-1">
-                <img src="../assets/img/person/13.png" >
-            </div>
         </div>
 
 
         <!-- 3模块 -->
-        <div class="col-md-12 chapter3" style="padding:0 0 0 0;height:25%;width:100%;background-image:url(../assets/img/person/background2.png)">
-            <div id="studycenter" class="col-md-2">
-                <img src="../assets/img/person/20.png" >
+        <div class="col-md-12 chapter3" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background2.png)">
+            <div id="studycenter" class="col-md-1">
+                <img style="margin-top:20%;height:50%;width:40%" src="../assets/img/person/20.png" >
             </div>
-            <div class="col-md-2">
-                <img src="../assets/img/person/21.png" >
-            </div>
+            <div class="col-md-11">
+                <div class="col-md-2">
+                    <img style="height:95%" src="../assets/img/person/21.png" >
+                </div>
 
-            <div class="col-md-2 col-md-offset-1">
-                <img src="../assets/img/person/22.png" >
-            </div>
+                <div class="col-md-2 col-md-offset-2">
+                    <img style="height:95%" src="../assets/img/person/22.png" >
+                </div>
 
-            <div class="col-md-2 col-md-offset-1">
-                <img src="../assets/img/person/23.png" >
+                <div class="col-md-2 col-md-offset-2">
+                    <img style="height:95%" src="../assets/img/person/23.png" >
+                </div>
             </div>
         </div>
 
 
         <!-- 4模块 -->
-        <div class="col-md-12 chapter4" style="padding:0 0 0 0;height:25%;width:100%;background-image:url(../assets/img/person/background.png)">
-            <div class="col-md-2 col-md-3">
-                <img  src="../assets/img/person/41.png" >
+        <div class="col-md-12 chapter4" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background.png)">
+            <div align="center" class="col-md-2 col-md-offset-1" style="padding-top:10px">
+                <img id="powertitle" src="../assets/img/person/power1.png" style="width:40%;height:10%">
+                <!-- <br> -->
+                <!-- <img src="../assets/img/person/power2.png" style="width:55%;height:80%"> -->
+                <div id="powerplace" ><p style="width:100%;height:100%" id="powerplace2"></p></div>
+            </div>
+            <div class="col-md-9">
+                <div class="col-md-12" align="left" id="huizhang1" style="height:50%;width:100%;padding-top:10px">
+                </div>
+                <div class="col-md-12" align="left" id="huizhang2" style="height:50%;width:100%;padding-top:10px">
+                </div>
             </div>
         </div>
     </div>

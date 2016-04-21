@@ -135,7 +135,7 @@ function updateStatus(userid)
                 // current=getCookie("currentlevel");
                 currentid=getCookie("CourseNow");
                 currentCourse=currentid;
-                console.log($("#149419"));
+                // console.log($("#149419"));
                 // $("#currentinfo").append(current);
                 apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+currentid;
                 random(apilink);
@@ -208,7 +208,7 @@ function updateStatus(userid)
                         }
                         if(getanswer[i]==answer[i]){
                                 rightamount++;
-                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/yes.gif">');
+                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/yes.png">');
                                 $(".glyphicon").remove();
                                 $("#title"+i).append('<div class="tyes" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                                 newpower+=difficulty[i]*50;
@@ -216,7 +216,7 @@ function updateStatus(userid)
                         // console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  right");
                         else{
                                 wrongamount++;
-                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/no.gif">');
+                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/no.png">');
                                 $(".glyphicon").remove();
                                 $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                             totalid+=id+";";
@@ -290,7 +290,7 @@ function updateStatus(userid)
                     var qqq=parseInt(ppp/50);
                     $.post("http://xboxweb.azurewebsites.net/api/user/updatepower",{Id:userid,Power:ppp,CourseNow:currentCourse,MasterCourse:qqq}, function(data,status){
                             if(data=="success"){
-                                console.log("新增"+newpower+"能量值");
+                                // console.log("新增"+newpower+"能量值");
                             }
                     });
                 }
@@ -299,6 +299,7 @@ function updateStatus(userid)
                         
                         postpower(newpower);
                         $('#powerresult').remove();
+                        $('#result').empty();
                         $('#result2').remove();
                         $('.answerlist').remove();
                         $('.theme-popover-mask').fadeOut(100);
@@ -306,8 +307,8 @@ function updateStatus(userid)
                         $('#submit').fadeOut(100);
                         $('#showrecom').fadeIn(100);
                         $('#nextpage').fadeIn(100);
+                        
 
-                        //now
                         //$("#demo-list").empty();
                         updateStatus_cookie(userid);
                         var courseInfo=getCookie("totalCourse");
@@ -323,6 +324,66 @@ function updateStatus(userid)
                                 }
                             }
                         }
+                        //now
+                        var times=0;
+                        function state1(){
+                            $("#"+currentCourse+" div:eq(1)").removeClass("r2"); 
+                            $("#"+currentCourse+" div:eq(1)").addClass("r1");
+                            times++;
+                            if(times<10){
+                                setTimeout(state2,90);
+                            }
+                        }
+                        function state2(){     
+                            $("#"+currentCourse+" div:eq(1)").removeClass("r1");
+                            $("#"+currentCourse+" div:eq(1)").addClass("r2"); 
+                            times++;
+                            if(times<10){
+                                setTimeout(state1,90);
+                            }
+                            else{
+                                setTimeout(state3,90);
+                            }
+                        }
+                        function state3(){
+                            $("#"+currentCourse+" div:eq(1)").removeClass("r2"); 
+                        }
+                        state1();
+                        
+                        
+
+                        var sum2;
+                        var sumlevel2;
+                        $(".level1").each(function(index) {
+                            sum2=0;
+                            sumlevel2=0;
+                            $(this).find(".level2").each(function(){
+                                if($(this).children("div:eq(0)").find("a").length>0)
+                                {
+                                    var cash=$(this).children("div:eq(0)")[0].innerText;
+                                    sumlevel2+=parseInt(cash);
+                                // sum2++;
+                                }
+                            });
+
+                      $(this).find(">ul>li").each(function(){
+                        sum2++;
+                      });
+
+                      sumlevel2=(sumlevel2/sum2).toFixed(2);
+                      console.log("sumlevel2="+sumlevel2);
+
+                      if(sumlevel2>=0&&sumlevel2<5){
+                      }
+                      else{
+                        if(sumlevel2>=5&&sumlevel2<=15){
+                          $(this).find("a:eq(0) img").attr("src","../assets/img/award/award1.png");
+                        }
+                        else{
+                          $(this).find("a:eq(0) img").attr("src","../assets/img/award/award2.png");
+                        }
+                      }
+                  })
                         //getseed();
                         //jQuery.getScript("../dist/js/awol.js");
                 })
@@ -332,10 +393,11 @@ function updateStatus(userid)
                     wronganswer();
                     newtime=new Date();
                     time=Math.floor((newtime-oldtime)/1000);
-                    $("#result").append('<div id="result2">答对'+rightamount+'题，答错'+wrongamount+'题</div><div id="powerresult">获得'+newpower+'能量值<div><div>用时'+time+'秒</div>');
+                    $("#result").append('<h4 style="color:rgb(21,91,169)"><div id="result2">答对'+rightamount+'题，答错'+wrongamount+'题</div><br><div id="powerresult">获得'+newpower+'能量值</div><br><div>用时'+time+'秒</div></h4><br>');
                     $(".theme-popover-mask").fadeIn(100);
                     $(".theme-popover").slideDown(200);
                     $(".useranswer").remove();
+                    $("html,body").animate({scrollTop:0}, 500);
                 })
 
                 $(".myclose").click(function(){
@@ -382,11 +444,11 @@ function updateStatus(userid)
                 {
                     // var averagelevel=0;
                     //二级有子节点
-                    console.log("二级："+children.children[i].Id);
+                    // console.log("二级："+children.children[i].Id);
                     for (var t in children.children[i].children) {
                         for(var j in c_json){
                             if(children.children[i].children[t].Id==c_json[j].Id){
-                                console.log(" "+c_json[j].Id+":"+c_json[j].Degree+";");
+                                // console.log(" "+c_json[j].Id+":"+c_json[j].Degree+";");
                                 // averagelevel+=parseInt(c_json[j].Degree);
                             }
                         }
@@ -451,7 +513,7 @@ function updateStatus(userid)
                     html=html.substring(0,html.length-5);
                     //一级无子节点
                     if(obj.children[i].rank==1&&obj.children[i].children!=0){
-                        console.log("一级："+obj.children[i].Id);
+                        // console.log("一级："+obj.children[i].Id);
                     }
                     if(i!=0)
                         html+="</ul></li>";
@@ -501,7 +563,22 @@ function updateStatus(userid)
             }
             
         })
-        });
+
+        var parent1=$("#"+currentCourse)[0].parentNode.parentNode.id;
+        $("#"+parent1).addClass("active");
+        $("#"+parent1+" a:eq(0)").addClass("submenu-indicator-minus");
+        $("#"+parent1+" ul:eq(0)").attr("style","display:block");
+
+        var parent2=$("#"+currentCourse)[0].parentNode.parentNode.parentNode.parentNode.id;
+        if(parent2!=null){
+            $("#"+parent2).addClass("active");
+            $("#"+parent2+" a:eq(0)").addClass("submenu-indicator-minus");
+            $("#"+parent2+" ul:eq(0)").attr("style","display:block");
+        }
+            
+        
+
+        });  //ready
     </script>
 
     <!-- 左侧知识树 -->
@@ -631,16 +708,17 @@ function updateStatus(userid)
         .theme-popover {
             z-index:9999;
             position:fixed;
-            top:25%;
-            left:25%;
-            width:50%;
-            height:50%;
+            top:10%;
+            left:34%;
+            width:32%;
+            height:80%;
             margin:0px 0 0 0px;
             border-radius:5px;
             border:solid 2px #666;
             background-color:#fff;
             display:none;
             box-shadow: 0 0 10px #666;
+            border-radius: 10px;
         }
         .theme-popover-mask2 {
             z-index: 9998;
@@ -743,7 +821,30 @@ function updateStatus(userid)
         .progress-bar{
                 border-radius: 4px;
         }
-     
+        .navbar-header{
+            background: url("../assets/img/back/background2.png")
+            repeat:no-repeat;
+        }
+        #currentinfo{
+            width: 300px;
+            color:white;
+        }
+        .jquery-accordion-menu,.navbar-header{
+            box-shadow: 0 5px 20px #333;
+        }
+        #result2, #result{
+            font-family: sans-serif;
+        }
+        .r1 {
+            -moz-transform:rotate(-3deg);
+            -webkit-transform:rotate(-3deg);
+            -o-transform:rotate(-3deg);
+        }
+        .r2 {
+            -moz-transform:rotate(2deg);
+            -webkit-transform:rotate(2deg);
+            -o-transform:rotate(2deg);
+        }
     </style>
 
 </head>
@@ -753,18 +854,27 @@ function updateStatus(userid)
 
 
 <!-- 弹窗1 -->
-<div class="theme-popover col-md-12" style="background-image:url(../assets/img/ele.png);background-size:100% 100%;">
+<div class="theme-popover col-md-12" style="background-image:url(../assets/img/answer/answer1/book.png);background-size:100% 100%;">
     <!-- now -->
     <div class="theme-poptit col-md-12" >
-        <h3 style="height:30px">答题情况</h3>
+        <!-- <h3 style="height:30px">答题情况</h3>
         <div style="height:190px" class="col-md-6 col-md-offset-5" id="result">
         </div>
         <button id="showanswer" type="button" class="col-md-2 col-md-offset-5 button button-caution button-pill button-pill">
                 看答案
-        </button>
-        <script>
-           
-        </script>
+        </button> -->
+
+        <div class="col-md-3 col-md-offset-3">
+            <img style="margin-top:15px" src="../assets/img/answer/answer1/result.png">
+        </div>
+        <div class="col-md-1 col-md-offset-5" style="align:right">
+            <img src="../assets/img/answer/answer1/close.png" id="showanswer" type="button">
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" id="result">
+        </div>
+
+
     </div>
 </div>
 <div class="theme-popover-mask"></div>
@@ -815,20 +925,25 @@ function updateStatus(userid)
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <div class="col-md-11" style="padding-left:0">
-                    <div class="col-md-5">
-                    <a class="navbar-brand" style="padding-left:0" href="index.html" id="title">做题不无聊 V0.9</a>
+                <div class="col-md-12" style="padding-left:0">
+                    <div align="left" class="col-md-4" style="padding-top:10px">
+                    <!-- <a class="navbar-brand" style="padding-left:0" href="index.html" id="title">做题不无聊 V0.9</a> -->
+                    <img src="../assets/img/back/title.png" style="width:40%;height:4%">
                     </div>
-                    <!-- now -->
-                    <div class="col-md-6">当前章节：<p id="currentinfo"></p></div>
-                </div>
-                <div class="col-md-1" style="padding-right:0">
-                    <a class="navbar-brand" style="padding-right:0" href="person.html" >个人中心</a>
+                    
+                    <div  class="col-md-4" style="padding-top:10px">
+                        <div align="right" class="col-md-4"></div>
+                        <div align="left" class="col-md-8">
+                            <img src="../assets/img/back/now.png" style="width:40%;height:4%">
+                            <p id="currentinfo"></p>
+                        </div>
+                    </div>
+
+                    <div align="right" class="col-md-4" style="padding-right:0;padding-top:10px;">
+                        <a href="person.html"><img src="../assets/img/back/personal.png" style="width:20%;height:4%"></a>
+                    </div>
                 </div>
             </div>
-            <!-- /.navbar-header -->
-            
-
             
         </nav>
     </div>
