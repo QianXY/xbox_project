@@ -2,10 +2,11 @@
 <html >
 
 <head>
- 
+ <meta charset="utf-8" />
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../dist/js/echarts.js"></script>
 
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -38,8 +39,40 @@
     #personalinfo{
         font-size: 30px;
     }
+    
+    .theme-popover-mask {
+            z-index: 9998;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:#000;
+            opacity:0.4;
+            filter:alpha(opacity=40);
+            display:none
+    }
+    .theme-popover {
+            z-index:9999;
+            position:fixed;
+            top:10%;
+            left:34%;
+            width:32%;
+            height:80%;
+            margin:0px 0 0 0px;
+            border-radius:5px;
+            border:solid 2px #666;
+            background-color:#fff;
+            display:none;
+            box-shadow: 0 0 10px #666;
+            border-radius: 10px;
+    }
     .images{
-        box-shadow: 0 0 10px #666;
+        box-shadow: 2px 2px 10px -2px rgba(157,154,157,1);
+    }
+    #currentinfo{
+        font-size: 20px;
+        color:white;
     }
     </style>
 
@@ -66,62 +99,125 @@
             var grade;
             var power;
             var coursenow;
+            var coursenowname;
 
     $(document).ready(function (){
+        $("#rader").click(function(){
+            $(".theme-popover-mask").fadeIn(100);
+                    $(".theme-popover").slideDown(200);
+         });
+        $("#close").click(function(){
+            $(".theme-popover-mask").fadeOut(100);
+                    $(".theme-popover").slideUp(200);
+        })
+        function LoadBaidu(result)
+        {
+            var t =result.split(",");
+            var myChart = echarts.init(document.getElementById('main'));
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                polar: [
+                   {
+                       indicator: [
+                           { text: '第21章', max: 100},
+                           { text: '第22章', max: 100 },
+                           { text: '第23章', max: 100 },
+                           { text: '第24章', max: 100},
+                           { text: '第25章', max: 100 },
+                       ]
+                   }
+                ],
+                calculable: true,
+                series: [
+                    {
+                        type: 'radar',
+                        data: [
+                             {
+                                 value: t,
+                                 name: '今日学习进展'
+                             }
+                        ]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+    var result = "";
+         $.ajax({
+            type: "GET",
+            sync:false,
+            url: "http://xboxweb.azurewebsites.net/api/user/updatechapter",
+            success: function (data) 
+            {
+                LoadBaidu(data);
+            }
+            }); 
+
             name=getCookie("name");
             grade=getCookie("grade");
             power=getCookie("power");
             coursenow=getCookie("CourseNow");
+            coursenowname=getCookie("CourseNowName");
             $("#personalinfo").append(name+"<br>"+grade);
             $("#powerplace2").append(power);
-            $("#currentinfo").append(coursenow);
+            $("#currentinfo").append(coursenowname);
 
             if(power>=0){
-                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/1.png" style="width:100%;height:80%"></div>');
+                $("#huizhang1").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/1.png" style="width:100%;height:80%"></div>');
             }
             if(power>=500){
                 
-                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/2.png" style="width:100%;height:80%"></div>');
+                $("#huizhang1").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/2.png" style="width:100%;height:80%"></div>');
             }
             if(power>=2000){
                 
-                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/3.png" style="width:100%;height:80%"></div>');
+                $("#huizhang1").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/3.png" style="width:100%;height:80%"></div>');
             }
             if(power>=5000){
                 
-                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/4.png" style="width:100%;height:80%"></div>');
+                $("#huizhang1").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/4.png" style="width:100%;height:80%"></div>');
             }
             if(power>=10000){
                 
-                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/5.png" style="width:100%;height:80%"></div>');
+                $("#huizhang1").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/5.png" style="width:100%;height:80%"></div>');
             }
             if(power>=20000){
                 
-                $("#huizhang1").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/6.png" style="width:100%;height:80%"></div>');
+                $("#huizhang1").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/6.png" style="width:100%;height:80%"></div>');
             }
             if(power>=40000){
                 
-                $("#huizhang2").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/7.png" style="width:100%;height:80%"></div>');
+                $("#huizhang2").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/7.png" style="width:100%;height:80%"></div>');
             }
             if(power>=70000){
                 
-                $("#huizhang2").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/8.png" style="width:100%;height:80%"></div>');
+                $("#huizhang2").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/8.png" style="width:100%;height:80%"></div>');
             }
             if(power>=100000){
                 
-                $("#huizhang2").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/9.png" style="width:100%;height:80%"></div>');
+                $("#huizhang2").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/9.png" style="width:100%;height:80%"></div>');
             }
             if(power>=150000){
                 
-                $("#huizhang2").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/10.png" style="width:100%;height:80%"></div>');
+                $("#huizhang2").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/10.png" style="width:100%;height:80%"></div>');
             }
             if(power>=200000){
                 
-                $("#huizhang2").append('<div class="col-md-2"><img class="images" src="../assets/img/person/huizhang/11.png" style="width:100%;height:80%"></div>');
+                $("#huizhang2").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/11.png" style="width:100%;height:80%"></div>');
             }
 
             
     })
+
+
+
+
+    
+
+         
+
     </script>
 
 </head>
@@ -133,10 +229,10 @@
         <!-- 1模块 -->
         <div class="col-md-12 chapter1" style="padding:0 0 0 0;height:25%;width:100%;background-image:url(../assets/img/person/background.png)">
 
-            <div align="left" style="height:100%;padding-top:20px" class="col-md-2 col-md-offset-2" id="personalinfo"></div>
-            <div class="col-md-4" style="height:100%;padding-top:20px">
-                <img src="../assets/img/back/now.png" style="width:40%;height:20%">
-                <br>
+            <div align="center" style="height:100%;padding-top:1.5%;" class="col-md-2 col-md-offset-2" id="personalinfo"></div>
+            <div align="center" class="col-md-4" style="height:100%;padding-top:2%;padding-left:8%">
+                <img src="../assets/img/back/now.png" style="width:45%;height:20%">
+                <br><br>
                 <p id="currentinfo"></p>
             </div>
             <div align="center" class="col-md-4"><img src="../assets/img/person/elephant.png" style="width:40%;height:90%"></div>
@@ -144,17 +240,17 @@
 
 
         <!-- 2模块 -->
-        <div class="col-md-12 chapter2" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background1.png)">
+        <div class="col-md-12 chapter2" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background.png);border-top:1px solid white">
             <div id="studycenter" class="col-md-1">
-                <img style="magin-top:20%;height:50%;width:40%" src="../assets/img/person/10.png" >
+                <img style="height:50%;width:40%;margin-top:3%" src="../assets/img/person/10.png" >
             </div>
             <div class="col-md-11">
                 <div style="height:100%;" class="col-md-2">
-                    <a href="index.html"><img style="height:95%" src="../assets/img/person/11.png" ></a>
+                    <a href="index.html"><img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/11.png" ></a>
                 </div>
 
-                <div style="height:100%;" class="col-md-2 col-md-offset-2">
-                    <a href="recommend.html"><img style="height:95%" src="../assets/img/person/12.png" ></a>
+                <div id="test" style="height:100%;" class="col-md-2 col-md-offset-2">
+                    <a href="recommend.html"><img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/12.png" ></a>
                 </div>
             </div>
             
@@ -163,28 +259,28 @@
 
 
         <!-- 3模块 -->
-        <div class="col-md-12 chapter3" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background2.png)">
+        <div class="col-md-12 chapter3" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background.png);border-top:1px solid white">
             <div id="studycenter" class="col-md-1">
-                <img style="margin-top:20%;height:50%;width:40%" src="../assets/img/person/20.png" >
+                <img style="height:50%;width:40%;margin-top:3%" src="../assets/img/person/20.png" >
             </div>
             <div class="col-md-11">
                 <div class="col-md-2">
-                    <img style="height:95%" src="../assets/img/person/21.png" >
+                    <img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/21.png" >
                 </div>
 
                 <div class="col-md-2 col-md-offset-2">
-                    <img style="height:95%" src="../assets/img/person/22.png" >
+                    <a id="rader"><img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/22.png" ></a>
                 </div>
 
                 <div class="col-md-2 col-md-offset-2">
-                    <img style="height:95%" src="../assets/img/person/23.png" >
+                    <img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/23.png" >
                 </div>
             </div>
         </div>
 
 
         <!-- 4模块 -->
-        <div class="col-md-12 chapter4" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background.png)">
+        <div class="col-md-12 chapter4" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background.png);border-top:1px solid white">
             <div align="center" class="col-md-2 col-md-offset-1" style="padding-top:10px">
                 <img id="powertitle" src="../assets/img/person/power1.png" style="width:40%;height:10%">
                 <!-- <br> -->
@@ -199,6 +295,20 @@
             </div>
         </div>
     </div>
+
+
+    <!-- 弹窗 -->
+    <div class="theme-popover col-md-12" >
+        <div class="col-md-1 col-md-offset-11"><button id="close">X</button></div>
+        <div id="main" class="theme-poptit col-md-12" style="margin-top:20px;width:200px;height:200px">
+        
+
+        </div>
+    </div>
+    <div class="theme-popover-mask"></div>
+
+
+
 
 </body>
 

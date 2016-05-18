@@ -212,18 +212,28 @@
 
                   var block_status = 0;
                   //var now_title;
-                  $(".level2").each(function () {
+                  $(".level2").each(function () 
+                  {
                           var t = $(this).children("div:eq(0)").children("a[style='display:none']")
-                          if (t.length > 0) {
+                          if (t.length > 0) 
+                          {
                               // console.log(t[0].text);
-                              if (parseInt(t[0].text) == undefined || parseInt(t[0].text) <= 20) {
+                              if (parseInt(t[0].text) == undefined || parseInt(t[0].text) <= 20) 
+                              {
                                   var ul = $(this).find("ul");
                                   if ($(this).find("ul").length == 0) {
+                                    if(block_status==0)
+                                    {
+
                                       block_status = 1;
                                       setCookie("currentlevel", $(this).find("li:eq(0) a:eq(0)").context.children[0].text);
                                       setCookie("currentlevelid", $(this).attr("id"));
+                                      setCookie("CourseNowName", $(this).find("li:eq(0) a:eq(0)").context.children[0].text);
+                                      setCookie("CourseNow", $(this).attr("id"));
+                                      
                                       $("#currentinfo").empty();
                                       $("#currentinfo").append($(this).find("li:eq(0) a:eq(0)").context.children[0].text);
+                                    }
                                   }
                                   else {
                                       $(this).find("li").each(function (index) {
@@ -235,14 +245,28 @@
                                                   title = title.substring(0, title.length);
                                                   setCookie("currentlevel", title);
                                                   setCookie("currentlevelid", $(this).attr("id"));
+                                                  setCookie("CourseNowName", title);
+                                                  setCookie("CourseNow", $(this).attr("id"));
+                                                  if(t==undefined)
+                                                  {
+                                                    var testid=$(this).attr("id");
+                                                    $("#"+testid).find("div:eq(0)").attr("style","margin-left:50px;margin-top:40px");
+                                                    $("#"+testid).find("a:eq(0)").attr("style","padding-bottom:0");
+                                                    $("#"+testid).find("div:eq(0)").append('<div class="progress progress-striped active" style="width:80%"><div data-toggle="tooltip" data-placement="right" data-original-title="'+0+'%" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: '+0+'%;"></div></div><a style="display:none" value="'+0+'">'+0+'</a>');
+                                                  }
                                                   $("#currentinfo").empty();
                                                   $("#currentinfo").append(title);
                                                   block_status = 1;
                                               }
                                               else {
-                                                  $(this).addClass("block_click");
-                                                  $(this).find("a:eq(0)").attr("style", "color:gray");
-                                                  //console.log($(this));
+                                                  if(t!=undefined)
+                                                  {}
+                                                  else
+                                                  {
+                                                    $(this).addClass("block_click");
+                                                    $(this).find("a:eq(0)").attr("style", "color:gray");
+                                                    //console.log($(this));
+                                                  }
                                               }
                                           }
                                           else {
@@ -252,7 +276,8 @@
                                   }
                               }
                                   //第二节点大于20，做子节点遍历
-                              else {
+                              else 
+                              {
                                   $(this).find("li").each(function (index) {
                                       var t1 = $(this);
                                       var t = $(this).find("div:eq(0)")[0].children[1];
@@ -262,6 +287,15 @@
                                               title = title.substring(0, title.length);
                                               setCookie("currentlevel", title);
                                               setCookie("currentlevelid", $(this).attr("id"));
+                                              setCookie("CourseNowName", title);
+                                              setCookie("CourseNow", $(this).attr("id"));
+                                              if(t==undefined)
+                                              {
+                                                var testid=$(this).attr("id");
+                                                $("#"+testid).find("div:eq(0)").attr("style","margin-left:50px;margin-top:40px");
+                                                $("#"+testid).find("a:eq(0)").attr("style","padding-bottom:0");
+                                                $("#"+testid).find("div:eq(0)").append('<div class="progress progress-striped active" style="width:80%"><div data-toggle="tooltip" data-placement="right" data-original-title="'+0+'%" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: '+0+'%;"></div></div><a style="display:none" value="'+0+'">'+0+'</a>');
+                                              }
                                               $("#currentinfo").empty();
                                               $("#currentinfo").append(title);
                                               block_status = 1;
@@ -288,6 +322,14 @@
                                       title = title.substring(0, title.length);
                                       setCookie("currentlevel", title);
                                       setCookie("currentlevelid", $(this).attr("id"));
+                                      setCookie("CourseNowName", title);
+                                      setCookie("CourseNow", $(this).attr("id"));
+
+                                        var testid=$(this).attr("id");
+                                        $("#"+testid).find("div:eq(0)").attr("style","margin-left:35px;margin-top:40px");
+                                        $("#"+testid).find("a:eq(0)").attr("style","padding-bottom:0");
+                                        $("#"+testid).find("div:eq(0)").append('<div class="progress progress-striped active" style="width:80%"><div data-toggle="tooltip" data-placement="right" data-original-title="'+0+'%" class="progress-bar progress-bar-blue" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: '+0+'%;"></div></div><a style="display:none" value="'+0+'">'+0+'</a>');
+                                        
                                       $("#currentinfo").empty();
                                       $("#currentinfo").append(title);
                                       block_status = 1;
@@ -299,6 +341,15 @@
                                               title = title.substring(0, title.length);
                                               setCookie("currentlevel", title);
                                               setCookie("currentlevelid", $(this).attr("id"));
+                                              setCookie("CourseNowName", title);
+                                              setCookie("CourseNow", $(this).attr("id"));
+                                              if(t==undefined)
+                                              {
+                                                var testid=$(this).attr("id");
+                                                $("#"+testid).find("div:eq(0)").attr("style","margin-left:50px;margin-top:40px");
+                                                $("#"+testid).find("a:eq(0)").attr("style","padding-bottom:0");
+                                                $("#"+testid).find("div:eq(0)").append('<div class="progress progress-striped active" style="width:80%"><div data-toggle="tooltip" data-placement="right" data-original-title="'+0+'%" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: '+0+'%;"></div></div><a style="display:none" value="'+0+'">'+0+'</a>');
+                                              }
                                               $("#currentinfo").empty();
                                               $("#currentinfo").append(title);
                                               block_status = 1;

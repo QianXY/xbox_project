@@ -19,7 +19,7 @@
     
     <link href="../dist/css/ucc.css" rel="stylesheet">
 
-  
+    <link rel="stylesheet" href="../assets/css/animate.min.css">
 
     <!-- Custom Theme JavaScript -->
     
@@ -174,19 +174,20 @@ function updateStatus(userid)
 
                 $('#nextpage').click(function(){
                     // 去掉问题&答案
-                    $('.questionlist').remove();
+                    // $('.questionlist').remove();
                     // $('.answerlist').remove();
-                    random(apilink);
+                    // random(apilink);
+                    location.reload();
                     //变换按钮
-                    $("#submit").fadeIn(100);
-                    $("#nextpage").fadeOut(100);
-                    $("#showrecom").fadeOut(100);
-                    $(".tyes").remove();
-                    $(".tno").remove();
-                    $(".yesorno").remove();
-                    for(var i=0;i<5;i++){
-                        $("#logo"+i).append('<i class="glyphicon glyphicon-education"></i>');
-                    }
+                    // $("#submit").fadeIn(100);
+                    // $("#nextpage").fadeOut(100);
+                    // $("#showrecom").fadeOut(100);
+                    // $(".tyes").remove();
+                    // $(".tno").remove();
+                    // $(".yesorno").remove();
+                    // for(var i=0;i<5;i++){
+                    //     $("#logo"+i).append('<i class="glyphicon glyphicon-education"></i>');
+                    // }
                 })
 
            
@@ -218,7 +219,7 @@ function updateStatus(userid)
                                 wrongamount++;
                                 $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/no.png">');
                                 $(".glyphicon").remove();
-                                $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
+                                $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'<br>正确答案：'+answer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                             totalid+=id+";";
                         }
                     }
@@ -300,6 +301,8 @@ function updateStatus(userid)
                         postpower(newpower);
                         $('#powerresult').remove();
                         $('#result').empty();
+                        $('#huizhangchange').empty();
+                        $('#awardchange').empty();
                         $('#result2').remove();
                         $('.answerlist').remove();
                         $('.theme-popover-mask').fadeOut(100);
@@ -324,7 +327,7 @@ function updateStatus(userid)
                                 }
                             }
                         }
-                        //now
+                        
                         var times=0;
                         function state1(){
                             $("#"+currentCourse+" div:eq(1)").removeClass("r2"); 
@@ -394,6 +397,21 @@ function updateStatus(userid)
                     newtime=new Date();
                     time=Math.floor((newtime-oldtime)/1000);
                     $("#result").append('<h4 style="color:rgb(21,91,169)"><div id="result2">答对'+rightamount+'题，答错'+wrongamount+'题</div><br><div id="powerresult">获得'+newpower+'能量值</div><br><div>用时'+time+'秒</div></h4><br>');
+
+                    //新增徽章
+                    $("#huizhangchange").append('<div class="col-md-3"><img class="huizhang" src="../assets/img/person/huizhang/1.png" style="width:200%;height:15%;display:none"></div><div class="col-md-9"></div>');
+                    setTimeout(function(){$(".huizhang").attr("style","display:block");$(".huizhang").addClass("animated lightSpeedIn");},1000);
+                    setTimeout(function(){$(".huizhang").attr("style","width:200%;height:15%;margin-bottom:20px");},3000);
+
+
+                    //新增奖杯
+                    setTimeout(function(){$("#awardchange").append('<div id="awardplace" class="col-md-3 col-md-offset-2"><img style="float:right;margin-right:15px;width:200%;height:15%;" id="oldaward" src="../assets/img/award/award1.png"/></div>');},4000);
+                    setTimeout(function(){$("#oldaward").addClass("animated bounceOut");},5000);
+                    setTimeout(function(){$("#awardplace").empty()},5700);
+                    setTimeout(function(){$("#awardplace").append('<img class="animated bounceIn" style="float:right;margin-right:15px;width:200%;height:15%;" id="newaward" src="../assets/img/award/award2.png"/>');},6000);
+                    
+
+
                     $(".theme-popover-mask").fadeIn(100);
                     $(".theme-popover").slideDown(200);
                     $(".useranswer").remove();
@@ -418,7 +436,7 @@ function updateStatus(userid)
         {
 
             var id1=children.Id;
-            html+=("<li class='needcolor level"+children.rank+"' id="+id1+"><a href='#'>"+children.name+"</a><div></div>");
+            html+=("<li style='padding-bottom:2px;' class='needcolor level"+children.rank+"' id="+id1+"><a href='#'>"+children.name+"</a><div></div>");
             
             for(var i in children.children)
             {
@@ -533,6 +551,8 @@ function updateStatus(userid)
         
         //顶部导航切换
         $("#demo-list li").click(function () {
+            //nownownow
+
             $("#demo-list li.active").removeClass("active");
             $(this).addClass("active");
             // console.log($(this).attr("id"));
@@ -556,6 +576,7 @@ function updateStatus(userid)
                 $("#currentinfo").append($(this).find("li:eq(0) a").context.innerText);
                 random(apilink);
                 currentCourse=getid;
+                resetarrow(getid);
 
             }
             else{
@@ -575,7 +596,64 @@ function updateStatus(userid)
             $("#"+parent2+" a:eq(0)").addClass("submenu-indicator-minus");
             $("#"+parent2+" ul:eq(0)").attr("style","display:block");
         }
-            
+        //now
+        // $("#"+currentCourse+" a:eq(0)").attr("style","padding-left:0");
+
+        function setarrow(){
+            setTimeout(function(){currentCourse=getCookie("CourseNow"); 
+
+                var levelnum=$("#"+currentCourse)[0].classList[1];
+                if(levelnum=="level3")
+                {
+                    // setTimeout(function(){},1000);  
+                    // setTimeout(function(){currentCourse=getCookie("CourseNow"); },1000);
+                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:45px;height:10px;" src="../assets/img/color/blue1.png">');
+                }
+                if(levelnum=="level2")
+                {
+                    // setTimeout(function(){},1000);  
+                    // setTimeout(function(){currentCourse=getCookie("CourseNow");  },1000);
+                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:30px;height:10px;" src="../assets/img/color/blue1.png">' );
+                }
+
+                console.log($("#arrow"));
+
+            },1000);
+        }
+
+        function resetarrow(getid){
+            var parentlevel=$("#arrow")[0].parentElement.parentElement.classList[1];
+            if(parentlevel=="level3")
+                $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 50px";
+            else
+                $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 35px";
+            // $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 35px";
+            $("#arrow").remove();
+            currentCourse=getid; 
+
+                var levelnum=$("#"+currentCourse)[0].classList[1];
+                if(levelnum=="level3")
+                {
+                    // setTimeout(function(){},1000);  
+                    // setTimeout(function(){currentCourse=getCookie("CourseNow"); },1000);
+                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:45px;height:10px;" src="../assets/img/color/blue1.png">');
+                }
+                if(levelnum=="level2")
+                {
+                    // setTimeout(function(){},1000);  
+                    // setTimeout(function(){currentCourse=getCookie("CourseNow");  },1000);
+                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:30px;height:10px;" src="../assets/img/color/blue1.png">' );
+                }
+        }
+
+        setarrow();
+
+
+         
         
 
         });  //ready
@@ -822,8 +900,7 @@ function updateStatus(userid)
                 border-radius: 4px;
         }
         .navbar-header{
-            background: url("../assets/img/back/background2.png")
-            repeat:no-repeat;
+            background: url("../assets/img/back/background.png")
         }
         #currentinfo{
             width: 300px;
@@ -871,8 +948,9 @@ function updateStatus(userid)
             <img src="../assets/img/answer/answer1/close.png" id="showanswer" type="button">
         </div>
 
-        <div class="col-md-10 col-md-offset-2" id="result">
-        </div>
+        <div class="col-md-10 col-md-offset-2" id="result"></div>
+        <div class="col-md-10 col-md-offset-2" id="huizhangchange"></div>
+        <div class="col-md-10 col-md-offset-2" id="awardchange"></div>
 
 
     </div>
@@ -928,19 +1006,19 @@ function updateStatus(userid)
                 <div class="col-md-12" style="padding-left:0">
                     <div align="left" class="col-md-4" style="padding-top:10px">
                     <!-- <a class="navbar-brand" style="padding-left:0" href="index.html" id="title">做题不无聊 V0.9</a> -->
-                    <img src="../assets/img/back/title.png" style="width:40%;height:4%">
+                    <img src="../assets/img/back/title.png" style="width:40%;height:3%;margin-top:10px">
                     </div>
                     
                     <div  class="col-md-4" style="padding-top:10px">
-                        <div align="right" class="col-md-4"></div>
+                        <div align="right" class="col-md-4"><img src="../assets/img/back/elephant.png" style="width:50%;height:8%"></div>
                         <div align="left" class="col-md-8">
-                            <img src="../assets/img/back/now.png" style="width:40%;height:4%">
+                            <img src="../assets/img/back/now.png" style="width:40%;height:3%">
                             <p id="currentinfo"></p>
                         </div>
                     </div>
 
                     <div align="right" class="col-md-4" style="padding-right:0;padding-top:10px;">
-                        <a href="person.html"><img src="../assets/img/back/personal.png" style="width:20%;height:4%"></a>
+                        <a href="person.html"><img src="../assets/img/back/personal2.png" style="width:25%;height:5%;margin-top:5px"></a>
                     </div>
                 </div>
             </div>
