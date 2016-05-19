@@ -395,13 +395,22 @@ function updateStatus(userid)
                     
                     wronganswer();
                     newtime=new Date();
+                    var totalpower=parseInt(power)+parseInt(newpower);
+                    var oldamount=checkhuizhang(parseInt(power));
+                    var newamount=checkhuizhang(totalpower);
+                    var gap=newamount-oldamount;
                     time=Math.floor((newtime-oldtime)/1000);
-                    $("#result").append('<h4 style="color:rgb(21,91,169)"><div id="result2">答对'+rightamount+'题，答错'+wrongamount+'题</div><br><div id="powerresult">获得'+newpower+'能量值</div><br><div>用时'+time+'秒</div></h4><br>');
+                    $("#result").append('<h4 style="color:rgb(21,91,169)"><div id="result2">答对'+rightamount+'题，答错'+wrongamount+'题,用时'+time+'秒</div><br><div id="powerresult">获得'+newpower+'能量值,共有'+totalpower+'能量值</div><br><div>您拥有'+oldamount+'枚徽章</div><br><div id="showhuizhang" class="col-md-12" style="padding:0"></div></h4><br>');
 
+                    for(i=1;i<=oldamount;i++){
+                        $("#showhuizhang").append("<div class='col-md-2'><img src='../assets/img/person/huizhang/"+i+".png' style='width:300%;height:10%'></div>");
+                    }
+                    if(gap==0){
                     //新增徽章
-                    $("#huizhangchange").append('<div class="col-md-3"><img class="huizhang" src="../assets/img/person/huizhang/1.png" style="width:200%;height:15%;display:none"></div><div class="col-md-9"></div>');
+                    $("#huizhangchange").append('<h4 style="color:rgb(21,91,169)">恭喜获得新徽章<br><div class="col-md-3"><img class="huizhang" src="../assets/img/person/huizhang/7.png" style="width:200%;height:15%;display:none"></div><div class="col-md-9"></div></h4>');
                     setTimeout(function(){$(".huizhang").attr("style","display:block");$(".huizhang").addClass("animated lightSpeedIn");},1000);
-                    setTimeout(function(){$(".huizhang").attr("style","width:200%;height:15%;margin-bottom:20px");},3000);
+                    setTimeout(function(){$(".huizhang").attr("style","width:200%;height:12%;margin-bottom:20px");},3000);
+                    } 
 
 
                     //新增奖杯
@@ -608,14 +617,14 @@ function updateStatus(userid)
                     // setTimeout(function(){},1000);  
                     // setTimeout(function(){currentCourse=getCookie("CourseNow"); },1000);
                     $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
-                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:45px;height:10px;" src="../assets/img/color/blue1.png">');
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:45px;height:15px;" src="../assets/img/color/arrow.png">');
                 }
                 if(levelnum=="level2")
                 {
                     // setTimeout(function(){},1000);  
                     // setTimeout(function(){currentCourse=getCookie("CourseNow");  },1000);
                     $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
-                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:30px;height:10px;" src="../assets/img/color/blue1.png">' );
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:30px;height:15px;" src="../assets/img/color/arrow.png">' );
                 }
 
                 console.log($("#arrow"));
@@ -626,7 +635,7 @@ function updateStatus(userid)
         function resetarrow(getid){
             var parentlevel=$("#arrow")[0].parentElement.parentElement.classList[1];
             if(parentlevel=="level3")
-                $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 50px";
+                $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 45px";
             else
                 $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 35px";
             // $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 35px";
@@ -639,18 +648,53 @@ function updateStatus(userid)
                     // setTimeout(function(){},1000);  
                     // setTimeout(function(){currentCourse=getCookie("CourseNow"); },1000);
                     $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
-                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:45px;height:10px;" src="../assets/img/color/blue1.png">');
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:45px;height:15px;" src="../assets/img/color/arrow.png">');
                 }
                 if(levelnum=="level2")
                 {
                     // setTimeout(function(){},1000);  
                     // setTimeout(function(){currentCourse=getCookie("CourseNow");  },1000);
                     $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
-                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:30px;height:10px;" src="../assets/img/color/blue1.png">' );
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:30px;height:15px;" src="../assets/img/color/arrow.png">' );
                 }
         }
 
         setarrow();
+
+
+        function checkhuizhang(num){
+            if(num>=0&&num<500){
+                return 1;
+            }
+            if(num>=500&&num<2000){
+                return 2;
+            }
+            if(num>=2000&&num<5000){
+                return 3;
+            }
+            if(num>=5000&&num<10000){
+                return 4;
+            }
+            if(num>=10000&&num<20000){
+                return 5;
+            }
+            if(num>=20000&&num<40000){
+                return 6;
+            }
+            if(num>=40000&&num<70000){
+                return 7;
+            }
+            if(num>=70000&&num<100000){
+                return 8;
+            }
+            if(num>=100000&&num<150000){
+                return 9;
+            }
+            if(num>=150000&&num<200000){
+                return 10;
+            }
+
+        }
 
 
          
