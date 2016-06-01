@@ -5,57 +5,44 @@
  
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-
-    <!-- Metis Menu Plugin JavaScript -->
-
-
     <!-- Morris Charts JavaScript -->
-    
     <link href="../dist/css/ucc.css" rel="stylesheet">
 
 
 
-    <!-- Custom Theme JavaScript -->
-    
     <script type="text/javascript">
+
         function getCookie(name) {
                var arr,reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
                if (arr = document.cookie.match(reg))
                    return unescape(arr[2]);
                else
-                   return 'shabi';
+                   return 'xxx';
         }
-        var userid=getCookie("userid");
+
+        var userid=getCookie("userid"); //用户id
         var rightamout; //5题中答对的题的数量
         var wrongamount;    //5题中答错的题的数量
-        var totalid;    //打错的题的id集合
-        var oldpower;      //能量值
-        var newpower;
-        var difficulty=new Array();
-        var questionid=new Array();
-        var question;
-        var html;
-        var explain= new Array();
-        var answer=new Array();
-        var getanswer=new Array();
-        var questiontype=new Array();
-        var totalCourse=getCookie("totalCourse");
-        var difficulty=new Array();
-        var apilink;
-        var oldtime;
-        var newtime;
-        var time;
+        var totalid;    //答错的题的id集合
+        var oldpower;   //答题之前的能量值
+        var newpower;   //答完题获得的能量值
+        var difficulty=new Array(); //5题的难度系数，是一个队列
+        var questionid=new Array(); //5题的题目id，是一个队列
+        var explain= new Array();   //5题的解析，是一个队列
+        var answer=new Array();     //5题的答案，是一个队列
+        var getanswer=new Array();  //用户对5题的解答，是一个队列
+        var questiontype=new Array();//5题的题目类型，是一个队列
+        var question;   //题目的题干
+        var html;       //需要用jQuery动态添加的html
+        var oldtime;    //答题前的时间
+        var newtime;    //答题后的时间
+        var time;       //答题所用的时间
+
         console.log(userid);
         $(document).ready(function () {
-            // var a="149448";
-            // if(totalCourse.indexOf(a)>0)
-            //     console.log(totalCourse);
-            // else
-            //     console.log("sharandomshabi");
                 function random(){
                     $.ajax({
                     type: "GET",
@@ -64,19 +51,19 @@
                             var string_json = JSON.stringify(data);
                             var obj = JSON.parse(string_json);
                             for(var i in obj){   
-                                questiontype[i]=obj[i].questionType;
-                                questionid[i]=obj[i].questionID;
-                                question=obj[i].content;
-                                explain[i]=obj[i].answerExplain;
-                                answer[i]=obj[i].rightAnswer;
-                                html=questionid+question;
-                                difficulty[i]=obj[i].difficulty;
+                                questiontype[i]=obj[i].questionType;//获取题目类型
+                                questionid[i]=obj[i].questionID;//获取题目id
+                                question=obj[i].content;//获取题目内容
+                                explain[i]=obj[i].answerExplain;//获取题目解析
+                                answer[i]=obj[i].rightAnswer;//获取题目答案
+                                html=questionid+question;//将题目id和题目内容合并，后面要直接添加到页面上
+                                difficulty[i]=obj[i].difficulty;//获取题目难度系数
                                 $('#Q'+i).append("<div class='questionlist' id='"+questionid[i]+"'>"+question+"</div>");
-                                // console.log(answer[i]);
-
+                                //如果题目类型是填空题，在答题区域添加文本框
                                 if(questiontype[i]=="2"){
                                     $('#A'+i).append('<div id="'+questionid[i]+'" class="useranswer input-group input-group-lg"><input id="input'+i+'" type="text" class="form-control inputa" placeholder="answer" size="50" ></div>');
                                 }
+                                //如果题目类型是选择题，在答题区徐添加单选按钮
                                 else{
                                     $('#A'+i).append('<div id="'+questionid[i]+'" class="useranswer"><input class="select" name="answer'+i+'" type="radio" value="A"> A &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="B"> B &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="C"> C &nbsp;&nbsp;<input class="select" name="answer'+i+'" type="radio" value="D"> D &nbsp;&nbsp;</div>');
                                 }
@@ -94,52 +81,55 @@
                 function wronganswer(){
                 rightamount=0;
                 wrongamount=0;
-                totalid="";
+                totalid="";//所有错题的id
                 oldpower=getCookie("power");
                 newpower=0;
-                //选择
                 for(var i=0;i<5;i++){
                     var id=questionid[i];
+                    // 选择题
                     if(questiontype[i]=="0"){
-                        getanswer[i]=$('input:radio[name="answer'+i+'"]:checked').val();
+                        getanswer[i]=$('input:radio[name="answer'+i+'"]:checked').val();//获取用户的答案
+                        // 未作答的情况
                         if(getanswer[i]==null){
-                            getanswer[i]="未作答";
+                            getanswer[i]="未作答";//获取用户答案为“未作答”
                         }
+                        // 答对的情况
                         if(getanswer[i]==answer[i]){
                                 rightamount++;
-                                $("#title"+i).append('<div class="tyes" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5>答对了<button class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
-                                newpower+=difficulty[i]*50;
+                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/yes.png">');//添加答对img
+                                $(".glyphicon").remove();//去掉博士帽logo
+                                $("#title"+i).append('<div class="tyes" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');//用户答案+正确答案+解析
+                                newpower+=difficulty[i]*50;//新增能量值根据题目难度而定
                         }
-                        // console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  right");
+                        // 答错的情况
                         else{
                             wrongamount++;
-                                $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5>答错了<button class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
-                            totalid+=id+";";
+                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/no.png">');//添加答错img
+                                $(".glyphicon").remove();
+                                $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'<br>正确答案：'+answer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
+                            totalid+=id+";";//答错的题的id保存
                         }
                     }
+                    // 填空题
                     else{
-                        //now
                         getanswer[i]=$('input:text[id="input'+i+'"]').val();
                         if(getanswer[i]==""){
                             getanswer[i]="未作答";
                         }
-                        // console.log(questionid[i]+"  wrong");
                         wrongamount++;
-                                $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5>答错了<button class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
-                        totalid+=id+";";
+                                $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/no.png">');
+                                $(".glyphicon").remove();
+                                $("#title"+i).append('<div class="tno" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'<br>正确答案：'+answer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
+                        totalid+=id+";";//填空题无法判断，直接判定为错（在正式答题中，只出选择题而不出填空题）
                     }
                 }
 
-                //直接显示解析
-                // for(var i in explain){
-                //     $("#showdetail"+i).click(function(){
-                //         $(".answerlist").remove();
-                //         $("#explain"+i).append('<div class="answerlist">'+explain[i]+'</div>');
-                //     })
-                // }
-
+                
+                // 看解析按钮的触发事件
                 $("#showdetail"+0).click(function(){
+                        // 隐藏其它解析
                         $(".answerlist").remove();
+                        // 显示当前题目解析
                         $("#explain"+0).append('<div class="answerlist">'+explain[0]+'</div>');
                 })
                 $("#showdetail"+1).click(function(){
@@ -159,16 +149,7 @@
                         $("#explain"+4).append('<div class="answerlist">'+explain[4]+'</div>');
                 })
 
-                //弹窗显示解析
-                // for(var i in explain){
-                //     $("#showdetail"+i).click(function(){
-                //         $(".theme-popover-answer").append('<div class="answerlist">'+explain[i]+'</div>');
-                //         $(".theme-popover-answer").fadeIn(100);
-                //         $(".theme-popover-mask").fadeIn(100);
-                //         for(var t in explain){
-                //         }
-                //     })
-                // }
+                
 
                 returnid(totalid);
                 }
@@ -189,29 +170,29 @@
                     });
                 }
 
+                // 用户关闭弹出框的触发事件
                 $('#showanswer').click(function () {
-                        //now
-                        postpower(newpower);
+                        postpower(newpower);    //更新能量值
                         $('#powerresult').remove();
                         $('#result2').remove();
                         $('.answerlist').remove();
                         $('.theme-popover-mask').fadeOut(100);
-                        $('.theme-popover').slideUp(200);
-                        $('#submit').remove();
-                        $('.buttongroup').append('<button id="enterpanel" type="button" href="" class="button button-caution button-pill button-pill">进入个人中心</button>');
+                        $('.theme-popover').slideUp(200);   //隐藏弹出框
+                        $('#submit').remove();  //移除提交答案按钮
+                        $('.buttongroup').append('<button id="enterpanel" type="button" href="" class="button button-caution button-pill button-pill">进入个人中心</button>');    //添加进入个人中心按钮
                         $('#showrecom').fadeIn(100);
                         $('#nextpage').fadeIn(100);
                 })
 
+                // 用户提交答案后的触发事件
                 $("#submit" ).click(function() {
-                    //nowsubmit
-                    wronganswer();
+                    wronganswer();      //判断答题对错
                     newtime=new Date();
-                    time=Math.floor((newtime-oldtime)/1000);
+                    time=Math.floor((newtime-oldtime)/1000);    //计算答题时间
                     $("#result").append('<div id="result2">答对'+rightamount+'题，答错'+wrongamount+'题</div><div id="powerresult">获得'+newpower+'能量值<div><div>用时'+time+'秒</div>');
                     $(".theme-popover-mask").fadeIn(100);
-                    $(".theme-popover").slideDown(200);
-                    $(".useranswer").remove();
+                    $(".theme-popover").slideDown(200);     //在弹出框中显示答题情况
+                    $(".useranswer").remove();          //隐藏用户答题框
                 })
 
         
@@ -237,14 +218,6 @@
     }
     </style>
     <script>
-    //知识树
-    var html="";
-    jQuery(document).ready(function () {
-        
-
-        // for(var i=149423;i<149427;i++)
-        //     console.log(i+"="+$("#"+i).children(".submenu").length+",");
-    });
 
     </script>
     <script src="../dist/js/awol.js"></script>
@@ -377,6 +350,12 @@
         h5{
             color: black;
         }
+        .navbar-header{
+            background: url("../assets/img/back/background.png")
+        }
+        .yesorno{
+            z-index: 9999;
+        }
     </style>
 
 </head>
@@ -386,29 +365,20 @@
 
 
 <!-- 弹窗 -->
-<div class="theme-popover">
-    <div class="theme-poptit">
-        <h3>答题情况</h3>
-        <div id="result">
+<div class="theme-popover col-md-12" style="background-image:url(../assets/img/answer/answer1/book.png);background-size:100% 100%;">
+    <div class="theme-poptit col-md-12">
+        <!-- 标题 -->
+        <div class="col-md-3 col-md-offset-3">
+            <img style="margin-top:15px" src="../assets/img/answer/answer1/result.png">
         </div>
-        <button id="showanswer" type="button" class="button button-caution button-pill button-pill">
-                看答案
-        </button>
-        <script>
-           
-        </script>
+        <!-- 右上角关闭小标 -->
+        <div class="col-md-1 col-md-offset-5" style="align:right">
+            <img src="../assets/img/answer/answer1/close.png" id="showanswer" type="button">
+        </div>
+        <!-- 答题情况详细信息 -->
+        <div class="col-md-10 col-md-offset-2" id="result"></div>
     </div>
 </div>
-
-
-<div class="theme-popover-answer">
-    <div class="theme-poptit">
-        <h3>解析</h3>
-        
-    </div>
-</div>
-
-
 <div class="theme-popover-mask"></div>
 <!-- 弹窗 -->
 
@@ -416,21 +386,29 @@
 
 
 
-    <!-- 导航栏 -->
-  <div class="row" id="top">
+        <!-- 导航栏 -->
+  <div class="row col-md-12" id="top">
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-top: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html" id="title">做题不无聊 V0.9</a>
+            <div class="navbar-header col-md-12">
+                <div class="col-md-12" style="padding-left:0">
+                    <!-- “做题不无聊”的logo -->
+                    <div align="left" class="col-md-4" style="padding-top:10px">
+                    <img src="../assets/img/back/title.png" style="width:40%;height:3%;margin-top:10px">
+                    </div>
+                    
+                    <div  class="col-md-4" style="padding-top:10px">
+                        <div align="right" class="col-md-4"><img src="../assets/img/back/elephant.png" style="width:50%;height:8%"></div>
+                        <div align="left" class="col-md-8">
+                            <img src="../assets/img/back/now.png" style="width:40%;height:3%">
+                            <p id="currentinfo"></p>
+                        </div>
+                    </div>
+                    <!-- 个人中心的button -->
+                    <div align="right" class="col-md-4" style="padding-right:0;padding-top:10px;">
+                        <a href="person.html"><img src="../assets/img/back/personal2.png" style="width:25%;height:5%;margin-top:5px"></a>
+                    </div>
+                </div>
             </div>
-            <!-- /.navbar-header -->
-            
-
             
         </nav>
     </div>
@@ -438,13 +416,7 @@
 
 
 
-
     <div clsss="row col-md-12" id="bottom">
-        
-
-
-        
-
         <!-- 右侧做题 -->    
         <div id="exam" class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
@@ -457,7 +429,7 @@
                         <!-- 第一题 -->
                         <li >
                             <!-- 问第一题 -->
-                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
+                            <div id="logo0" class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -479,7 +451,7 @@
                         <!-- 第二题 -->
                         <li>
                             <!-- 问第二题 -->
-                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
+                            <div id="logo1" class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -501,7 +473,7 @@
                         <!-- 第3题 -->
                         <li>
                             <!-- 问第三题 -->
-                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
+                            <div id="logo2" class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -523,7 +495,7 @@
                         <!-- 第4题 -->
                         <li>
                             <!-- 问第四题 -->
-                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
+                            <div id="logo3" class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -545,7 +517,7 @@
                         <!-- 第5题 -->
                         <li>
                             <!-- 问第五题 -->
-                            <div class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
+                            <div id="logo4" class="timeline-badge info"><i class="glyphicon glyphicon-education"></i>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">

@@ -1,13 +1,97 @@
-<html> 
-<head> 
-<title>LIGHTBOX EXAMPLE</title> 
+<html>
+    
+<head>
+     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../dist/js/echarts.js"></script>
+</head>
 
-</head> 
-<body> 
-	<a style="display:none">aaa</a>
-	<script type="text/javascript">
-	</script>
-			
-</body> 
-</html> 
 
+
+<body>
+    <div id="main" style="height:400px;"></div>
+     
+    <script>
+        function LoadBaidu(result)
+        {
+            //var json_result = JSON.parse(result);
+
+            var t =result.RadarNow.split(",");
+            var old  = result.RadarOld.split(",");
+            var myChart = echarts.init(document.getElementById('main'));
+            option = {
+    title : {
+        text: '罗纳尔多 vs 舍普琴科',
+        subtext: '完全实况球员数据'
+    },
+    tooltip : {
+        trigger: 'axis'
+    },
+    legend: {
+        x : 'center',
+        data:['罗纳尔多','舍普琴科']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    polar : [
+        {
+            indicator : [
+                {text : '进攻', max  : 100},
+                {text : '防守', max  : 100},
+                {text : '体能', max  : 100},
+                {text : '速度', max  : 100},
+                {text : '力量', max  : 100}
+
+            ],
+            radius : 130
+        }
+    ],
+    series : [
+        {
+            name: '完全实况球员数据',
+            type: 'radar',
+            itemStyle: {
+                normal: {
+                    areaStyle: {
+                        type: 'default'
+                    }
+                }
+            },
+            data : [
+                {
+                    value : t,
+                    name : '舍普琴科'
+                },
+                {
+                    value : old,
+                    name : '罗纳尔多'
+                }
+            ]
+        }
+    ]
+};
+            myChart.setOption(option);
+        }
+    var result = "";
+         $.ajax({
+         	type: "GET",
+         	sync:false,
+         	url: "http://localhost:50410/api/user/updatechapter?id=1",
+         	success: function (data) 
+         	{
+                
+         		LoadBaidu(data);
+         	}
+         	}); 
+    </script>
+</body>
+
+ </html>

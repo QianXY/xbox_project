@@ -27,7 +27,6 @@
           var userid=getCookie("userid");
           $.post("http://xboxweb.azurewebsites.net/api/user/updatecurrentlevel",{Id:userid,CurrentlevelId:currentlevelid}, function(data,status){
                             if(data=="success"){
-                                // console.log("setcurrentlevelid"+data);
                             }
                     });
         }
@@ -58,6 +57,7 @@
    			}).addClass("animate-ink")
    		});
    };
+
    //这里实现点击下拉或者直接跳转
    $("#jquery-accordion-menu").children("ul").find('li').click(function(e){
 
@@ -86,6 +86,9 @@
    	}
     });
 
+
+
+    //下面是根据用户学习进度来判断当前所处章节的实现部分，是整个菜单最难最精华的部分
     var courseInfo=getCookie("totalCourse");
     if(courseInfo!=null)
     {
@@ -95,74 +98,43 @@
             var id = c_json[i].Id;
             var master = parseInt(c_json[i].Degree);
             if(id!=null||id.length>0){
-               // switch(master){
-               // case "1":
-               //    levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:8%;height:2%;' src='../assets/img/color/"+color+"1.png'/><a style='display:none' value='1'>1</a>");break;
-               // case "2":
-               //    levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:16%;height:2%;' src='../assets/img/color/"+color+"2.png'/><a style='display:none' value='2'>2</a>");break;
-               // case "3":
-               //    levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:24%;height:2%;' src='../assets/img/color/"+color+"3.png'/><a style='display:none' value='3'>3</a>");break;
-               // case "4":
-               //    levelnum(id);$("#"+id).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:32%;height:2%;' src='../assets/img/color/"+color+"4.png'/><a style='display:none' value='4'>4</a>");break;
                
 
             if(id!=""){
               levelnum(id);
               $("#"+id).find("div:eq(0)").append('<div class="progress progress-striped active" style="width:80%"><div data-toggle="tooltip" data-placement="right" data-original-title="'+master+'%" class="progress-bar progress-bar-'+color+'" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: '+master+'%;"></div></div><a style="display:none" value="'+master+'">'+master+'</a>');
             }
-              
-               // }
             }
             
         }
-        //console.log($(".level2").length);
         var secondlevel = $(".level2");
         var sumlevel1=0;
         var sum1=0;
         var sumlevel2=0;
         var sum2=0;
-        // for(var t in secondlevel){
-              // for(var i=0;i<=secondlevel.length;i++){
-                  // console.log(secondlevel[i].children[1].children[1].innerHTML);
+
+                  //对于每个三级节点
                   $(".level2").each(function(index) {
                     sum1=0;
                     sumlevel1=0;
                     if ($(this).find(".submenu").length > 0) {
-                        //sum1 = $(this).find("li").length;
-                        // console.log($(this));
-                      $(this).find("a[style='display:none']").each(function(){
-                        sumlevel1+=parseInt(this.attributes[1].value);
-                        // sum1++;
-                        // console.log(this.attributes[1].value);
+                      $(this).find("a[style='display:none']").each(function(){//获得该节点下的a标签的值
+                        sumlevel1+=parseInt(this.attributes[1].value);//同一个二级节点下的所有三级节点的值相加获得总和
                       });
                       $(this).find("ul>li").each(function(){
-                        sum1++;
+                        sum1++;//同一个二级节点下的所有三级节点的总个数
                       });
-                      //var tttt = $(this).find(".submenu");
-                      // sumlevel1=Math.floor(sumlevel1/sum1);
-                      // console.log(sum1);
-                      sumlevel1=(sumlevel1/sum1).toFixed(2);
+                      sumlevel1=(sumlevel1/sum1).toFixed(2);//该二级节点的进度值
                       if(!isNaN(sumlevel1)&&sumlevel1!=0){
-
-                      // console.log(sumlevel1);
                         $(this).find("div:eq(0)").attr("style","margin-left:35px;margin-top:40px");
                         $(this).find("a:eq(0)").attr("style","padding-bottom:0px");
-                        // switch(sumlevel1){
-                        //   case 1:
-                        //   $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:8%;height:2%;' src='../assets/img/color/blue1.png'/><a style='display:none' value='1'>1</a>");break;
-                        //   case 2:
-                        //   $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:16%;height:2%;' src='../assets/img/color/blue2.png'/><a style='display:none' value='2'>2</a>");break;
-                        //   case 3:
-                        //   $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:24%;height:2%;' src='../assets/img/color/blue3.png'/><a style='display:none' value='3'>3</a>");break;
-                        //   case 4:
-                        //   $(this).find("div:eq(0)").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:32%;height:2%;' src='../assets/img/color/blue4.png'/><a style='display:none' value='4'>4</a>");break;
-                        // }
+                        
                         $(this).find("div:eq(0)").append('<div class="progress progress-striped active"style="width:80%"><div data-toggle="tooltip" data-placement="right" data-original-title="'+sumlevel1+'%" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+sumlevel1+'%;"></div></div><a style="display:none" value="'+sumlevel1+'">'+sumlevel1+'</a>');
                       }
                     }
                   });
 
-
+                  //对于每一个二级节点
                   $(".level1").each(function(index) {
                     sum2=0;
                     sumlevel2=0;
@@ -170,16 +142,15 @@
                       if($(this).children("div:eq(0)").find("a").length>0)
                       {
                         var cash=$(this).children("div:eq(0)")[0].innerText;
-                        sumlevel2+=parseInt(cash);
-                        // sum2++;
+                        sumlevel2+=parseInt(cash);//同一个一级节点下的所有二级节点的值相加的总和
                       }
                       });
 
                       $(this).find(">ul>li").each(function(){
-                        sum2++;
+                        sum2++;//同一个一级节点下的所有二级节点的个数
                       });
 
-                      sumlevel2=(sumlevel2/sum2).toFixed(2);
+                      sumlevel2=(sumlevel2/sum2).toFixed(2);//该一级节点的进度值
                       console.log("sumlevel2="+sumlevel2);
 
                       if(sumlevel2>=0&&sumlevel2<5){
@@ -193,38 +164,22 @@
                           $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award2.png'/><a style='display:none' value='3'>3</a>");
                         }
                       }
-
-                    
-                        // switch(sumlevel2){
-                        //   // case 1:
-                        //   // $(this).find("a:eq(0)").append("<img style='width:10%;height:10%;' src='../assets/img/award/award0.png'/><a style='display:none' value='1'>1</a>");break;
-                        //   // case 2:
-                        //   // $(this).find("a:eq(0)").append("<img style='width:10%;height:10%;' src='../assets/img/award/award0.png'/><a style='display:none' value='1'>1</a>");break;
-                        //   case 3:
-                        //   $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award1.png'/><a style='display:none' value='3'>3</a>");break;
-                        //   case 4:
-                        //   $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award2.png'/><a style='display:none' value='4'>4</a>");break;
-                        //   default:
-                        //   $(this).find("a:eq(0)").append("<img style='float:right;margin-right:15px;width:10%;height:4%;' src='../assets/img/award/award0.png'/><a style='display:none' value='4'>4</a>");break;
-                        // }
-                        // console.log(sumlevel2);
                   });
 
-                  var block_status = 0;
-                  //var now_title;
-                  $(".level2").each(function () 
+
+                  var block_status = 0;//该值为1的时候，之后所有的节点都要加上block_click
+                  $(".level2").each(function () //对每一个二级节点做遍历
                   {
-                          var t = $(this).children("div:eq(0)").children("a[style='display:none']")
-                          if (t.length > 0) 
+                          var t = $(this).children("div:eq(0)").children("a[style='display:none']")//获取子节点下的a标签
+                          if (t.length > 0) //如果该a标签有值，则说明该二级节不是子节点
                           {
-                              // console.log(t[0].text);
-                              if (parseInt(t[0].text) == undefined || parseInt(t[0].text) <= 20) 
+                              if (parseInt(t[0].text) == undefined || parseInt(t[0].text) <= 20) //非子节点的二级节点，未定义或进度小于20
                               {
                                   var ul = $(this).find("ul");
-                                  if ($(this).find("ul").length == 0) {
+                                  if ($(this).find("ul").length == 0) {//找到该二级节点下面的ul标签
                                     if(block_status==0)
                                     {
-
+                                      //ul标签下的第一个li标签就是当前所处章节
                                       block_status = 1;
                                       setCookie("currentlevel", $(this).find("li:eq(0) a:eq(0)").context.children[0].text);
                                       setCookie("currentlevelid", $(this).attr("id"));
@@ -235,7 +190,7 @@
                                       $("#currentinfo").append($(this).find("li:eq(0) a:eq(0)").context.children[0].text);
                                     }
                                   }
-                                  else {
+                                  else {//如果该二级节点下面没有ul标签，则它本身就是当前所处章节
                                       $(this).find("li").each(function (index) {
                                           var t1 = $(this);
                                           var t = $(this).find("div:eq(0)")[0].children[1];
@@ -256,7 +211,7 @@
                                                   }
                                                   $("#currentinfo").empty();
                                                   $("#currentinfo").append(title);
-                                                  block_status = 1;
+                                                  block_status = 1;//之后的所有节点都是不可点击的
                                               }
                                               else {
                                                   if(t!=undefined)
@@ -265,23 +220,21 @@
                                                   {
                                                     $(this).addClass("block_click");
                                                     $(this).find("a:eq(0)").attr("style", "color:gray");
-                                                    //console.log($(this));
                                                   }
                                               }
                                           }
                                           else {
-                                              // console.log($(this));
                                           }
                                       });
                                   }
                               }
-                                  //第二节点大于20，做子节点遍历
+                                  //非子节点的二级节点，进度值大于20，做子节点遍历
                               else 
                               {
                                   $(this).find("li").each(function (index) {
                                       var t1 = $(this);
                                       var t = $(this).find("div:eq(0)")[0].children[1];
-                                      if (t == undefined || parseInt(t.text) <= 20) {
+                                      if (t == undefined || parseInt(t.text) <= 20) {//找到二级节点下的进度值小于20的三级节点
                                           if (block_status == 0) {
                                               var title = $(this).find("li:eq(0) a:eq(0)").context.children[0].text;
                                               title = title.substring(0, title.length);
@@ -303,11 +256,9 @@
                                           else {
                                               $(this).addClass("block_click");
                                               $(this).find("a:eq(0)").attr("style", "color:gray");
-                                              //console.log($(this));
                                           }
                                       }
                                       else {
-                                          // console.log($(this));
                                       }
                                   });
                               }
@@ -315,8 +266,6 @@
                               //else的话，节点里全都灭了,注意，cookie里设置是全灭的第一个三级
                           else {
                               if (block_status == 0) {
-                                 // $(this).addClass("block_click");
-                                  // $(this).find("a:eq(0)").attr("style", "color:gray");
                                   if ($(this).find("ul").length == 0) {
                                       var title = $(this).find("li:eq(0) a:eq(0)").context.children[0].text;
                                       title = title.substring(0, title.length);
@@ -359,7 +308,6 @@
                                               $(this).find("a:eq(0)").attr("style", "color:gray");
                                           }
                                       });
-                                      //console.log(ttt);
                                   }
                                  
                               }
@@ -367,16 +315,8 @@
                                   $(this).addClass("block_click");
                                   $(this).find("a:eq(0)").attr("style", "color:gray");
                                   $(this).find("li").each(function (index) {
-                                      $(this).find("a").each(function (index) {
-                                          // console.log(this);
-                                          if ($(this).text().length > 5 && this.nextSibling.children.length == 0) {
-                                              $(this).attr("style", "color:gray");
-                                          }
-                                          else {
-                                              //$(this).attr("style", "color:gray");
-                                          }
-
-                                      });
+                                    $(this).addClass("block_click");
+                                    $(this).find("a:eq(0)").attr("style", "color:gray");
                                   });
                               }
                           }

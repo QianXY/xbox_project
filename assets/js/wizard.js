@@ -86,7 +86,7 @@ $(document).ready(function(){
 });
 
 function validateFirstStep(){
-    
+    // 输入信息正确性检测
     $(".wizard-card form").validate({
 		rules: {
 			// realname: "required",
@@ -99,28 +99,7 @@ function validateFirstStep(){
                 required: true,
                 equalTo:"#password",
             }
-			
-/*  other possible input validations
-			,username: {
-				required: true,
-				minlength: 2
-			},
-			password: {
-				required: true,
-				minlength: 5
-			},
-			confirm_password: {
-				required: true,
-				minlength: 5,
-				equalTo: "#password"
-			},
 		
-			topic: {
-				required: "#newsletter:checked",
-				minlength: 2
-			},
-			agree: "required"
-*/			
 
 		},
 		messages: {
@@ -135,25 +114,7 @@ function validateFirstStep(){
                 equalTo:"密码不同，请重新输入"
             }
 
-/*   other posible validation messages
-			username: {
-				required: "Please enter a username",
-				minlength: "Your username must consist of at least 2 characters"
-			},
-			password: {
-				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long"
-			},
-			confirm_password: {
-				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long",
-				equalTo: "Please enter the same password as above"
-			},
-			email: "Please enter a valid email address",
-			agree: "Please accept our policy",
-			topic: "Please select at least 2 topics"
-*/
-				
+
 		}
 	}); 
 	

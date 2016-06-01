@@ -21,50 +21,40 @@
                   this.document.cookie = cname + "=" + cvalue + "; " + expires;
             };
 
-
-            
-
-    function login(){
-         var name=$('#login-name').val();
-            var password=$('#login-pass').val();
-            var power;
-            var grade;
-            var name;
+            //login()功能
+        function login(){
+            var name=$('#login-name').val();    //用户名
+            var password=$('#login-pass').val();    //密码
+            var power;  //能量值，用于判断用户是否为新用户
+            var grade;  //年级
+            var name;   //姓名
             $.post("http://xboxweb.azurewebsites.net/api/user/loginUser",{Name:name,Password:password}, function(data,status){
                 if(data.Status=="Success"){
-                    var totalCourse=JSON.stringify(data.CourseInfo);
-                    console.log(data);
-                    console.log(totalCourse);
+                    var totalCourse=JSON.stringify(data.CourseInfo); //数据库中当前所有已经存在的章节及其学习进度
                     power=data.Power;
                     grade=data.Grade;
-                    name=data.Name;
+                    name=data.Name;  //获取数据库中的power、grade、name数据
                     setCookie("userid",data.Id);
                     setCookie("totalCourse",totalCourse);
                     setCookie("power",power);
                     setCookie("grade",grade);
                     setCookie("name",name);
-                    alert(data.CourseNow);
                     setCookie("CourseNow",data.CourseNow);
-                    setCookie("CourseNowName",data.CourseNowName);
-                    // alert(data.CourseNowName);
-                    alert(totalCourse);
+                    setCookie("CourseNowName",data.CourseNowName);  //将数据库中获取的数据及用户输入的数据一并放入cookie
                     if(power==0)
-                        location.href="random.html";
+                        location.href="random.html";    //如果是新用户，重定向到random.html
                     else
-                        location.href="person.html";
+                        location.href="person.html";    //如果是老用户，重定向到person.html
                 }
                 if(data.Status=="Password Error"){
                 }
             });
-    }
+        }
 
-
-
-
-
-
+        // 登录按钮触发事件
         $('#login').click(function(){
             $(".login-form form").validate({
+                // 密码长度不得为空并别不得小于3个字符，验证密码不得为空并且必须与密码相同
                 rules:{
                     name:"required",
                     password:{
@@ -80,12 +70,12 @@
                     }
                 },
             });
+            //如果符合规则，则触发login()
             if(!$(".login-form form").valid()){
                 return false;
             }
             else
                 login();
-
         })
     });
     </script>
@@ -133,12 +123,12 @@
                 <div id="passworddiv" class="form-group">
                     <input name="password" type="password" class="form-control login-field" value="" placeholder="Password" id="login-pass" />
                 </div>
-            <br>
-            <a id="login" class="btn btn-primary btn-lg btn-block">登录</a>
-            <br>
-            <a id="register" class="btn btn-lg btn-block" href="register.html">注册</a>
-            <a class="login-link" href="#">忘记密码??</a>
-        </form>
+                <br>
+                <a id="login" class="btn btn-primary btn-lg btn-block">登录</a>
+                <br>
+                <a id="register" class="btn btn-lg btn-block" href="register.html">注册</a>
+                <a class="login-link" href="#">忘记密码??</a>
+            </form>
         </div>
     </div>
     

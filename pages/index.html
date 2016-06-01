@@ -5,42 +5,35 @@
  
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-
     <!-- Bootstrap Core JavaScript -->
-   
-
     <script src="../dist/js/jquery-latest.js" type="text/javascript"></script>
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-
-
     <!-- Morris Charts JavaScript -->
-    
     <link href="../dist/css/ucc.css" rel="stylesheet">
-
     <link rel="stylesheet" href="../assets/css/animate.min.css">
 
-    <!-- Custom Theme JavaScript -->
     
     <script type="text/javascript">
+        // 获得cookie的值
         function getCookie(name) {
                var arr,reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
                if (arr = document.cookie.match(reg))
                    return unescape(arr[2]);
                else
-                   return 'shabi';
+                   return 'xxx';
         }
-
+        // 设置cookie的值
         function setCookie(cname, cvalue, exdays) {
                   var d = new Date();
                   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
                   var expires = null; //"expires=" + d.toUTCString();
                   this.document.cookie = cname + "=" + cvalue + "; " + expires;
-            }
-function updateStatus(userid)
+        }
+
+        // 更新用户状态
+        function updateStatus(userid)
         {
-            if (userid != "shabi") {
+            if (userid != "xxx") {
                 $.ajax({
                     type: "post",
                     url: "http://xboxweb.azurewebsites.net/api/user/UserStatus",
@@ -49,11 +42,9 @@ function updateStatus(userid)
                     success: function (data) {
                         if (data.Status == "Success") {
                             var totalCourse = JSON.stringify(data.CourseInfo);
-                            // console.log(data);
-                            // console.log(totalCourse);
-                            power = data.Power;
+                            power = data.Power;//更新能量值
                             setCookie("userid", data.Id);
-                            setCookie("totalCourse", totalCourse);
+                            setCookie("totalCourse", totalCourse);//更新所学章节的进度值
                             setCookie("power", power);
                         }
                     }
@@ -61,35 +52,34 @@ function updateStatus(userid)
             }
         }
 
-
-
-
         var userid=getCookie("userid");
-        if (userid != "shabi")
+        if (userid != "xxx")
         {
-                    updateStatus(userid);
+            updateStatus(userid);
         }
+
+
         var rightamout; //5题中答对的题的数量
         var wrongamount;    //5题中答错的题的数量
-        var totalid;    //打错的题的id集合
-        var oldpower;      //能量值
-        var newpower;
-        var difficulty=new Array();
-        var questionid=new Array();
-        var question;
-        var html;
-        var explain= new Array();
-        var answer=new Array();
-        var getanswer=new Array();
-        var questiontype=new Array();
-        var totalCourse=getCookie("totalCourse");
-        var difficulty=new Array();
-        var apilink;
-        var oldtime;
-        var newtime;
-        var time;
-        var currentCourse="";
-        //推荐内容
+        var totalid;    //答错的题的id集合
+        var oldpower;   //答题之前的能量值
+        var newpower;   //答完题获得的能量值
+        var difficulty=new Array(); //5题的难度系数，是一个队列
+        var questionid=new Array(); //5题的题目id，是一个队列
+        var explain= new Array();   //5题的解析，是一个队列
+        var answer=new Array();     //5题的答案，是一个队列
+        var getanswer=new Array();  //用户对5题的解答，是一个队列
+        var questiontype=new Array();//5题的题目类型，是一个队列
+        var question;   //题目的题干
+        var html;       //需要用jQuery动态添加的html
+        var oldtime;    //答题前的时间
+        var newtime;    //答题后的时间
+        var time;       //答题所用的时间
+        var totalCourse=getCookie("totalCourse");//用户所有学过的章节
+        var apilink;    //用户点击左侧菜单时，需要重新加载题目，该变量提供新的题目地址
+        var currentCourse="";//页面加载进来时的当前所处章节（从cookie中取值，或根据菜单中所有的值进行计算）
+        
+        //推荐内容（以下变量并没有用到，可以忽略）
         var recomvideoUrl;
         var recomcontent;
         var recomquestion;
@@ -98,12 +88,16 @@ function updateStatus(userid)
         var length;
         var current;
         var currentid;
+
+
+
+
         $(document).ready(function () {
 
 
-                function updateStatus_cookie(userid)
+        function updateStatus_cookie(userid)
         {
-            if (userid != "shabi") {
+            if (userid != "xxx") {
                 $.ajax({
                     type: "post",
                     url: "http://xboxweb.azurewebsites.net/api/user/UserStatus",
@@ -124,27 +118,18 @@ function updateStatus(userid)
             }
         }
 
-
-            // alert(totalCourse);
-            // var a="149448";
-            // if(totalCourse.indexOf(a)>0)
-            //     console.log(totalCourse);
-            // else
-            //     console.log("shashabi");
                 $(function () { $("[data-toggle='tooltip']").tooltip(); });
-                // current=getCookie("currentlevel");
                 currentid=getCookie("CourseNow");
                 currentCourse=currentid;
-                // console.log($("#149419"));
-                // $("#currentinfo").append(current);
                 apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+currentid;
                 random(apilink);
-
-
+                //根据当前所处章节的id，调用random(apilink)函数出题
                 function random(apilink){
                     $.ajax({
                     type: "GET",
                     url: apilink,
+                    //以下功能与random.html中的功能类似，所以不再加注释。如有疑问可以参考random.html的解释，变量名不变
+                    //不同之处在于，本页面不出填空题，所有题目均为选择题
                         success: function (data) {
                             var string_json = JSON.stringify(data);
                             var obj = JSON.parse(string_json);
@@ -156,8 +141,6 @@ function updateStatus(userid)
                                 answer[i]=obj[i].rightAnswer;
                                 difficulty[i]=obj[i].difficulty;
                                 $('#Q'+i).append("<div class='questionlist' id='"+questionid[i]+"'>"+question+"</div>");
-                                // console.log(answer[i]);
-
                                 if(questiontype[i]=="2"){
                                     $('#A'+i).append('<div id="'+questionid[i]+'" class="useranswer input-group input-group-lg"><input id="input'+i+'" type="text" class="form-control inputa" placeholder="answer" size="50" ></div>');
                                 }
@@ -172,34 +155,21 @@ function updateStatus(userid)
                     });
                 }
 
+
+                //再做一组题，因为不用变换章节，所以只需要重新加载同一个地址即可
                 $('#nextpage').click(function(){
-                    // 去掉问题&答案
-                    // $('.questionlist').remove();
-                    // $('.answerlist').remove();
-                    // random(apilink);
                     location.reload();
-                    //变换按钮
-                    // $("#submit").fadeIn(100);
-                    // $("#nextpage").fadeOut(100);
-                    // $("#showrecom").fadeOut(100);
-                    // $(".tyes").remove();
-                    // $(".tno").remove();
-                    // $(".yesorno").remove();
-                    // for(var i=0;i<5;i++){
-                    //     $("#logo"+i).append('<i class="glyphicon glyphicon-education"></i>');
-                    // }
                 })
 
            
-
-
+                //以下功能与random.html中的功能类似，所以不再加注释。如有疑问可以参考random.html的解释，变量名不变
                 function wronganswer(){
                 rightamount=0;
                 wrongamount=0;
                 totalid="";
                 oldpower=getCookie("power");
                 newpower=0;
-                //选择
+                //判断答案是否正确
                 for(var i=0;i<5;i++){
                     var id=questionid[i];
                     if(questiontype[i]=="0"){
@@ -214,7 +184,6 @@ function updateStatus(userid)
                                 $("#title"+i).append('<div class="tyes" id="titie'+i+'"><h5>您的答案：'+getanswer[i]+'</h5><button style="padding-left:0px" class="showdetail btn btn-xs btn-link" id="showdetail'+i+'" type="button" class="btn btn-xs btn-link">看解析</button></div>');
                                 newpower+=difficulty[i]*50;
                         }
-                        // console.log("第"+(i+1)+"题选择 "+getanswer[i]+"  right");
                         else{
                                 wrongamount++;
                                 $("#logo"+i).append('<img class="yesorno" src="../assets/img/yesorno/no.png">');
@@ -235,14 +204,6 @@ function updateStatus(userid)
                         totalid+=id+";";
                     }
                 }
-
-                //直接显示解析
-                // for(var i in explain){
-                //     $("#showdetail"+i).click(function(){
-                //         $(".answerlist").remove();
-                //         $("#explain"+i).append('<div class="answerlist">'+explain[i]+'</div>');
-                //     })
-                // }
 
                 $("#showdetail"+0).click(function(){
                         $(".answerlist").remove();
@@ -265,39 +226,20 @@ function updateStatus(userid)
                         $("#explain"+4).append('<div class="answerlist">'+explain[4]+'</div>');
                 })
 
-                //弹窗显示解析
-                // for(var i in explain){
-                //     $("#showdetail"+i).click(function(){
-                //         $(".theme-popover-answer").append('<div class="answerlist">'+explain[i]+'</div>');
-                //         $(".theme-popover-answer").fadeIn(100);
-                //         $(".theme-popover-mask").fadeIn(100);
-                //         for(var t in explain){
-                //         }
-                //     })
-                // }
-
-                // returnid(totalid);
                 }
 
-                
-
-
-                // function returnid(totalid){
-                //     $.post("http://xboxweb.azurewebsites.net/api/user/getlost",{id:1,u_password:123,u_courseid:totalid}, function(data,status){
-                //     });
-                // }
                 
                 function postpower(ppp){
                     var qqq=parseInt(ppp/50);
                     $.post("http://xboxweb.azurewebsites.net/api/user/updatepower",{Id:userid,Power:ppp,CourseNow:currentCourse,MasterCourse:qqq}, function(data,status){
                             if(data=="success"){
-                                // console.log("新增"+newpower+"能量值");
                             }
                     });
                 }
 
+
+                //关闭弹窗的触发事件
                 $('#showanswer').click(function () {
-                        
                         postpower(newpower);
                         $('#powerresult').remove();
                         $('#result').empty();
@@ -311,8 +253,6 @@ function updateStatus(userid)
                         $('#showrecom').fadeIn(100);
                         $('#nextpage').fadeIn(100);
                         
-
-                        //$("#demo-list").empty();
                         updateStatus_cookie(userid);
                         var courseInfo=getCookie("totalCourse");
                         if(courseInfo!=null){
@@ -321,7 +261,6 @@ function updateStatus(userid)
                                 var id = c_json[i].Id;
                                 var master = parseInt(c_json[i].Degree);
                                 if(id!=null||id.length>0){
-                                    // console.log($("#"+id+" .progress-bar"));
                                     $("#"+id+" .progress-bar").attr("data-original-title",master+"%");
                                     $("#"+id+" .progress-bar").attr("style","width:"+master+"%");
                                 }
@@ -365,7 +304,6 @@ function updateStatus(userid)
                                 {
                                     var cash=$(this).children("div:eq(0)")[0].innerText;
                                     sumlevel2+=parseInt(cash);
-                                // sum2++;
                                 }
                             });
 
@@ -387,26 +325,26 @@ function updateStatus(userid)
                         }
                       }
                   })
-                        //getseed();
-                        //jQuery.getScript("../dist/js/awol.js");
                 })
 
+
+                //提交答案按钮的触发事件
                 $("#submit" ).click(function() {
                     
                     wronganswer();
                     newtime=new Date();
                     var totalpower=parseInt(power)+parseInt(newpower);
-                    var oldamount=checkhuizhang(parseInt(power));
-                    var newamount=checkhuizhang(totalpower);
-                    var gap=newamount-oldamount;
+                    var oldamount=checkhuizhang(parseInt(power));//用旧的能量值判断用户之前有多少徽章
+                    var newamount=checkhuizhang(totalpower);//用新的能量值判断用户答题只有有多少徽章
+                    var gap=newamount-oldamount;//判断徽章数量有没有改变
                     time=Math.floor((newtime-oldtime)/1000);
                     $("#result").append('<h4 style="color:rgb(21,91,169)"><div id="result2">答对'+rightamount+'题，答错'+wrongamount+'题,用时'+time+'秒</div><br><div id="powerresult">获得'+newpower+'能量值,共有'+totalpower+'能量值</div><br><div>您拥有'+oldamount+'枚徽章</div><br><div id="showhuizhang" class="col-md-12" style="padding:0"></div></h4><br>');
-
+                    //显示用户之前拥有的所有徽章
                     for(i=1;i<=oldamount;i++){
                         $("#showhuizhang").append("<div class='col-md-2'><img src='../assets/img/person/huizhang/"+i+".png' style='width:300%;height:10%'></div>");
                     }
-                    if(gap==0){
-                    //新增徽章
+                    if(gap！=0){
+                    //如果gap不等于0说明说胡获得了新增徽章
                     $("#huizhangchange").append('<h4 style="color:rgb(21,91,169)">恭喜获得新徽章<br><div class="col-md-3"><img class="huizhang" src="../assets/img/person/huizhang/7.png" style="width:200%;height:15%;display:none"></div><div class="col-md-9"></div></h4>');
                     setTimeout(function(){$(".huizhang").attr("style","display:block");$(".huizhang").addClass("animated lightSpeedIn");},1000);
                     setTimeout(function(){$(".huizhang").attr("style","width:200%;height:12%;margin-bottom:20px");},3000);
@@ -414,254 +352,18 @@ function updateStatus(userid)
 
 
                     //新增奖杯
-                    setTimeout(function(){$("#awardchange").append('<div id="awardplace" class="col-md-3 col-md-offset-2"><img style="float:right;margin-right:15px;width:200%;height:15%;" id="oldaward" src="../assets/img/award/award1.png"/></div>');},4000);
-                    setTimeout(function(){$("#oldaward").addClass("animated bounceOut");},5000);
-                    setTimeout(function(){$("#awardplace").empty()},5700);
-                    setTimeout(function(){$("#awardplace").append('<img class="animated bounceIn" style="float:right;margin-right:15px;width:200%;height:15%;" id="newaward" src="../assets/img/award/award2.png"/>');},6000);
+                    // setTimeout(function(){$("#awardchange").append('<div id="awardplace" class="col-md-3 col-md-offset-2"><img style="float:right;margin-right:15px;width:200%;height:15%;" id="oldaward" src="../assets/img/award/award1.png"/></div>');},4000);
+                    // setTimeout(function(){$("#oldaward").addClass("animated bounceOut");},5000);
+                    // setTimeout(function(){$("#awardplace").empty()},5700);
+                    // setTimeout(function(){$("#awardplace").append('<img class="animated bounceIn" style="float:right;margin-right:15px;width:200%;height:15%;" id="newaward" src="../assets/img/award/award2.png"/>');},6000);
                     
-
-
                     $(".theme-popover-mask").fadeIn(100);
                     $(".theme-popover").slideDown(200);
                     $(".useranswer").remove();
                     $("html,body").animate({scrollTop:0}, 500);
                 })
 
-                $(".myclose").click(function(){
-                        $('.theme-popover-mask2').fadeOut(100);
-                        $('.theme-popover2').slideUp(200);
-                        $('#img').remove();
-                })
-
-                
-                $("#showrecom").click(function(){
-                        location.href="recommend.html";
-                })
-
-
-
-                //AP
-                function AP(children)
-        {
-
-            var id1=children.Id;
-            html+=("<li style='padding-bottom:2px;' class='needcolor level"+children.rank+"' id="+id1+"><a href='#'>"+children.name+"</a><div></div>");
-            
-            for(var i in children.children)
-            {
-                //二级有子节点
-                // if(children.children[i].rank==2&&children.children[i].children!=0){
-                //     console.log("二级："+children.children[i].Id);
-                // }
-
-
-                var id2=children.children[i].Id;
-                if(i=="0")
-                {
-                    html+="<ul class='submenu'>"+"<li class='needcolor level"+children.children[i].rank+"' id="+id2+"><a href='#'>"+children.children[i].name+"</a><div></div>";
-                }
-                else
-                {
-                    html+="<li class='needcolor level"+children.children[i].rank+"' id="+id2+"><a href='#'>"+children.children[i].name+"</a><div></div>";
-
-                }
-                var courseInfo=getCookie("totalCourse");
-                var c_json = JSON.parse(courseInfo);
-                if (children.children[i].children.length>0)
-                {
-                    // var averagelevel=0;
-                    //二级有子节点
-                    // console.log("二级："+children.children[i].Id);
-                    for (var t in children.children[i].children) {
-                        for(var j in c_json){
-                            if(children.children[i].children[t].Id==c_json[j].Id){
-                                // console.log(" "+c_json[j].Id+":"+c_json[j].Degree+";");
-                                // averagelevel+=parseInt(c_json[j].Degree);
-                            }
-                        }
-
-                        // console.log("三级："+children.children[i].children[t].Id);
-                        if(t==0)
-                        {
-                            html+="<ul class='submenu'>";
-                            AP(children.children[i].children[t]);
-                        }
-                        else
-                        {
-                            AP(children.children[i].children[t]);
-                            if(t==children.children[i].children.length-1)
-                            {
-                                html+="</ul></li>";
-                            }
-                        //html+="</ul>";
-                        }
-
-                    }
-
-                    // averagelevel=Math.floor(averagelevel/children.children[i].children.length);
-
-                    // alert(averagelevel);
-                        
-                        // $("#"+id2+" div").attr("style","color:#FFFFFF ;margin-left:35px");
-                        // $("#"+id2+" a").attr("style","padding-bottom:0px");
-                        // switch(averagelevel){
-                        //     case 1:
-                        //         $("#"+id2+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在1级' style='width:10%;height:2.5%;' id='level' src='../assets/img/color/blue1.png'/>");break;
-                        //     case 2:
-                        //     alert("fuck"+averagelevel);
-
-                        //         // $("#"+id2+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在2级' style='width:20%;height:2.5%;' id='level' src='../assets/img/color/blue2.png'/>");break;
-                        //     case 3:
-                        //         $("#"+id2+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在3级' style='width:30%;height:2.5%;' id='level' src='../assets/img/color/blue3.png'/>");break;
-                        //     case 4:
-                        //         $("#"+id2+" div").append("<img data-toggle='tooltip' data-placement='right' data-original-title='您现在4级' style='width:40%;height:2.5%;' id='level' src='../assets/img/color/blue4.png'/>");break;
-                        // }
-                    //html+="</li>";
-                }
-                else{html+="</li>"}
-            }
-            html+="</li>";
-            
-        }
-
-        getseed();
-        function getseed(){
-            $.ajax({
-            type: "get",
-            async:false,
-            url: "http://xboxweb.azurewebsites.net/api/user/getseed",
-            success: function (data) {
-                var string_json = JSON.stringify(data);
-                var obj = JSON.parse(string_json);
-                // if(obj.children[0].rank==1){
-                //         console.log(obj.children[0].Id);
-                //     }
-                for (var i in obj.children) {
-                    html=html.substring(0,html.length-5);
-                    //一级无子节点
-                    if(obj.children[i].rank==1&&obj.children[i].children!=0){
-                        // console.log("一级："+obj.children[i].Id);
-                    }
-                    if(i!=0)
-                        html+="</ul></li>";
-                    AP(obj.children[i]);
-                };
-                html+="</li></ul>";
-                $('#demo-list').append(html);
-                 if ($('#demo-list').find(".submenu").length > 0) {
-                $('#demo-list').find(".submenu").siblings("a").append("<span class='submenu-indicator'>+</span>")
-
-                
-                }
-
-            }
-            });
-        }
-        
-        //顶部导航切换
-        $("#demo-list li").click(function () {
-            //nownownow
-
-            $("#demo-list li.active").removeClass("active");
-            $(this).addClass("active");
-            // console.log($(this).attr("id"));
-            getid=$(this).attr("id");
-            length=$("#"+getid).children(".submenu").length;
-            if(length==0&&!$(this).hasClass("block_click")){
-                apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+getid;
-                // class='questionlist'  class="useranswer
-                $(".questionlist").remove();
-                $('.answerlist').remove();
-                $(".useranswer").remove();
-                $(".tyes").remove();
-                $(".tno").remove();
-                $("#nextpage").fadeOut(100);
-                $("#showrecom").fadeOut(100);
-                $("#submit").fadeIn(100);
-                $(".yesorno").remove();
-                $(".glyphicon").remove();
-                $(".timeline-badge").append('<i class="glyphicon glyphicon-education"></i>');
-                $("#currentinfo").empty();
-                $("#currentinfo").append($(this).find("li:eq(0) a").context.innerText);
-                random(apilink);
-                currentCourse=getid;
-                resetarrow(getid);
-
-            }
-            else{
-
-            }
-            
-        })
-
-        var parent1=$("#"+currentCourse)[0].parentNode.parentNode.id;
-        $("#"+parent1).addClass("active");
-        $("#"+parent1+" a:eq(0)").addClass("submenu-indicator-minus");
-        $("#"+parent1+" ul:eq(0)").attr("style","display:block");
-
-        var parent2=$("#"+currentCourse)[0].parentNode.parentNode.parentNode.parentNode.id;
-        if(parent2!=null){
-            $("#"+parent2).addClass("active");
-            $("#"+parent2+" a:eq(0)").addClass("submenu-indicator-minus");
-            $("#"+parent2+" ul:eq(0)").attr("style","display:block");
-        }
-        //now
-        // $("#"+currentCourse+" a:eq(0)").attr("style","padding-left:0");
-
-        function setarrow(){
-            setTimeout(function(){currentCourse=getCookie("CourseNow"); 
-
-                var levelnum=$("#"+currentCourse)[0].classList[1];
-                if(levelnum=="level3")
-                {
-                    // setTimeout(function(){},1000);  
-                    // setTimeout(function(){currentCourse=getCookie("CourseNow"); },1000);
-                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
-                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:45px;height:15px;" src="../assets/img/color/arrow.png">');
-                }
-                if(levelnum=="level2")
-                {
-                    // setTimeout(function(){},1000);  
-                    // setTimeout(function(){currentCourse=getCookie("CourseNow");  },1000);
-                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
-                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:30px;height:15px;" src="../assets/img/color/arrow.png">' );
-                }
-
-                console.log($("#arrow"));
-
-            },1000);
-        }
-
-        function resetarrow(getid){
-            var parentlevel=$("#arrow")[0].parentElement.parentElement.classList[1];
-            if(parentlevel=="level3")
-                $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 45px";
-            else
-                $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 35px";
-            // $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 35px";
-            $("#arrow").remove();
-            currentCourse=getid; 
-
-                var levelnum=$("#"+currentCourse)[0].classList[1];
-                if(levelnum=="level3")
-                {
-                    // setTimeout(function(){},1000);  
-                    // setTimeout(function(){currentCourse=getCookie("CourseNow"); },1000);
-                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
-                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:45px;height:15px;" src="../assets/img/color/arrow.png">');
-                }
-                if(levelnum=="level2")
-                {
-                    // setTimeout(function(){},1000);  
-                    // setTimeout(function(){currentCourse=getCookie("CourseNow");  },1000);
-                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
-                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:30px;height:15px;" src="../assets/img/color/arrow.png">' );
-                }
-        }
-
-        setarrow();
-
-
+        //根据用户的能量值做参数，判断该用户的徽章数量
         function checkhuizhang(num){
             if(num>=0&&num<500){
                 return 1;
@@ -696,11 +398,187 @@ function updateStatus(userid)
 
         }
 
+                //显示推荐页面
+                $("#showrecom").click(function(){
+                        location.href="recommend.html";
+                })
 
-         
+
+
+                //AP
+        function AP(children)
+        {
+            var id1=children.Id;
+            html+=("<li style='padding-bottom:2px;' class='needcolor level"+children.rank+"' id="+id1+"><a href='#'>"+children.name+"</a><div></div>");//整个菜单的开头
+            
+            for(var i in children.children)
+            {
+                var id2=children.children[i].Id;
+                if(i=="0")
+                {
+                    html+="<ul class='submenu'>"+"<li class='needcolor level"+children.children[i].rank+"' id="+id2+"><a href='#'>"+children.children[i].name+"</a><div></div>";
+                }
+                else
+                {
+                    html+="<li class='needcolor level"+children.children[i].rank+"' id="+id2+"><a href='#'>"+children.children[i].name+"</a><div></div>";
+
+                }
+                var courseInfo=getCookie("totalCourse");
+                var c_json = JSON.parse(courseInfo);
+                // 二级有子节点
+                if (children.children[i].children.length>0)
+                {
+                    for (var t in children.children[i].children) {
+                        for(var j in c_json){
+                            if(children.children[i].children[t].Id==c_json[j].Id){
+                            }
+                        }
+                        if(t==0)
+                        {
+                            html+="<ul class='submenu'>";
+                            AP(children.children[i].children[t]);//这是一个迭代的过程，不管后面3、4、5……级菜单都可以用迭代来实现
+                        }
+                        else
+                        {
+                            AP(children.children[i].children[t]);
+                            if(t==children.children[i].children.length-1)
+                            {
+                                html+="</ul></li>";
+                            }
+                        }
+
+                    }
+                }
+                // 二级无子节点
+                else{html+="</li>"}
+            }
+            html+="</li>";
+            
+        }
+
+        getseed();
+        // 获得整个菜单结构的过程
+        function getseed(){
+            $.ajax({
+            type: "get",
+            async:false,
+            url: "http://xboxweb.azurewebsites.net/api/user/getseed",
+            success: function (data) {
+                var string_json = JSON.stringify(data);
+                var obj = JSON.parse(string_json);
+                for (var i in obj.children) {
+                    html=html.substring(0,html.length-5);
+                    //一级无子节点
+                    if(obj.children[i].rank==1&&obj.children[i].children!=0){
+                    }
+                    if(i!=0)
+                        html+="</ul></li>";
+                    //用AP方法加载整个菜单
+                    AP(obj.children[i]);
+                };
+                html+="</li></ul>";
+                $('#demo-list').append(html);//将菜单结构的html代码添加到demo-list的div中
+                 if ($('#demo-list').find(".submenu").length > 0) {
+                $('#demo-list').find(".submenu").siblings("a").append("<span class='submenu-indicator'>+</span>")
+                }
+            }
+            });
+        }
+        
+        //顶部导航切换
+        $("#demo-list li").click(function () {
+            $("#demo-list li.active").removeClass("active");//去掉active的类，打开的菜单就会关闭
+            $(this).addClass("active");//被点击的li增加active类，该li打开
+            getid=$(this).attr("id");
+            length=$("#"+getid).children(".submenu").length;//该li子节点的长度
+            if(length==0&&!$(this).hasClass("block_click")){//子节点的长度为0并且该li没有block_click类，说明它是一个可点的根节点
+                apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+getid;
+                $(".questionlist").remove();
+                $('.answerlist').remove();
+                $(".useranswer").remove();
+                $(".tyes").remove();
+                $(".tno").remove();
+                //以上是去掉问题、回答、答案、答对答错的标志等信息
+                $("#nextpage").fadeOut(100);
+                $("#showrecom").fadeOut(100);
+                //以上是去掉再做一组、显示推荐等按钮
+                $("#submit").fadeIn(100);
+                //重新把提交答案按钮加载进来
+                $(".yesorno").remove();
+                $(".glyphicon").remove();
+                $(".timeline-badge").append('<i class="glyphicon glyphicon-education"></i>');
+                $("#currentinfo").empty();
+                $("#currentinfo").append($(this).find("li:eq(0) a").context.innerText);
+                random(apilink);//根据点击的li的id，重新定义apilink，获得新的章节的链接，加载题目
+                currentCourse=getid;//因为重新点击了新的章节，当前的章节发生了变化
+                resetarrow(getid);//只想当前所处章节的箭头需要重新加载
+            }
+            else{  }
+        })
+
+        var parent1=$("#"+currentCourse)[0].parentNode.parentNode.id;
+        $("#"+parent1).addClass("active");
+        $("#"+parent1+" a:eq(0)").addClass("submenu-indicator-minus");
+        $("#"+parent1+" ul:eq(0)").attr("style","display:block");
+
+        var parent2=$("#"+currentCourse)[0].parentNode.parentNode.parentNode.parentNode.id;
+        if(parent2!=null){
+            $("#"+parent2).addClass("active");
+            $("#"+parent2+" a:eq(0)").addClass("submenu-indicator-minus");
+            $("#"+parent2+" ul:eq(0)").attr("style","display:block");
+        }
+
+        //箭头的定位
+        function setarrow(){
+            //箭头的定位需要等菜单加载完成才能处理，所以设置1000ms的延时等待
+            setTimeout(function(){currentCourse=getCookie("CourseNow"); 
+                var levelnum=$("#"+currentCourse)[0].classList[1];//获取点击的是第几集菜单
+                //第二级菜单和第三级菜单左边空余空间不同，所以箭头的长度也应不同
+                if(levelnum=="level3")
+                {
+                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:45px;height:15px;" src="../assets/img/color/arrow.png">');//把箭头放到对应位置
+                }
+                if(levelnum=="level2")
+                {
+                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:30px;height:15px;" src="../assets/img/color/arrow.png">' );
+                }
+
+                console.log($("#arrow"));
+
+            },1000);
+        }
+
+        //箭头重定位
+        function resetarrow(getid){
+            //重定位与定位不同的是，重定位需要将之前的箭头去掉，再重新加载新的箭头
+            var parentlevel=$("#arrow")[0].parentElement.parentElement.classList[1];
+            if(parentlevel=="level3")
+                $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 45px";
+            else
+                $("#arrow")[0].parentElement.attributes[1].value="padding:14px 22px 0 35px";
+            $("#arrow").remove();
+            currentCourse=getid; 
+
+                var levelnum=$("#"+currentCourse)[0].classList[1];
+                if(levelnum=="level3")
+                {
+                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:45px;height:15px;" src="../assets/img/color/arrow.png">');
+                }
+                if(levelnum=="level2")
+                {
+                    $("#"+currentCourse+" a:eq(0)").attr("style","padding:14px 22px 0 0 ");
+                    $("#"+currentCourse+" a:eq(0)").prepend('<img id="arrow" style="width:30px;height:15px;" src="../assets/img/color/arrow.png">' );
+                }
+        }
+
+        setarrow();
+
         
 
-        });  //ready
+        }); 
     </script>
 
     <!-- 左侧知识树 -->
@@ -726,9 +604,6 @@ function updateStatus(userid)
     var html="";
     jQuery(document).ready(function () {
         
-
-        // for(var i=149423;i<149427;i++)
-        //     console.log(i+"="+$("#"+i).children(".submenu").length+",");
     });
 
     </script>
@@ -978,12 +853,6 @@ function updateStatus(userid)
 <div class="theme-popover col-md-12" style="background-image:url(../assets/img/answer/answer1/book.png);background-size:100% 100%;">
     <!-- now -->
     <div class="theme-poptit col-md-12" >
-        <!-- <h3 style="height:30px">答题情况</h3>
-        <div style="height:190px" class="col-md-6 col-md-offset-5" id="result">
-        </div>
-        <button id="showanswer" type="button" class="col-md-2 col-md-offset-5 button button-caution button-pill button-pill">
-                看答案
-        </button> -->
 
         <div class="col-md-3 col-md-offset-3">
             <img style="margin-top:15px" src="../assets/img/answer/answer1/result.png">
@@ -1003,39 +872,6 @@ function updateStatus(userid)
 
 
 <!-- 弹窗 -->
-
-<!-- 弹窗2 -->
-<div class="theme-popover2 col-md-12">
-    <div class="theme-poptit2 col-md-12">
-        <div class="col-md-4 col-md-offset-4">
-            <h1>本章推荐</h1>
-        </div>
-        <div class="col-md-1 col-md-offset-3">
-            <a class="myclose">x</a>
-        </div>
-        <div id="videoplace" style="height:400px;margin-top:30px" class="col-md-6 video">
-
-        </div>
-        <div id="textplace" style="margin-top:30px" class="col-md-6">
-            <div id="textplace1" class="col-md-12">
-                <h3>概念</h3>
-            </div>
-            <div id="textplace2" class="col-md-12">
-                <h3>例题</h3>
-                <h4 >题目</h5>
-                    <div id="recomquestion"></div>
-                <h4 >解析</h5>
-                    <div id="recomexplain"></div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="theme-popover-mask2"></div>
-<!-- 弹窗 -->
-
-
-
-
 
     <!-- 导航栏 -->
   <div class="row col-md-12" id="top">

@@ -80,13 +80,14 @@
 
 
     <script type="text/javascript">
+            // 设置cookie功能，可反复调用
             function setCookie(cname, cvalue, exdays) {
                   var d = new Date();
                   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
                   var expires = null; //"expires=" + d.toUTCString();
                   this.document.cookie = cname + "=" + cvalue + "; " + expires;
             };
-
+            // 获取cookie功能，可反复调用
             function getCookie(name) {
                var arr,reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
                if (arr = document.cookie.match(reg))
@@ -95,13 +96,16 @@
                    return 'shabi';
             }
 
+            // 此处变量都从cookie中获取，在登录页面时已经存入cookie
             var name;
             var grade;
             var power;
             var coursenow;
             var coursenowname;
 
+
     $(document).ready(function (){
+        //点击雷达图，出现弹窗
         $("#rader").click(function(){
             $(".theme-popover-mask").fadeIn(100);
                     $(".theme-popover").slideDown(200);
@@ -110,6 +114,8 @@
             $(".theme-popover-mask").fadeOut(100);
                     $(".theme-popover").slideUp(200);
         })
+
+        //下面是调用百度提供的统计图API
         function LoadBaidu(result)
         {
             var t =result.split(",");
@@ -144,7 +150,11 @@
             };
             myChart.setOption(option);
         }
-    var result = "";
+
+
+
+
+        var result = "";
          $.ajax({
             type: "GET",
             sync:false,
@@ -153,17 +163,20 @@
             {
                 LoadBaidu(data);
             }
-            }); 
+            }); //页面加载完成的同时，百度提供的统计图API也加载完成，以供后面的方法调用
 
-            name=getCookie("name");
-            grade=getCookie("grade");
-            power=getCookie("power");
-            coursenow=getCookie("CourseNow");
-            coursenowname=getCookie("CourseNowName");
-            $("#personalinfo").append(name+"<br>"+grade);
-            $("#powerplace2").append(power);
-            $("#currentinfo").append(coursenowname);
+            //从cookie中取值
+            name=getCookie("name");//名字
+            grade=getCookie("grade");//年级
+            power=getCookie("power");//能量值
+            coursenow=getCookie("CourseNow");//当前所处章节的ID
+            coursenowname=getCookie("CourseNowName");//当前所处章节的名称
 
+            $("#personalinfo").append(name+"<br>"+grade);//把个人信息添加到第一模块
+            $("#currentinfo").append(coursenowname);//把当前所处章节添加到第一模块
+            $("#powerplace2").append(power);//把能量值添加到第四模块
+
+            // 徽章等级制度，所有值都可以更改
             if(power>=0){
                 $("#huizhang1").append('<div class="col-md-2"><img class="image2" src="../assets/img/person/huizhang/1.png" style="width:100%;height:80%"></div>');
             }
@@ -211,13 +224,6 @@
             
     })
 
-
-
-
-    
-
-         
-
     </script>
 
 </head>
@@ -228,8 +234,9 @@
     <div class="col-md-10 col-md-offset-1 background" style="padding:0 0 0 0">
         <!-- 1模块 -->
         <div class="col-md-12 chapter1" style="padding:0 0 0 0;height:25%;width:100%;background-image:url(../assets/img/person/background.png)">
-
+            <!-- 个人信息 -->
             <div align="center" style="height:100%;padding-top:1.5%;" class="col-md-2 col-md-offset-2" id="personalinfo"></div>
+            <!-- 当前所处章节 -->
             <div align="center" class="col-md-4" style="height:100%;padding-top:2%;padding-left:8%">
                 <img src="../assets/img/back/now.png" style="width:45%;height:20%">
                 <br><br>
@@ -241,37 +248,39 @@
 
         <!-- 2模块 -->
         <div class="col-md-12 chapter2" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background.png);border-top:1px solid white">
+            <!-- 靠左标签 -->
             <div id="studycenter" class="col-md-1">
                 <img style="height:50%;width:40%;margin-top:3%" src="../assets/img/person/10.png" >
             </div>
             <div class="col-md-11">
+                <!-- 测试中心 -->
                 <div style="height:100%;" class="col-md-2">
                     <a href="index.html"><img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/11.png" ></a>
                 </div>
-
+                <!-- 辅导中心 -->
                 <div id="test" style="height:100%;" class="col-md-2 col-md-offset-2">
                     <a href="recommend.html"><img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/12.png" ></a>
                 </div>
             </div>
-            
-
         </div>
 
 
         <!-- 3模块 -->
         <div class="col-md-12 chapter3" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background.png);border-top:1px solid white">
+            <!-- 靠左标签 -->
             <div id="studycenter" class="col-md-1">
                 <img style="height:50%;width:40%;margin-top:3%" src="../assets/img/person/20.png" >
             </div>
             <div class="col-md-11">
+                <!-- 树状图 -->
                 <div class="col-md-2">
                     <img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/21.png" >
                 </div>
-
+                <!-- 雷达图 -->
                 <div class="col-md-2 col-md-offset-2">
                     <a id="rader"><img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/22.png" ></a>
                 </div>
-
+                <!-- 排行榜 -->
                 <div class="col-md-2 col-md-offset-2">
                     <img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/23.png" >
                 </div>
@@ -281,12 +290,12 @@
 
         <!-- 4模块 -->
         <div class="col-md-12 chapter4" style="padding:0 0 0 0;height:40%;width:100%;background-image:url(../assets/img/person/background.png);border-top:1px solid white">
+            <!-- 显示能量值 -->
             <div align="center" class="col-md-2 col-md-offset-1" style="padding-top:10px">
                 <img id="powertitle" src="../assets/img/person/power1.png" style="width:40%;height:10%">
-                <!-- <br> -->
-                <!-- <img src="../assets/img/person/power2.png" style="width:55%;height:80%"> -->
                 <div id="powerplace" ><p style="width:100%;height:100%" id="powerplace2"></p></div>
             </div>
+            <!-- 显示徽章 -->
             <div class="col-md-9">
                 <div class="col-md-12" align="left" id="huizhang1" style="height:50%;width:100%;padding-top:10px">
                 </div>

@@ -37,11 +37,21 @@
       }
     </style>
     <script type="text/javascript">
-      // function reginfo(){
-      //   var firstname=
-      // }
+      
       $(document).ready(function (){
 
+          var username;  //用户名（第一页）
+          var password;   //密码（第一页）
+          var firstname;  //姓（第三页）
+          var lastname; //名（第三页）
+          var name; //姓名（姓+名）
+          var emailaddress; //邮箱地址（第三页）
+          var grade;  //年级（第二页）
+          var gender; //性别（第二页）
+          var age;  //年龄（第三页）
+
+
+          // 设置cookie功能，可调用
           function setCookie(cname, cvalue, exdays) {
                   var d = new Date();
                   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -49,20 +59,9 @@
                   this.document.cookie = cname + "=" + cvalue + "; " + expires;
             };
 
-
-          var username;
-          var password;
-          var firstname;
-          var lastname;
-          var name;
-          var emailaddress;
-          var grade;
-          var gender;
-          var age;
           
-
+          // 注册功能，发送给api并接受返回信息
         function register(){
-
             $.post("http://xboxweb.azurewebsites.net/api/user/register",{Name:username,Password:password,Email:emailaddress,Grade:grade,Lastname:lastname,Firstname:firstname,Gender:gender,Age:age,}, function(data,status){
                 if(data.Status=="success"){
                     console.log(data);
@@ -70,9 +69,9 @@
                     location.href="http://localhost/test/pages/login.html";
                 }
             });
-          // register();
         }
 
+        // id为btn-finish的按钮的出发事件
         $('.btn-finish').click(function(){
           username=$("input[name='username']").val();
           password=$("input[name='password']").val();
@@ -88,11 +87,10 @@
         })
 
        
-
+          // 检测用户名是否已经被占用
          $('#username').change(function () {
               $.ajax({
                   type: "get",
-                  //async:false,
                   url: "http://xboxweb.azurewebsites.net/api/user/namesearch?name=" + $('#username').val(),
                   success: function (data) {
                       var string_json = JSON.stringify(data);
@@ -105,20 +103,11 @@
                             $('#username').val("");
                             $('#username').attr("class","form-control");
                             },1000);//sleep(5000);
-                          
-
                       }
-                      else{
-                          
-                          // $('#username').parent().append('<label id="username-error" class="error" for="username">shabi</label>');
-                          
-                      }
-
+                      else{}
                   }
               });
           });
-
-        
     });
     </script>
 </head>
@@ -146,7 +135,6 @@
                 
                 <div class="card wizard-card ct-wizard-orange" id="wizardProfile">
                     <form action="" method="">
-                <!--        You can switch "ct-wizard-orange"  with one of the next bright colors: "ct-wizard-blue", "ct-wizard-green", "ct-wizard-orange", "ct-wizard-red"             -->
                 
                         <div class="wizard-header">
                             <h3>
@@ -155,6 +143,8 @@
                                <small>这些信息让我们更了解您</small>
                             </h3>
                         </div>
+
+                        <!-- 共三个tab -->
                         <ul class="nav nav-pills">
                             <li><a href="#about" data-toggle="tab">基本信息</a></li>
                             <li><a href="#account" data-toggle="tab">年级信息</a></li>
