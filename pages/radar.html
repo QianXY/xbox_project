@@ -1,0 +1,86 @@
+<html >
+    
+<head>
+    <meta charset="utf-8" />
+     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../dist/js/echarts.js"></script>
+</head>
+
+
+
+<body>
+    <div id="main" style="height:400px;"></div>
+     
+    <script>
+        function LoadBaidu(result)
+        {
+            //var json_result = JSON.parse(result);
+
+            var t =result.RadarNow.split(",");
+            var old  = result.RadarOld.split(",");
+            var myChart = echarts.init(document.getElementById('main'));
+            option = {
+    title : {
+        x : 'center',
+        text: '本周 vs 上周',
+        subtext: '学期情况统计'
+    },
+    tooltip : {
+        trigger: 'axis'
+    },
+    calculable : true,
+    polar : [
+        {
+            indicator : [
+                {text : '第21章', max  : 100},
+                {text : '第22章', max  : 100},
+                {text : '第23章', max  : 100},
+                {text : '第24章', max  : 100},
+                {text : '第25章', max  : 100}
+
+            ],
+            radius : 100
+        }
+    ],
+    series : [
+        {
+            name: '学期情况统计',
+            type: 'radar',
+            itemStyle: {
+                normal: {
+                    areaStyle: {
+                        type: 'default'
+                    }
+                }
+            },
+            data : [
+                {
+                    value : t,
+                    name : '上周'
+                },
+                {
+                    value : old,
+                    name : '本周'
+                }
+            ]
+        }
+    ]
+};
+            myChart.setOption(option);
+        }
+    var result = "";
+         $.ajax({
+         	type: "GET",
+         	sync:false,
+         	url: "http://158.182.6.226/api/user/updatechapter?id=1",
+         	success: function (data) 
+         	{
+                
+         		LoadBaidu(data);
+         	}
+         	}); 
+    </script>
+</body>
+
+ </html>

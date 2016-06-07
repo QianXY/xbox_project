@@ -36,7 +36,7 @@
             if (userid != "xxx") {
                 $.ajax({
                     type: "post",
-                    url: "http://xboxweb.azurewebsites.net/api/user/UserStatus",
+                    url: "http://158.182.6.226/api/user/UserStatus",
                     data: "Id=" + userid,
                     async: false,
                     success: function (data) {
@@ -100,7 +100,7 @@
             if (userid != "xxx") {
                 $.ajax({
                     type: "post",
-                    url: "http://xboxweb.azurewebsites.net/api/user/UserStatus",
+                    url: "http://158.182.6.226/api/user/UserStatus",
                     data: "Id=" + userid,
                     async: false,
                     success: function (data) {
@@ -121,7 +121,7 @@
                 $(function () { $("[data-toggle='tooltip']").tooltip(); });
                 currentid=getCookie("CourseNow");
                 currentCourse=currentid;
-                apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+currentid;
+                apilink="http://158.182.6.226/api/question/qslist/"+currentid;
                 random(apilink);
                 //根据当前所处章节的id，调用random(apilink)函数出题
                 function random(apilink){
@@ -231,7 +231,7 @@
                 
                 function postpower(ppp){
                     var qqq=parseInt(ppp/50);
-                    $.post("http://xboxweb.azurewebsites.net/api/user/updatepower",{Id:userid,Power:ppp,CourseNow:currentCourse,MasterCourse:qqq}, function(data,status){
+                    $.post("http://158.182.6.226/api/user/updatepower",{Id:userid,Power:ppp,CourseNow:currentCourse,MasterCourse:qqq}, function(data,status){
                             if(data=="success"){
                             }
                     });
@@ -462,7 +462,7 @@
             $.ajax({
             type: "get",
             async:false,
-            url: "http://xboxweb.azurewebsites.net/api/user/getseed",
+            url: "http://158.182.6.226/api/user/getseed",
             success: function (data) {
                 var string_json = JSON.stringify(data);
                 var obj = JSON.parse(string_json);
@@ -492,7 +492,7 @@
             getid=$(this).attr("id");
             length=$("#"+getid).children(".submenu").length;//该li子节点的长度
             if(length==0&&!$(this).hasClass("block_click")){//子节点的长度为0并且该li没有block_click类，说明它是一个可点的根节点
-                apilink="http://xboxweb.azurewebsites.net/api/question/qslist/"+getid;
+                apilink="http://158.182.6.226/api/question/qslist/"+getid;
                 $(".questionlist").remove();
                 $('.answerlist').remove();
                 $(".useranswer").remove();

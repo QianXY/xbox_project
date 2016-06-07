@@ -46,7 +46,7 @@
                 function random(){
                     $.ajax({
                     type: "GET",
-                    url:"http://xboxweb.azurewebsites.net/api/question/random",
+                    url:"http://158.182.6.226/api/question/random",
                         success: function (data) {
                             var string_json = JSON.stringify(data);
                             var obj = JSON.parse(string_json);
@@ -158,12 +158,12 @@
 
                 //传错题
                 function returnid(totalid){
-                    $.post("http://xboxweb.azurewebsites.net/api/user/getlost",{id:1,u_password:123,u_courseid:totalid}, function(data,status){
+                    $.post("http://158.182.6.226/api/user/getlost",{id:1,u_password:123,u_courseid:totalid}, function(data,status){
                     });
                 }
                 //传新增能量值
                 function postpower(ppp){
-                    $.post("http://xboxweb.azurewebsites.net/api/user/updatepower",{Id:userid,Power:ppp}, function(data,status){
+                    $.post("http://158.182.6.226/api/user/updatepower",{Id:userid,Power:ppp}, function(data,status){
                             if(data=="success"){
                                 console.log("新增"+newpower+"能量值");
                             }

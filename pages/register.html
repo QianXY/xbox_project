@@ -62,7 +62,7 @@
           
           // 注册功能，发送给api并接受返回信息
         function register(){
-            $.post("http://xboxweb.azurewebsites.net/api/user/register",{Name:username,Password:password,Email:emailaddress,Grade:grade,Lastname:lastname,Firstname:firstname,Gender:gender,Age:age,}, function(data,status){
+            $.post("http://158.182.6.226/api/user/register",{Name:username,Password:password,Email:emailaddress,Grade:grade,Lastname:lastname,Firstname:firstname,Gender:gender,Age:age,}, function(data,status){
                 if(data.Status=="success"){
                     console.log(data);
                     alert("注册成功，请登录");

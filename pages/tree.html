@@ -1,0 +1,89 @@
+<html>
+    
+<head>
+     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../dist/js/echarts.js"></script>
+</head>
+
+
+
+<body>
+    <div id="main" style="height:400px;"></div>
+     
+    <script>
+        function LoadBaidu2(result)
+        {
+            
+
+            
+            var myChart = echarts.init(document.getElementById('main'));
+           option = {
+    title : {
+        text: '树图',
+        subtext: '虚构数据'
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : false,
+
+    series : [
+        {
+            name:'树图',
+            type:'tree',
+            orient: 'vertical',  // vertical horizontal
+            rootLocation: {x: 'center',y: 50}, // 根节点位置  {x: 100, y: 'center'}
+            nodePadding: 1,
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: false,
+                        formatter: "{b}"
+                    },
+                    lineStyle: {
+                        color: '#48b',
+                        shadowColor: '#000',
+                        shadowBlur: 3,
+                        shadowOffsetX: 3,
+                        shadowOffsetY: 5,
+                        type: 'curve' // 'curve'|'broken'|'solid'|'dotted'|'dashed'
+
+                    }
+                },
+                emphasis: {
+                    label: {
+                        show: true
+                    }
+                }
+            },
+            
+            data: [result]
+        }
+    ]
+};
+                    
+                    
+            myChart.setOption(option);
+        }
+    var result = "";
+         $.ajax({
+         	type: "GET",
+         	sync:false,
+         	url: "http://158.182.6.226/api/user/treedata?id=1",
+         	success: function (data) 
+         	{
+                var test = JSON.stringify(data);
+         		LoadBaidu2(data);
+         	}
+         	}); 
+    </script>
+</body>
+
+ </html>

@@ -66,7 +66,7 @@
                 current=getCookie("currentlevel");
                 currentid=getCookie("currentlevelid");
                 $("#currentinfo").append(current);
-                apilink="http://xboxweb.azurewebsites.net/api/question/ExplainQuestion/"+currentid;
+                apilink="http://158.182.6.226/api/question/ExplainQuestion/"+currentid;
                 random(apilink);//根据当前所处章节找到对应的例题
                 getrecom();//找到数据库中对应的推荐内容
 
@@ -75,7 +75,7 @@
                 function getrecom(){
                     $.ajax({
                     type: "GET",
-                    url: "http://xboxweb.azurewebsites.net/api/explain/explain/"+currentid,
+                    url: "http://158.182.6.226/api/explain/explain/"+currentid,
                         success: function (data) {
                             recomvideoUrl=data.video_list[0].embed;//推荐视频的地址
                             // recomword=data.word;
@@ -154,7 +154,7 @@
                     $("#A0").empty();
                     currentid=this.id;
                     getrecom();
-                    apilink="http://xboxweb.azurewebsites.net/api/question/ExplainQuestion/"+currentid;
+                    apilink="http://158.182.6.226/api/question/ExplainQuestion/"+currentid;
                     random(apilink);
                 })
 

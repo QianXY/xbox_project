@@ -105,65 +105,179 @@
 
 
     $(document).ready(function (){
-        //点击雷达图，出现弹窗
-        $("#rader").click(function(){
-            $(".theme-popover-mask").fadeIn(100);
-                    $(".theme-popover").slideDown(200);
-         });
-        $("#close").click(function(){
-            $(".theme-popover-mask").fadeOut(100);
-                    $(".theme-popover").slideUp(200);
-        })
-
-        //下面是调用百度提供的统计图API
-        function LoadBaidu(result)
-        {
-            var t =result.split(",");
-            var myChart = echarts.init(document.getElementById('main'));
+        function LoadBaidu(result,location,size)
+            {
+            var t =result.RadarNow.split(",");
+            var old  = result.RadarOld.split(",");
+            var myChart = echarts.init(document.getElementById(location));
             option = {
-                tooltip: {
+                title : {
+                    x : 'center',
+                    text: '本周 vs 上周',
+                    subtext: '学期情况统计'
+                },
+                tooltip : {
                     trigger: 'axis'
                 },
-                polar: [
-                   {
-                       indicator: [
-                           { text: '第21章', max: 100},
-                           { text: '第22章', max: 100 },
-                           { text: '第23章', max: 100 },
-                           { text: '第24章', max: 100},
-                           { text: '第25章', max: 100 },
-                       ]
-                   }
+                calculable : true,
+                polar : [
+                {
+                    indicator : [
+                    {text : '第21章', max  : 100},
+                    {text : '第22章', max  : 100},
+                    {text : '第23章', max  : 100},
+                    {text : '第24章', max  : 100},
+                    {text : '第25章', max  : 100}
+
+                    ],
+                    radius : size
+                }
                 ],
-                calculable: true,
-                series: [
+                series : [
+                {
+                    name: '学期情况统计',
+                    type: 'radar',
+                    itemStyle: {
+                        normal: {
+                            areaStyle: {
+                                type: 'default'
+                            }
+                        }
+                    },
+                    data : [
                     {
-                        type: 'radar',
-                        data: [
-                             {
-                                 value: t,
-                                 name: '今日学习进展'
-                             }
-                        ]
+                        value : t,
+                        name : '上周'
+                    },
+                    {
+                        value : old,
+                        name : '本周'
                     }
+                    ]
+                }
                 ]
             };
+            
             myChart.setOption(option);
         }
+        var result = "";
+        $.ajax({
+            type: "GET",
+            sync:false,
+            url: "http://158.182.6.226/api/user/updatechapter?id=1",
+            success: function (data) 
+            {
+
+                LoadBaidu(data,'radarpic',55);
+            }
+        }); 
 
 
 
+        function LoadBaidu2(result,location)
+        {
+            var myChart = echarts.init(document.getElementById(location));
+            option = {
+                title : {
+                    x : 'center',
+                    text: '树图',
+                    subtext: '学习进展'
+                },
+                calculable : false,
+                series : [
+                {
+                    name:'树图',
+                    type:'tree',
+                    orient: 'vertical',  // vertical horizontal
+                    rootLocation: {x: 'center',y: 60}, // 根节点位置  {x: 100, y: 'center'}
+                    nodePadding: 1,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: false,
+                                formatter: "{b}"
+                            },
+                            lineStyle: {
+                                color: '#48b',
+                                shadowColor: '#000',
+                                shadowBlur: 3,
+                                shadowOffsetX: 3,
+                                shadowOffsetY: 5,
+                                type: 'curve' // 'curve'|'broken'|'solid'|'dotted'|'dashed'
 
+                            },
+                        },
+                        emphasis: {
+                            label: {
+                                show: true
+                            }
+                        }
+                    },
+                    data: [result]
+                }
+                ]
+            };        
+            myChart.setOption(option);
+        }
         var result = "";
          $.ajax({
             type: "GET",
             sync:false,
-            url: "http://xboxweb.azurewebsites.net/api/user/updatechapter",
+            url: "http://158.182.6.226/api/user/treedata?id=1",
             success: function (data) 
             {
-                LoadBaidu(data);
+                var test = JSON.stringify(data);
+                LoadBaidu2(data,'treepic');
             }
-            }); //页面加载完成的同时，百度提供的统计图API也加载完成，以供后面的方法调用
+        }); 
+
+
+
+
+        //点击雷达图，出现弹窗1
+        $("#radar").click(function(){
+            $("#theme-popover-mask").fadeIn(100);
+            $("#theme-popover").slideDown(200);
+            
+        var result = "";
+        $.ajax({
+            type: "GET",
+            sync:false,
+            url: "http://158.182.6.226/api/user/updatechapter?id=1",
+            success: function (data) 
+            {
+
+                LoadBaidu(data,'main',130);
+            }
+        }); 
+         });
+        $("#close").click(function(){
+            $("#theme-popover-mask").fadeOut(100);
+            $("#theme-popover").slideUp(200);
+        })
+
+        //点击树状图，出现弹窗2
+        $("#tree").click(function(){
+            $("#theme-popover-mask2").fadeIn(100);
+            $("#theme-popover2").slideDown(200);
+            
+        var result = "";
+         $.ajax({
+            type: "GET",
+            sync:false,
+            url: "http://158.182.6.226/api/user/treedata?id=1",
+            success: function (data) 
+            {
+                var test = JSON.stringify(data);
+                LoadBaidu2(data,'main2');
+            }
+            });  
+         });
+        $("#close2").click(function(){
+            $("#theme-popover-mask2").fadeOut(100);
+            $("#theme-popover2").slideUp(200);
+        })
+
 
             //从cookie中取值
             name=getCookie("name");//名字
@@ -274,11 +388,17 @@
             <div class="col-md-11">
                 <!-- 树状图 -->
                 <div class="col-md-2">
-                    <img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/21.png" >
+                    <div class="images" id="tree" style="height:95%;width:230%;margin-top:3%;background-image:url(../assets/img/person/21.png);background-size:100% 100%" >
+                        <div id="treepic" style="width:90%;height:90%;padding-left:10%;padding-top:8%;"></div>
+                        
+                    </div>
                 </div>
                 <!-- 雷达图 -->
                 <div class="col-md-2 col-md-offset-2">
-                    <a id="rader"><img class="images" style="height:95%;width:230%;margin-top:3%" src="../assets/img/person/22.png" ></a>
+                    <div class="images" id="radar" style="height:95%;width:230%;margin-top:3%;background-image:url(../assets/img/person/22.png);background-size:100% 100%" >
+                        <div id="radarpic" style="width:90%;height:110%;padding-left:10%;padding-top:8%;"></div>
+                        
+                    </div>
                 </div>
                 <!-- 排行榜 -->
                 <div class="col-md-2 col-md-offset-2">
@@ -306,15 +426,24 @@
     </div>
 
 
-    <!-- 弹窗 -->
-    <div class="theme-popover col-md-12" >
+    <!-- 弹窗1 -->
+    <div class="theme-popover col-md-12" id="theme-popover">
         <div class="col-md-1 col-md-offset-11"><button id="close">X</button></div>
-        <div id="main" class="theme-poptit col-md-12" style="margin-top:20px;width:200px;height:200px">
-        
+        <div id="main" class="theme-poptit col-md-12" style="margin-top:10%;width:100%;height:400%">
 
         </div>
     </div>
-    <div class="theme-popover-mask"></div>
+    <div class="theme-popover-mask" id="theme-popover-mask"></div>
+
+    <!-- 弹窗2 -->
+    <div class="theme-popover col-md-12" id="theme-popover2">
+        <div class="col-md-1 col-md-offset-11"><button id="close2">X</button></div>
+        <div id="main2" class="theme-poptit col-md-12" style="margin-top:10%;width:100%;height:400%">
+
+        </div>
+    </div>
+    <div class="theme-popover-mask" id="theme-popover-mask2"></div>
+
 
 
 

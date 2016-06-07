@@ -28,7 +28,7 @@
             var power;  //能量值，用于判断用户是否为新用户
             var grade;  //年级
             var name;   //姓名
-            $.post("http://xboxweb.azurewebsites.net/api/user/loginUser",{Name:name,Password:password}, function(data,status){
+            $.post("http://158.182.6.226/api/user/loginUser",{Name:name,Password:password}, function(data,status){
                 if(data.Status=="Success"){
                     var totalCourse=JSON.stringify(data.CourseInfo); //数据库中当前所有已经存在的章节及其学习进度
                     power=data.Power;
