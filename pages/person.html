@@ -190,7 +190,10 @@
                     type:'tree',
                     orient: 'vertical',  // vertical horizontal
                     rootLocation: {x: 'center',y: 60}, // 根节点位置  {x: 100, y: 'center'}
-                    nodePadding: 1,
+                    nodePadding: 10,
+                    layerPadding:50,
+                    roam:true,
+                    symbolSize:6,
                     itemStyle: {
                         normal: {
                             label: {
@@ -227,17 +230,67 @@
             success: function (data) 
             {
                 var test = JSON.stringify(data);
-                LoadBaidu2(data,'treepic');
+                LoadBaidu2(data,'treepic',55);
             }
         }); 
 
 
 
 
+
+         function LoadBaidu3(result,location)
+        {
+            var myChart = echarts.init(document.getElementById(location));
+            option = {
+                title : {
+                    x : 'center',
+                    text: '树图',
+                    subtext: '学习进展'
+                },
+                calculable : false,
+                series : [
+                {
+                    name:'树图',
+                    type:'tree',
+                    orient: 'vertical',  // vertical horizontal
+                    rootLocation: {x: 'center',y: 60}, // 根节点位置  {x: 100, y: 'center'}
+                    nodePadding: 12,
+                    layerPadding:80,
+                    roam:true,
+                    symbolSize:10,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: false,
+                                formatter: "{b}"
+                            },
+                            lineStyle: {
+                                color: '#48b',
+                                shadowColor: '#000',
+                                shadowBlur: 3,
+                                shadowOffsetX: 3,
+                                shadowOffsetY: 5,
+                                type: 'curve' // 'curve'|'broken'|'solid'|'dotted'|'dashed'
+
+                            },
+                        },
+                        emphasis: {
+                            label: {
+                                show: true
+                            }
+                        }
+                    },
+                    data: [result]
+                }
+                ]
+            };        
+            myChart.setOption(option);
+        }
+
+
         //点击雷达图，出现弹窗1
         $("#radar").click(function(){
-            $("#theme-popover-mask").fadeIn(100);
-            $("#theme-popover").slideDown(200);
+          
             
         var result = "";
         $.ajax({
@@ -248,6 +301,8 @@
             {
 
                 LoadBaidu(data,'main',130);
+            $("#theme-popover-mask").fadeIn(100);
+            $("#theme-popover").slideDown(200);
             }
         }); 
          });
@@ -258,8 +313,7 @@
 
         //点击树状图，出现弹窗2
         $("#tree").click(function(){
-            $("#theme-popover-mask2").fadeIn(100);
-            $("#theme-popover2").slideDown(200);
+         
             
         var result = "";
          $.ajax({
@@ -269,7 +323,9 @@
             success: function (data) 
             {
                 var test = JSON.stringify(data);
-                LoadBaidu2(data,'main2');
+                LoadBaidu3(data,'main2');
+                   $("#theme-popover-mask2").fadeIn(100);
+            $("#theme-popover2").slideDown(200);
             }
             });  
          });
@@ -429,7 +485,7 @@
     <!-- 弹窗1 -->
     <div class="theme-popover col-md-12" id="theme-popover">
         <div class="col-md-1 col-md-offset-11"><button id="close">X</button></div>
-        <div id="main" class="theme-poptit col-md-12" style="margin-top:10%;width:100%;height:400%">
+        <div id="main" class="theme-poptit col-md-12" style="margin-top:10%;width:400%;height:400%">
 
         </div>
     </div>
@@ -438,7 +494,7 @@
     <!-- 弹窗2 -->
     <div class="theme-popover col-md-12" id="theme-popover2">
         <div class="col-md-1 col-md-offset-11"><button id="close2">X</button></div>
-        <div id="main2" class="theme-poptit col-md-12" style="margin-top:10%;width:100%;height:400%">
+        <div id="main2" class="theme-poptit col-md-12" style="margin-top:10%;width:400%;height:400%">
 
         </div>
     </div>
